@@ -6835,8 +6835,8 @@ a.logo:hover {
 }
 
 .portfolio-item:hover .portfolio-item__wrapper-title {
-  transform: translateY(30px);
-  opacity: 0;
+  transform: translateY(0);
+  opacity: 1;
 }
 
 .portfolio-item_button-bordered {
