@@ -64,6 +64,11 @@
     "dimitri": "Dimitri Fafutis",
     "giorgos": "Giorgos Baroutsos"
   },
+  "team_profesion":{
+    "photographer":"Fotografo",
+    "director":"Director",
+    "camera_lead":"Lider de camara"
+  },
   "form": {
     "step0": {
       "title": "¿Cuál es el nombre de la novia?",
