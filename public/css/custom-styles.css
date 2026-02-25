@@ -64,3 +64,80 @@
 .d-none {
   display: none !important;
 }
+
+/* ==========================================================================
+   Testimonials & Reserve Now – equal balanced height
+   ========================================================================== */
+
+/* Shared min-height so both sections feel equal and balanced */
+.section-testimonials,
+.section-pricing-cards .pricing-table {
+  min-height: 50vh;
+}
+
+@media screen and (min-width: 768px) {
+  .section-testimonials,
+  .section-pricing-cards .pricing-table {
+    min-height: 55vh;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .section-testimonials,
+  .section-pricing-cards .pricing-table {
+    min-height: 58vh;
+  }
+}
+
+/* Testimonials: more prominent – increase padding and center content */
+.section-testimonials {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 3.5rem;
+  padding-bottom: 3.5rem;
+}
+
+.section-testimonials .section__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media screen and (min-width: 768px) {
+  .section-testimonials {
+    padding-top: 4.5rem;
+    padding-bottom: 4.5rem;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .section-testimonials {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+}
+
+/* Reserve Now (pricing): reduce padding for balance – overrides py-large */
+.section-pricing-cards .pricing-table {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.section-pricing-cards .pricing-table__content {
+  justify-content: center;
+}
+
+@media screen and (min-width: 768px) {
+  .section-pricing-cards .pricing-table {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .section-pricing-cards .pricing-table {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+}

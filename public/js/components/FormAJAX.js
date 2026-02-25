@@ -75,9 +75,16 @@ export default class FormAJAX extends BaseComponent {
 	}
 
 	_fetch() {
+		const sendJson = this.element.hasAttribute('data-submit-json');
+		const body = sendJson
+			? JSON.stringify(Object.fromEntries(new FormData(this.element)))
+			: new FormData(this.element);
+		const headers = sendJson ? { 'Content-Type': 'application/json' } : {};
+
 		fetch(this.action, {
 			method: this.method,
-			body: new FormData(this.element)
+			headers,
+			body
 		}).then((res) => {
 			if (res.status >= 200 && res.status < 300) {
 				this._onFetchSuccess();

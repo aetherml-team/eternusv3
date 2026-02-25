@@ -389,8 +389,9 @@
                             data-arts-os-animation-name="animatedJump">
                             <div class="row justify-content-center">
                                 <div class="col-12 col-lg-8">
-                                  <form id="multiStepForm" class="form js-form-ajax bg-dark-3 py-small px-gutters text-left" action="mail.php"
-                                  method="POST" novalidate="novalidate" data-arts-component-name="FormAJAX"
+                                  <!-- Submits to your Vercel serverless API (Resend). Set RESEND_API_KEY in Vercel env. -->
+                                  <form id="multiStepForm" class="form js-form-ajax bg-dark-3 py-small px-gutters text-left" action="/api/send" method="POST"
+                                  novalidate="novalidate" data-submit-json data-arts-component-name="FormAJAX"
                                   data-message-success="Thanks for your message! We will reply to you as soon as possible."
                                   data-message-error="Something went wrong :( Please contact me directly at &lt;a href='mailto:dimitri@gmail.com'&gt;dimitri@gmail.com&lt;/a&gt;"
                                   data-arts-color-theme="dark">
@@ -408,8 +409,10 @@
                                       </div>
                                       <div class="row form__row">
                                         <div class="col-12 form__col">
-                                          <label class="input-float">
-                                            <input class="input-float__input" type="text" name="bride_name" required
+                                          <label for="bride_name"  class="input-float">
+                                            <input
+                                            id="bride_name"
+                                            class="input-float__input" type="text" name="bride_name" required
                                               data-pristine-required-message="Please enter the bride's name" />
                                             <span class="input-float__label" data-i18n="form.step0.label">Bride's Name</span>
                                           </label>
@@ -627,7 +630,7 @@
                                       </div>
                                       <div class="row form__row">
                                         <div class="col form__col_submit text-center">
-                                          <button class="button button-circle ui-element" onclick="validateAndNextStep(6)" type="submit"
+                                          <button class="button button-circle ui-element" onclick="validateAndNextStep(6)" type="button"
                                               data-arts-cursor-follower-target="{color: 'var(--color-accent-dark-theme)', scale: 'current', magnetic: 0.25}">
                                               <span class="button__label button__label-normal"><span class="button__title">Submit</span></span>
                                               <span class="button__label button__label-hover"><span class="button__title">Submit</span></span>

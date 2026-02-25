@@ -22,7 +22,7 @@ export default async function handler(req:VercelRequest, res:VercelResponse) {
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        to: 'lu97is@gmail.com',
+        to: email,
         from: 'onboarding@resend.dev',
         subject: 'Wedding Planner Form Submission',
         html: weddingContact({ bride_name, groom_name, budget, wedding_type, additional_info, email}),
