@@ -65,6 +65,30 @@
   display: none !important;
 }
 
+/* Additional Information textarea – correct positioning and visible container */
+.input-float__input_textarea {
+  padding-top: 2.25rem;
+  min-height: 7rem;
+  border: 1px solid var(--color-border-opacity, rgba(255, 255, 255, 0.2));
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.input-float__input_textarea.input-float__input_focused,
+.input-float__input_textarea.input-float__input_not-empty {
+  border-color: var(--color-border-solid, rgba(255, 255, 255, 0.4));
+}
+
+/* Keep label above the textarea value when floating */
+.input-float:has(.input-float__input_textarea) .input-float__label {
+  top: 0.5rem;
+}
+
+.input-float:has(.input-float__input_textarea) .input-float__input_focused + .input-float__label,
+.input-float:has(.input-float__input_textarea) .input-float__input_not-empty + .input-float__label {
+  transform: scale(0.8571) translateY(-0.25rem);
+}
+
 /* ==========================================================================
    Testimonials & Reserve Now – equal balanced height
    ========================================================================== */
