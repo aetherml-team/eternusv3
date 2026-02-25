@@ -67,7 +67,8 @@
   "team_profesion":{
     "photographer":"Photograph",
     "director":"Director",
-    "camera_lead":"Camera lead"
+    "camera_lead":"Camera lead",
+    "wedding_planner":"Wedding Planner"
   },
   "form": {
     "step0": {
