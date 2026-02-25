@@ -350,7 +350,7 @@ img {
   --h4-color-dark-theme: #ffffff;
   --h4-color: var(--h4-color-light-theme);
   /* Heading 5 */
-  --h5-font-family: var(--font-primary);
+  --h5-font-family: var(--font-secondary);
   --h5-max-font-size: 30;
   --h5-min-font-size: 18;
   --h5-font-weight: 700;

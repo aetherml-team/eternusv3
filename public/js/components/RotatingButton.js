@@ -63,6 +63,9 @@ export default class RotatingButton extends BaseComponent {
   }
 
   _doInit() {
+    if (!this.elements.label || !this.elements.label[0]) {
+      return;
+    }
     this._addDelimiter();
     this._loopLabel();
     this._createCircle();
@@ -70,7 +73,7 @@ export default class RotatingButton extends BaseComponent {
   }
 
   getScrubAnimation() {
-    if (!this.options.rotateAnimation) {
+    if (!this.options.rotateAnimation || !this.elements.label?.[0] || !this.elements.icon?.[0]) {
       return;
     }
 
@@ -134,6 +137,9 @@ export default class RotatingButton extends BaseComponent {
   }
 
   getRevealAnimation() {
+    if (!this.elements.icon?.[0]) {
+      return;
+    }
     const tl = gsap.timeline({
       paused: true
     })
@@ -180,12 +186,18 @@ export default class RotatingButton extends BaseComponent {
   }
 
   _attachEvents() {
+    if (!this.elements.label?.[0] || !app.containerEl) {
+      return;
+    }
     this.resizeInstance = new ResizeObserver(this._onUpdate.bind(this));
     this.resizeInstance.observe(this.elements.label[0]);
     this.resizeInstance.observe(app.containerEl);
   }
 
   _onUpdate() {
+    if (!this.elements.label?.[0] || !this.circleInstance) {
+      return;
+    }
     this._setSize();
     this.circleInstance.refresh();
   }
