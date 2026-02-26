@@ -653,6 +653,11 @@ img {
   height: 100%;
 }
 
+/* Keep lightbox image aspect ratio (no vertical/horizontal stretch) */
+.pswp__img {
+  object-fit: contain !important;
+}
+
 /*!========================================================================
  * 3. PSWP Custom Arrow
  * ======================================================================!*/
