@@ -1147,8 +1147,47 @@
       }
     }
   </style>
-  <!-- - TEMPLATE SCRIPTS -->
-   <script src="js/randomnizer/gallery-randomnizer.js"></script>
+  <!-- Inline gallery randomizer – keeps mosaic layout, shuffles which image is in each cell -->
+  <script>
+    (function () {
+      function randomizeOnce() {
+        var container = document.querySelector('.grid_gallery_container');
+        if (!container) return false;
+
+        var items = Array.from(container.children);
+        if (items.length < 2) return false;
+
+        var areas = items
+          .map(function (el) {
+            return Array.from(el.classList).find(function (c) { return /^[A-Z]$/.test(c); });
+          })
+          .filter(Boolean);
+
+        if (areas.length < 2) return false;
+
+        var shuffled = areas.slice();
+        for (var i = shuffled.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var tmp = shuffled[i];
+          shuffled[i] = shuffled[j];
+          shuffled[j] = tmp;
+        }
+
+        items.forEach(function (item, idx) {
+          if (shuffled[idx]) {
+            item.style.gridArea = shuffled[idx];
+          }
+        });
+
+        return true;
+      }
+
+      (function waitForGalleryAndRandomize() {
+        if (randomizeOnce()) return;
+        setTimeout(waitForGalleryAndRandomize, 100);
+      })();
+    })();
+  </script>
 </body>
 
 </html>
