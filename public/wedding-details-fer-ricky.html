@@ -41,75 +41,30 @@
 </head>
 
 <body>
-  <!-- PAGE PRELOADER -->
+  <!-- PAGE PRELOADER (customized to use Fer & Ricky cover image) -->
   <div class="preloader section-fullheight bg-dark-4 text-center" id="js-preloader" data-arts-color-theme="dark"
     data-arts-component-name="Preloader" data-arts-os-animation="true">
     <div class="preloader__wrapper js-preloader__wrapper">
-      <!-- Fast-sliding images -->
+      <!-- Single cover image instead of generic slider -->
       <div class="preloader__wrapper-images-outer opacity-75 js-preloader__wrapper-images-outer">
         <div class="preloader__wrapper-images-inner js-preloader__wrapper-images-inner">
           <div class="preloader__wrapper-image">
             <div class="preloader__image-mask js-preloader__wrapper-image">
-              <div class="preloader__image custom-aspect-ratio js-preloader__image"><img class="lazy full-height"
+              <div class="preloader__image custom-aspect-ratio js-preloader__image">
+                <img class="lazy full-height"
                   src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='100%25'%20height='100%25'%3E%3C/svg%3E"
-                  decoding="async" data-src="img/assets/preloader/img-preloader-1.jpg" width="600" height="900"
-                  alt="" />
-              </div>
-            </div>
-          </div>
-          <div class="preloader__wrapper-image">
-            <div class="preloader__image-mask js-preloader__wrapper-image">
-              <div class="preloader__image custom-aspect-ratio js-preloader__image"><img class="lazy full-height"
-                  src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='100%25'%20height='100%25'%3E%3C/svg%3E"
-                  decoding="async" data-src="img/assets/preloader/img-preloader-2.jpg" width="600" height="900"
-                  alt="" />
-              </div>
-            </div>
-          </div>
-          <div class="preloader__wrapper-image">
-            <div class="preloader__image-mask js-preloader__wrapper-image">
-              <div class="preloader__image custom-aspect-ratio js-preloader__image"><img class="lazy full-height"
-                  src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='100%25'%20height='100%25'%3E%3C/svg%3E"
-                  decoding="async" data-src="img/assets/preloader/img-preloader-3.jpg" width="600" height="900"
-                  alt="" />
-              </div>
-            </div>
-          </div>
-          <div class="preloader__wrapper-image">
-            <div class="preloader__image-mask js-preloader__wrapper-image">
-              <div class="preloader__image custom-aspect-ratio js-preloader__image"><img class="lazy full-height"
-                  src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='100%25'%20height='100%25'%3E%3C/svg%3E"
-                  decoding="async" data-src="img/assets/preloader/img-preloader-4.jpg" width="600" height="900"
-                  alt="" />
-              </div>
-            </div>
-          </div>
-          <div class="preloader__wrapper-image">
-            <div class="preloader__image-mask js-preloader__wrapper-image">
-              <div class="preloader__image custom-aspect-ratio js-preloader__image"><img class="lazy full-height"
-                  src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='100%25'%20height='100%25'%3E%3C/svg%3E"
-                  decoding="async" data-src="img/assets/preloader/img-preloader-5.jpg" width="600" height="900"
-                  alt="" />
-              </div>
-            </div>
-          </div>
-          <div class="preloader__wrapper-image">
-            <div class="preloader__image-mask js-preloader__wrapper-image">
-              <div class="preloader__image custom-aspect-ratio js-preloader__image"><img class="lazy full-height"
-                  src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='100%25'%20height='100%25'%3E%3C/svg%3E"
-                  decoding="async" data-src="img/assets/preloader/img-preloader-6.jpg" width="600" height="900"
-                  alt="" />
+                  decoding="async"
+                  data-src="img/assets/wedingDetails/Fer&Ricky/TeaserEdit_01_00_27_12.jpg"
+                  width="600" height="900" alt="Fer & Ricky cover" />
               </div>
             </div>
           </div>
         </div>
       </div>
-      <!-- - Fast-sliding images -->
       <!-- Heading -->
       <div class="preloader__heading js-preloader__heading" data-arts-split-text-preset="animatedChars">
         <div class="display-xl color-accent">Eternus</div>
       </div>
-      <!-- - Heading -->
       <!-- Counter -->
       <div class="preloader__wrapper-counter display-xl color-accent js-preloader__wrapper-counter">
         <div class="preloader__counter">
@@ -118,32 +73,24 @@
             <div class="split-counter__lane js-split-counter__lane"></div>
             <div class="split-counter__lane js-split-counter__lane"></div>
           </div>
-          <!-- Last counter number -->
           <div class="preloader__wrapper-counter-end">
             <div class="js-preloader__counter-end">100</div>
           </div>
-          <!-- - Last counter number -->
         </div>
         <svg class="svg-circle" viewBox="0 0 600 600">
           <circle class="circle js-preloader__circle" cx="300" cy="300" r="299" fill="none"></circle>
         </svg>
       </div>
-      <!-- - Counter -->
       <!-- Bottom content -->
       <div class="preloader__footer p-gutters" data-arts-split-text-preset="animatedLines">
-        <!-- Content [before load] -->
         <div class="preloader__loading js-preloader__content-loading">
           <div class="h6">Loading...</div>
         </div>
-        <!-- - Content [before load] -->
-        <!-- Content [after load] -->
         <div class="js-preloader__content-loaded">
           <div class="h6">Moments</div>
           <div class="h6">Through time</div>
         </div>
-        <!-- - Content [after load] -->
       </div>
-      <!-- - Bottom content -->
     </div>
   </div>
   <!-- - PAGE PRELOADER -->
@@ -1125,7 +1072,51 @@
       }
     }
   </style>
-  <script src="js/randomnizer/gallery-randomnizer-ricky-fer.js"></script>
+  <!-- Inline gallery randomizer so it also runs on first Barba/AJAX entry -->
+  <script>
+    (function () {
+      function fisherYatesShuffle(items) {
+        var arr = items.slice();
+        for (var i = arr.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var tmp = arr[i];
+          arr[i] = arr[j];
+          arr[j] = tmp;
+        }
+        return arr;
+      }
+
+      function randomizeOnce() {
+        var container = document.querySelector('.grid_gallery_container');
+        if (!container) return false;
+
+        var items = Array.from(container.children);
+        if (items.length < 2) return false;
+
+        // Neutralize named grid-template-areas so DOM order controls layout
+        var styleTag = document.getElementById('grid-layout-styles');
+        if (styleTag) {
+          styleTag.textContent = '\n        @media screen and (min-width: 1024px) {\n          .grid_gallery_container {\n            display: grid !important;\n            grid-template-columns: repeat(4, 1fr) !important;\n            grid-auto-rows: 320px !important;\n            grid-template-areas: none !important;\n          }\n          .grid_gallery_container .item {\n            grid-area: auto !important;\n          }\n        }\n      ';
+        }
+
+        items.forEach(function (item) {
+          item.style.gridArea = '';
+        });
+
+        var shuffled = fisherYatesShuffle(items);
+        shuffled.forEach(function (item) {
+          container.appendChild(item);
+        });
+
+        return true;
+      }
+
+      (function waitForGalleryAndRandomize() {
+        if (randomizeOnce()) return;
+        setTimeout(waitForGalleryAndRandomize, 100);
+      })();
+    })();
+  </script>
 </body>
 
 </html>
