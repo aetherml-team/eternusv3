@@ -30,8 +30,10 @@
     "team": "Equipo",
     "packages": "Paquetes",
     "teaser": "Teaser de Boda",
+    "highlights": "Wedding Highlights",
     "promotional": "Video Promocional de Boda",
-    "credits": "Créditos"
+    "credits": "Créditos",
+    "documentary": "Wedding Documentary"
   },
   "destinations": {
     "ibiza": "Ibiza",
@@ -68,7 +70,7 @@
     "photographer":"Fotografo",
     "director":"Director",
     "camera_lead":"Lider de camara",
-    "wedding_planner":"Planificador de bodas"
+    "wedding_planner":"Wedding Planner"
   },
   "form": {
     "step0": {

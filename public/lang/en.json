@@ -30,8 +30,10 @@
     "team": "Team",
     "packages": "Packages",
     "teaser": "Wedding Teaser",
+    "highlights": "Wedding Highlights",
     "promotional": "Wedding Promotional",
-    "credits": "Credits"
+    "credits": "Credits",
+    "documentary": "Wedding Documentary"
   },
   "destinations": {
     "ibiza": "Ibiza",
