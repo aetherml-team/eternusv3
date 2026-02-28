@@ -1082,6 +1082,17 @@
   <script src="js/app.js"></script>
   <!-- Grid Layout CSS -->
   <style id="grid-layout-styles">
+    @media screen and (max-width: 1023px) {
+      .grid_gallery_container {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        grid-auto-rows: minmax(280px, 320px) !important;
+        grid-template-areas: unset !important;
+      }
+      .grid_gallery_container .item {
+        grid-area: auto !important;
+      }
+    }
     @media screen and (min-width: 1024px) {
       .grid_gallery_container {
         display: grid !important;
@@ -1133,6 +1144,14 @@
             item.style.gridArea = shuffled[idx];
           }
         });
+
+        var areaOrder = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        var byArea = items.slice().sort(function (a, b) {
+          var areaA = (a.style.gridArea || '').trim() || areaOrder[0];
+          var areaB = (b.style.gridArea || '').trim() || areaOrder[0];
+          return areaOrder.indexOf(areaA) - areaOrder.indexOf(areaB);
+        });
+        byArea.forEach(function (node) { container.appendChild(node); });
 
         return true;
       }

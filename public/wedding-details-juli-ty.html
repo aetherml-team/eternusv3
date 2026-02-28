@@ -2286,6 +2286,17 @@
   <script src="js/app.js"></script>
   <!-- Grid Layout CSS: 4-column gallery so all photos display -->
   <style id="grid-layout-styles">
+    @media screen and (max-width: 1023px) {
+      .grid_gallery_container {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        grid-auto-rows: minmax(280px, 320px) !important;
+      }
+      .grid_gallery_container .item {
+        grid-area: auto !important;
+        min-height: 280px !important;
+      }
+    }
     @media screen and (min-width: 1024px) {
       .grid_gallery_container {
         display: grid !important;
