@@ -1064,7 +1064,7 @@
         grid-area: auto !important;
       }
     }
-    
+
     @media screen and (min-width: 1024px) {
       .grid_gallery_container {
         display: grid !important;
@@ -1082,6 +1082,16 @@
           "U U V V"
           "W X X Y"
           "Z Z Z Z";
+      }
+    }
+    @media screen and (min-width: 1440px) {
+      .grid_gallery_container {
+        grid-template-rows: repeat(11, 400px) !important;
+      }
+    }
+    @media screen and (min-width: 1920px) {
+      .grid_gallery_container {
+        grid-template-rows: repeat(11, 520px) !important;
       }
     }
   </style>

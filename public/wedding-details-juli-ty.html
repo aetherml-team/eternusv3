@@ -2308,6 +2308,22 @@
         grid-area: auto !important;
       }
     }
+    @media screen and (min-width: 1440px) {
+      .grid_gallery_container {
+        grid-auto-rows: 400px !important;
+      }
+      .grid_gallery_container .item {
+        min-height: 400px !important;
+      }
+    }
+    @media screen and (min-width: 1920px) {
+      .grid_gallery_container {
+        grid-auto-rows: 520px !important;
+      }
+      .grid_gallery_container .item {
+        min-height: 520px !important;
+      }
+    }
   </style>
   <!-- Inline gallery randomizer – simple DOM shuffle for auto-flow grid -->
   <script>
