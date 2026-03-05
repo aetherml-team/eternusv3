@@ -37,7 +37,8 @@
     "highlights": "Wedding Highlights",
     "promotional": "Wedding Promotional",
     "credits": "Credits",
-    "documentary": "Wedding Documentary"
+    "documentary": "Wedding Documentary",
+    "location":"Location"
   },
   "destinations": {
     "ibiza": "Ibiza",
@@ -153,5 +154,9 @@
     "followMe": "Follow Me",
     "terms": "Terms",
     "privacyPolicy": "Privacy Policy"
+  },
+  "fer_ricky":{
+    "weddingDate":"September 13, 2025",
+    "weddingReflection":"Fer and Ricky’s wedding in Valle de Guadalupe left a mark on us. Not only because of the scale of the production, but also because of the bond we built with them during those days. There were three spectacular celebrations: an elegant civil ceremony inside a wine cellar, a ceremony set in the middle of the vineyard with breathtaking views, and a reception beneath a wooden structure specially designed for the occasion, where lasers and lighting transformed the night into something unforgettable. The grand finale was a cowboy-themed costume party featuring circus acts, juggling, bubbles, and sparklers that took everything to the next level. An extraordinary weekend that left a lasting impression on us."
   }
 }
