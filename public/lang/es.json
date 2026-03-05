@@ -131,7 +131,8 @@
       "title": "Información Adicional",
       "description": "Cuéntanos detalles extras o solicitudes especiales para hacer tu boda perfecta.",
       "label": "Información Adicional",
-      "placeholder": "Cuéntanos más sobre tu boda..."
+      "placeholder": "Cuéntanos más sobre tu boda...",
+      "contactEmail":"correo electrónico de contacto"
     },
     "review": {
       "title": "Revisa tu Información",
