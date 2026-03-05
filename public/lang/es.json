@@ -8,13 +8,17 @@
     "play": "Reproducir",
     "scroll": "Seguir bajando"
   },
+  "aroundTheWorld":{
+    "title":"Alrededor del mundo"
+  },
   "nav": {
     "home": "Inicio",
     "portfolio": "Portafolio",
     "team": "Equipo",
     "packages": "Paquetes",
     "contact": "Contacto",
-    "getInTouch": "Ponte en Contacto"
+    "getInTouch": "Ponte en Contacto",
+    "project":"Explorar proyecto"
   },
   "hero": {
     "title": "Eternus",
@@ -69,6 +73,8 @@
   "team_profesion":{
     "photographer":"Fotografo",
     "director":"Director",
+    "photography_director":"Director de Fotografía",
+    "art_director":"Director de Arte",
     "camera_lead":"Lider de camara",
     "wedding_planner":"Wedding Planner"
   },
