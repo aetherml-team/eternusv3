@@ -130,7 +130,8 @@
       "title": "Additional Information",
       "description": "Let us know any extra details or special requests to make your wedding perfect.",
       "label": "Additional Information",
-      "placeholder": "Tell us more about your wedding..."
+      "placeholder": "Tell us more about your wedding...",
+      "contactEmail":"contact email"
     },
     "review": {
       "title": "Review Your Information",
