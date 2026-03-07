@@ -809,8 +809,9 @@ window.app = {
 				const rel = 'preload';
 
 				nextComponents.forEach((component) => {
+					const name = component.getAttribute('data-arts-component-name');
+					if (!name || !app.components[name]) return;
 					const
-						name = component.getAttribute('data-arts-component-name'),
 						dependencies = app.components[name].dependencies,
 						src = app.components[name].file.replace('./', './js/'),
 						files = app.components[name].files;

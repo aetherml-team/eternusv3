@@ -22,6 +22,7 @@
     position: relative;
     overflow: hidden;
     transition: height 0.5s ease-in-out;
+    padding-bottom: 2.5rem; /* space so Next button is never clipped */
   }
   
   /* Form Steps */
@@ -214,6 +215,28 @@
   color: var(--color-gray-3, #777);
   opacity: 0.7;
   user-select: none;
+}
+
+/* ==========================================================================
+   Contact form section – prevent marquee text from looking "chopped"
+   ========================================================================== */
+
+/* Fade marquee at left/right edges so text doesn't cut off sharply */
+.section-form__marquee {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 12%,
+    black 88%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 12%,
+    black 88%,
+    transparent 100%
+  );
 }
 
 /* ==========================================================================

@@ -94,8 +94,9 @@
     const activeStep = document.querySelector('.form-step.active');
     if (container && activeStep) {
       container.style.height = 'auto';
-      const height = activeStep.offsetHeight;
-      container.style.height = height + 'px';
+      var height = activeStep.offsetHeight;
+      var extra = 48; /* room for Next button so it is not clipped */
+      container.style.height = (height + extra) + 'px';
     }
   }
 
