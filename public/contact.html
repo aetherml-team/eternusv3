@@ -161,6 +161,8 @@
             <div class="header__bar header__bar_fixed borders-auto-opacity-solid d-flex justify-content-between js-header__bar header__custom"
                 data-arts-color-theme="dark" data-arts-header-logo="secondary" data-arts-header-sticky-logo="secondary"
                 data-arts-header-sticky-class="bg-dark-1">
+                <!-- Spacer to keep logo centered when lang toggle is on the right -->
+                <div class="header__col header__col_left lang-toggle-spacer" aria-hidden="true"></div>
                 <!-- Site logo --><a class="header__col header__col_center header__col_logo logo no-ajax" href="index.html">
                     <div class="logo__wrapper-img">
                         <!-- primary logo version (for use with light backgrounds)--><img class="logo__img-primary"
@@ -172,6 +174,12 @@
                     </div>
                 </a>
                 <!-- - Site logo -->
+                <!-- Language toggle (EN | ES) -->
+                <div class="header__col header__col_right lang-toggle" role="group" aria-label="Language">
+                  <a href="#" class="lang-toggle__link lang-toggle__link--en" data-lang="en" aria-current="true">EN</a>
+                  <span class="lang-toggle__divider" aria-hidden="true">|</span>
+                  <a href="#" class="lang-toggle__link lang-toggle__link--es" data-lang="es">ES</a>
+                </div>
                 <!-- Hidden placeholder for JS (do not remove) -->
                 <a class="js-header__overlay-switcher" href="#" style="display: none;" aria-hidden="true"></a>
                 <!-- Bar border bottom-->
