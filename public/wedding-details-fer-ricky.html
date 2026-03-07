@@ -20,6 +20,7 @@
   <link rel="stylesheet" type="text/css" href="css/vendor.css" />
   <!-- Template main styles-->
   <link rel="stylesheet" type="text/css" href="css/main.css" />
+  <link rel="stylesheet" type="text/css" href="css/custom-styles.css" />
   <!-- Favicons & App Icons -->
   <link rel="apple-touch-icon" sizes="57x57" href="img/favicon/apple-icon-57x57.png" />
   <link rel="apple-touch-icon" sizes="60x60" href="img/favicon/apple-icon-60x60.png" />
@@ -39,19 +40,10 @@
   <meta name="msapplication-TileImage" content="img/favicon/ms-icon-144x144.png" />
   <meta name="theme-color" content="#060707" />
 
-  <!-- Lang toggle: absolute positioning so it never affects the logo centering -->
+  <!-- Lang toggle: spacer hidden; position + typography from custom-styles.css (same as index) -->
   <style>
     .lang-toggle-spacer {
       display: none !important;
-    }
-
-    .lang-toggle {
-      position: absolute !important;
-      right: var(--gutters, 24px) !important;
-      top: 50% !important;
-      transform: translateY(-50%) !important;
-      /* keep it above any z-stacked siblings */
-      z-index: 10;
     }
   </style>
 </head>
