@@ -1,8 +1,10 @@
 /**
  * Simple i18n (Internationalization) System
- * Handles language switching via URL parameter (?lang=es)
+ * Handles language switching via URL parameter (?lang=es) and persisted preference (localStorage)
  * Defaults to English if no language is specified
  */
+
+const I18N_STORAGE_KEY = 'eternus-lang';
 
 class i18n {
   constructor() {
@@ -13,25 +15,36 @@ class i18n {
 
   /**
    * Initialize the i18n system
-   * Detects language from URL parameter (?lang=es)
-   * Falls back to browser language or English
+   * Priority: URL parameter (?lang=es) > saved preference (localStorage) > browser language > English
    */
   async init() {
-    // Get language from URL parameter
     const urlParams = new URLSearchParams(window.location.search);
     const langParam = urlParams.get('lang');
 
     if (langParam && this.supportedLanguages.includes(langParam)) {
       this.currentLang = langParam;
+      try {
+        localStorage.setItem(I18N_STORAGE_KEY, langParam);
+      } catch (e) {}
     } else {
-      // Try to detect browser language
-      const browserLang = navigator.language.split('-')[0];
-      if (this.supportedLanguages.includes(browserLang)) {
-        this.currentLang = browserLang;
+      try {
+        const saved = localStorage.getItem(I18N_STORAGE_KEY);
+        if (saved && this.supportedLanguages.includes(saved)) {
+          this.currentLang = saved;
+        } else {
+          const browserLang = (navigator.language || '').split('-')[0];
+          if (this.supportedLanguages.includes(browserLang)) {
+            this.currentLang = browserLang;
+          }
+        }
+      } catch (e) {
+        const browserLang = (navigator.language || '').split('-')[0];
+        if (this.supportedLanguages.includes(browserLang)) {
+          this.currentLang = browserLang;
+        }
       }
     }
 
-    // Load translations
     await this.loadTranslations(this.currentLang);
   }
 
@@ -90,9 +103,11 @@ class i18n {
 
     await this.loadTranslations(lang);
     this.currentLang = lang;
+    try {
+      localStorage.setItem(I18N_STORAGE_KEY, lang);
+    } catch (e) {}
 
     if (reload) {
-      // Update URL with language parameter
       const url = new URL(window.location);
       url.searchParams.set('lang', lang);
       window.history.pushState({}, '', url);
@@ -151,7 +166,37 @@ class i18n {
       el.setAttribute('aria-label', translation);
     });
 
+    // Update language toggle state and bind clicks if present
+    this._initLangToggle();
+
     console.log(`[i18n] DOM translation complete`);
+  }
+
+  /**
+   * Initialize language toggle (EN | ES): set active state and bind click handlers
+   */
+  _initLangToggle() {
+    const container = document.querySelector('.lang-toggle');
+    if (!container) return;
+
+    const links = container.querySelectorAll('.lang-toggle__link');
+    const current = this.currentLang;
+
+    links.forEach((el) => {
+      const lang = el.getAttribute('data-lang');
+      if (lang) {
+        el.setAttribute('aria-current', lang === current ? 'true' : 'false');
+        if (!el._i18nBound) {
+          el._i18nBound = true;
+          el.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (lang !== this.currentLang) {
+              this.setLanguage(lang, true);
+            }
+          });
+        }
+      }
+    });
   }
 }
 
