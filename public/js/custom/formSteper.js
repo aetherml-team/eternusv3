@@ -144,6 +144,17 @@
       firstStep.style.visibility = 'visible';
       updateContainerHeight();
     }
+
+    /* Submit current step on Enter (except in textarea where Enter is newline) */
+    var form = getForm();
+    if (form) {
+      form.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter') return;
+        if (e.target && e.target.tagName === 'TEXTAREA') return;
+        e.preventDefault();
+        validateAndNextStep(currentStep);
+      });
+    }
   }
 
   if (document.readyState === 'loading') {

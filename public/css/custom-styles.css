@@ -24,6 +24,22 @@
     transition: height 0.5s ease-in-out;
     padding-bottom: 2.5rem; /* space so Next button is never clipped */
   }
+
+  /* Tighter spacing on step title/description so Next button fits */
+  .form-container .form-step .form__row:first-child .h4,
+  .form-container .form-step .form__row:first-child h3 {
+    margin-top: 0;
+    margin-bottom: 0.35rem;
+  }
+  .form-container .form-step .form__row:first-child .text-muted {
+    margin-bottom: 0;
+  }
+  .form-container .form-step .form__row {
+    margin-bottom: 0.75rem;
+  }
+  .form-container .form-step .form__row:last-child {
+    margin-bottom: 0;
+  }
   
   /* Form Steps */
   .form-step {
