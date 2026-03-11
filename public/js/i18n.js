@@ -166,6 +166,19 @@ class i18n {
       el.setAttribute('aria-label', translation);
     });
 
+    // Handle cursor follower labels
+      const cursorElements = document.querySelectorAll('[data-i18n-cursor-label]');
+      console.log(`[i18n] Found ${cursorElements.length} elements with data-i18n-cursor-label`);
+
+      cursorElements.forEach((el) => {
+        const key = el.getAttribute('data-i18n-cursor-label');
+        const translation = this.t(key);
+        const raw = el.getAttribute('data-arts-cursor-follower-target');
+        if (!raw) return;
+        const updated = raw.replace(/label:\s*'[^']*'/, "label: '" + translation + "'");
+        el.setAttribute('data-arts-cursor-follower-target', updated);
+      });
+
     // Update language toggle state and bind clicks if present
     this._initLangToggle();
 
