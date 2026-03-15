@@ -6,7 +6,9 @@
     "submit": "Enviar",
     "loading": "Cargando...",
     "play": "Reproducir",
-    "scroll": "Seguir bajando"
+    "scroll": "Seguir bajando",
+    "over":"Mas de ",
+    "projects":"Proyectos"
   },
   "aroundTheWorld":{
     "title":"Alrededor del mundo"

@@ -201,9 +201,17 @@ class i18n {
     elements.forEach((el) => {
       const key = el.getAttribute('data-i18n');
       const translation = this.t(key);
+      const wrapTag = el.getAttribute('data-i18n-wrap');
+      const wrapClass = el.getAttribute('data-i18n-wrap-class') || '';
 
-      // Check if element has innerHTML (for HTML content) or just text
-      if (el.innerHTML.includes('<') || translation.includes('<')) {
+      if (wrapTag) {
+        const safe = String(translation)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+        const cls = wrapClass ? ' class="' + wrapClass.replace(/"/g, '&quot;') + '"' : '';
+        el.innerHTML = '<' + wrapTag + cls + '>' + safe + '</' + wrapTag + '>';
+      } else if (el.innerHTML.includes('<') || translation.includes('<')) {
         el.innerHTML = translation;
       } else {
         el.textContent = translation;

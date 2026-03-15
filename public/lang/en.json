@@ -6,7 +6,9 @@
     "submit": "Submit",
     "loading": "Loading...",
     "play": "Play",
-    "scroll": "Scroll down"
+    "scroll": "Scroll down",
+    "over":"Over",
+    "projects":"Projects"
   },
   "aroundTheWorld":{
     "title":"Around the world"
