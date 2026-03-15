@@ -1,3 +1,17 @@
+/* i18n: smooth language switch (no flash) */
+.i18n-switching [data-i18n],
+.i18n-switching [data-i18n-placeholder] {
+  transition: opacity 0.12s ease;
+}
+html.i18n-switching [data-i18n],
+html.i18n-switching [data-i18n-placeholder] {
+  opacity: 0;
+}
+html:not(.i18n-switching) [data-i18n],
+html:not(.i18n-switching) [data-i18n-placeholder] {
+  opacity: 1;
+}
+
 /* Keyframe Animations */
 @keyframes slideInFromRight {
     0% {

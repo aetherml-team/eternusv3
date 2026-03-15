@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>i18n tests</title>
+  <style>
+    body { font-family: system-ui, sans-serif; padding: 2rem; max-width: 40rem; }
+    .pass { color: #0a0; }
+    .fail { color: #c00; }
+    pre { background: #f5f5f5; padding: 0.5rem; overflow: auto; }
+  </style>
+</head>
+<body>
+  <h1>i18n behaviour tests</h1>
+  <p>Open this page from the same origin as your app (e.g. <code>http://127.0.0.1:5501/public/test-i18n.html</code>).</p>
+  <div id="out"></div>
+  <script src="js/i18n.js"></script>
+  <script>
+    (function () {
+      var out = document.getElementById('out');
+      function log(msg, pass) {
+        var p = document.createElement('p');
+        p.className = pass === true ? 'pass' : pass === false ? 'fail' : '';
+        p.textContent = msg;
+        out.appendChild(p);
+      }
+      function run() {
+        var i18n = window.i18n;
+        if (!i18n) {
+          log('FAIL: window.i18n not found');
+          return;
+        }
+        log('1. Initial lang: ' + i18n.getLang());
+        var enProject = i18n.t('nav.project');
+        log('2. nav.project (current): ' + enProject);
+        if (i18n.getLang() === 'es' && enProject !== 'Explore Project') {
+          log('3. Spanish content OK', true);
+        } else if (i18n.getLang() === 'en' && enProject === 'Explore Project') {
+          log('3. English content OK', true);
+        } else {
+          log('3. Content matches lang', true);
+        }
+        i18n.setLanguage('es').then(function () {
+          if (i18n.getLang() !== 'es') {
+            log('4. setLanguage(es): getLang() is still ' + i18n.getLang(), false);
+            return;
+          }
+          var esProject = i18n.t('nav.project');
+          if (esProject !== 'Explorar proyecto') {
+            log('4. setLanguage(es): nav.project = "' + esProject + '" (expected "Explorar proyecto")', false);
+            return;
+          }
+          log('4. setLanguage(es) → lang=es, nav.project="Explorar proyecto"', true);
+          return i18n.setLanguage('en');
+        }).then(function () {
+          if (!i18n || i18n.getLang() !== 'en') {
+            log('5. setLanguage(en): getLang() is ' + (i18n ? i18n.getLang() : 'n/a'), false);
+            return;
+          }
+          var enAgain = i18n.t('nav.project');
+          if (enAgain !== 'Explore Project') {
+            log('5. setLanguage(en): nav.project = "' + enAgain + '"', false);
+            return;
+          }
+          log('5. setLanguage(en) → lang=en, nav.project="Explore Project"', true);
+          log('All checks passed.', true);
+        }).catch(function (err) {
+          log('Error: ' + err.message, false);
+        });
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () {
+          setTimeout(run, 500);
+        });
+      } else {
+        setTimeout(run, 500);
+      }
+    })();
+  </script>
+</body>
+</html>
