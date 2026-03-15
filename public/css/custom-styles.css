@@ -319,3 +319,58 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
 .section-demo-screens-wall .section__content .subheading {
   color: #E8E6E0 !important;
 }
+
+/* ==========================================================================
+   Gallery “Coming Soon” cover – wedding detail pages with no photos yet
+   ========================================================================== */
+
+.gallery-coming-soon {
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.gallery-coming-soon::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 50%,
+    rgba(255, 255, 255, 0.03) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+.gallery-coming-soon__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.gallery-coming-soon__title {
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-accent-dark-theme, #FDF9CF);
+}
+
+.gallery-coming-soon__subtitle {
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+  color: var(--color-light-1, #DBDAD7);
+}
+
+@media screen and (min-width: 768px) {
+  .gallery-coming-soon {
+    min-height: 55vh;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .gallery-coming-soon {
+    min-height: 60vh;
+  }
+}
