@@ -10,6 +10,7 @@ class i18n {
   constructor() {
     this.currentLang = 'en';
     this.translations = {};
+    this._translationCache = {}; // lang -> { translations object } to avoid refetch on every toggle
     this.supportedLanguages = ['en', 'es'];
     this._initTimeoutIds = [];
     this._isTranslating = false;
@@ -30,11 +31,14 @@ class i18n {
       return;
     }
     root.classList.add('i18n-switching');
+    const done = () => {
+      this._isSwitchingLanguage = false;
+    };
     requestAnimationFrame(() => {
       this.translateDOM();
       requestAnimationFrame(() => {
         root.classList.remove('i18n-switching');
-        this._isSwitchingLanguage = false;
+        done();
       });
     });
   }
@@ -75,6 +79,7 @@ class i18n {
     if (document.documentElement) {
       document.documentElement.setAttribute('lang', this.currentLang);
     }
+    this.translateDOM();
   }
 
   /**
@@ -83,6 +88,10 @@ class i18n {
    * @returns {Promise<string>} - The language actually loaded (lang or 'en' on fallback)
    */
   async loadTranslations(lang) {
+    if (this._translationCache[lang]) {
+      this.translations = this._translationCache[lang];
+      return lang;
+    }
     const basePath = window.location.pathname.replace(/\/[^/]*$/, '') || '/';
     const url = window.location.origin + basePath + '/lang/' + lang + '.json';
     try {
@@ -90,8 +99,9 @@ class i18n {
       if (!response.ok) {
         throw new Error(`Failed to load translations for ${lang}: ${response.status}`);
       }
-      this.translations = await response.json();
-      console.log(`[i18n] Loaded ${lang} translations:`, Object.keys(this.translations).length, 'keys');
+      const data = await response.json();
+      this._translationCache[lang] = data;
+      this.translations = data;
       return lang;
     } catch (error) {
       console.error('[i18n] Error loading translations:', error);
@@ -148,6 +158,7 @@ class i18n {
       const loadedLang = await this.loadTranslations(lang);
       if (loadedLang !== lang) {
         console.warn('[i18n] Requested language not loaded; kept current state.');
+        this._isSwitchingLanguage = false;
         return;
       }
 
@@ -168,7 +179,8 @@ class i18n {
       if (typeof window.dispatchEvent === 'function') {
         window.dispatchEvent(new CustomEvent('i18n:languageChange', { detail: { lang } }));
       }
-    } finally {
+    } catch (e) {
+      console.error('[i18n] setLanguage error:', e);
       this._isSwitchingLanguage = false;
     }
   }
@@ -198,25 +210,31 @@ class i18n {
 
   _translateDOM() {
     const elements = document.querySelectorAll('[data-i18n]');
-    elements.forEach((el) => {
+    // Process in reverse document order so updating a parent's innerHTML doesn't remove untranslated children
+    const list = Array.from(elements);
+    for (let i = list.length - 1; i >= 0; i--) {
+      const el = list[i];
       const key = el.getAttribute('data-i18n');
       const translation = this.t(key);
       const wrapTag = el.getAttribute('data-i18n-wrap');
       const wrapClass = el.getAttribute('data-i18n-wrap-class') || '';
 
       if (wrapTag) {
-        const safe = String(translation)
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;');
+        const allowHtml = el.hasAttribute('data-i18n-wrap-allow-html');
         const cls = wrapClass ? ' class="' + wrapClass.replace(/"/g, '&quot;') + '"' : '';
-        el.innerHTML = '<' + wrapTag + cls + '>' + safe + '</' + wrapTag + '>';
+        const inner = allowHtml
+          ? String(translation)
+          : String(translation)
+              .replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;');
+        el.innerHTML = '<' + wrapTag + cls + '>' + inner + '</' + wrapTag + '>';
       } else if (el.innerHTML.includes('<') || translation.includes('<')) {
         el.innerHTML = translation;
       } else {
         el.textContent = translation;
       }
-    });
+    }
 
     // Handle placeholders
     const placeholderElements = document.querySelectorAll('[data-i18n-placeholder]');
@@ -302,9 +320,12 @@ if (typeof document !== 'undefined') {
 }
 
 function scheduleInitTranslations() {
-  const delays = [50, 200, 500, 1000, 2000];
+  const delays = [100, 600];
   delays.forEach((ms) => {
-    const id = setTimeout(() => i18nInstance.translateDOM(), ms);
+    const id = setTimeout(() => {
+      if (i18nInstance._isSwitchingLanguage) return;
+      i18nInstance.translateDOM();
+    }, ms);
     i18nInstance._initTimeoutIds.push(id);
   });
 }
