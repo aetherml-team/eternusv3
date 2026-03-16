@@ -89,7 +89,7 @@
   "form": {
     "step0": {
       "title": "¿Cuál es el nombre de la novia?",
-      "description": "Por favor proporciona el nombre de la novia para personalizar tu experiencia de boda con nosotros.",
+      "description": "Por favor proporciona el nombre de la novia para personalizar tu experiencia de boda.",
       "label": "Nombre de la Novia",
       "error": "¡Por favor ingresa el nombre de la novia!"
     },

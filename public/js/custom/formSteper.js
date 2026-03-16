@@ -58,6 +58,8 @@
       }
     } else {
       if (errorElement) errorElement.classList.remove('d-none');
+      // Ensure container grows to fit the error message + button
+      updateContainerHeight();
     }
   };
 
