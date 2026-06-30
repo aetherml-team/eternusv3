@@ -3,8 +3,11 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "optimize-images": "node scripts/optimize-index-images.js",
-    "fix-image-paths": "node scripts/wrap-index-pictures.js",
+    "audit-images": "node scripts/audit-images.js",
+    "optimize-images": "node scripts/optimize-all-images.js",
+    "fix-image-paths": "node scripts/fix-image-paths.js",
+    "wrap-pictures": "node scripts/wrap-pictures.js",
+    "remove-missing-images": "node scripts/remove-missing-image-blocks.js",
     "unwrap-pictures": "node scripts/unwrap-index-pictures.js"
   },
   "devDependencies": {

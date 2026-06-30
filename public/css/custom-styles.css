@@ -474,3 +474,44 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
   height: 100%;
   max-height: 66vh;
 }
+
+/* Picture wrappers: fill parent exactly like a direct img (no layout change) */
+.js-animated-mask-inner > picture,
+.masthead__background > picture,
+.hover-zoom__inner > picture,
+.has-aspect-ratio > picture,
+.img-wrapper > picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.masthead__background > picture {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.masthead__background picture img.of-cover-absolute {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.has-aspect-ratio > picture {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.has-aspect-ratio > picture > img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
