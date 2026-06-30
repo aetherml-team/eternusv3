@@ -228,7 +228,10 @@ window.app = {
 	},
 
 	initOnce: () => {
-		app._initIOSScrollFix();
+		/**
+		 * The code you put here will be executed only once
+		 * on page load.
+		 */
 	},
 
 	init: () => {
@@ -849,48 +852,6 @@ window.app = {
 
 			resolve(true);
 		});
-	},
-
-	_initIOSScrollFix() {
-		if (!document.documentElement.classList.contains('is-ios')) {
-			return;
-		}
-
-		let startY = 0;
-
-		const getScroller = () => document.scrollingElement || document.body;
-
-		const getMetrics = () => {
-			const scroller = getScroller();
-			return {
-				scrollTop: scroller.scrollTop,
-				scrollHeight: scroller.scrollHeight,
-				clientHeight: scroller.clientHeight,
-			};
-		};
-
-		document.addEventListener('touchstart', (event) => {
-			if (event.touches.length !== 1) {
-				return;
-			}
-
-			startY = event.touches[0].pageY;
-		}, { passive: true, capture: true });
-
-		document.addEventListener('touchmove', (event) => {
-			if (event.touches.length !== 1) {
-				return;
-			}
-
-			const { scrollTop, scrollHeight, clientHeight } = getMetrics();
-			const dy = event.touches[0].pageY - startY;
-			const atTop = scrollTop <= 0;
-			const atBottom = scrollTop + clientHeight >= scrollHeight - 2;
-
-			if ((atTop && dy > 0) || (atBottom && dy < 0)) {
-				event.preventDefault();
-			}
-		}, { passive: false, capture: true });
 	}
 };
 
