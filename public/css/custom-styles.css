@@ -515,3 +515,10 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
   height: 100%;
   object-fit: cover;
 }
+
+/* iOS/mobile rubber-band overscroll: match page bg so white doesn't show past footer */
+html,
+body,
+[data-barba="wrapper"] {
+  background-color: #060B14;
+}
