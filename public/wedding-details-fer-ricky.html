@@ -109,8 +109,8 @@
       <!-- Top bar -->
       <div
         class="header__bar header__bar_fixed borders-auto-opacity-solid d-flex justify-content-between js-header__bar header__custom"
-        data-arts-color-theme="dark" data-arts-header-logo="secondary" data-arts-header-sticky-logo="primary"
-        data-arts-header-sticky-color-theme="light" data-arts-header-sticky-class="bg-light-3"
+        data-arts-color-theme="dark" data-arts-header-logo="secondary" data-arts-header-sticky-logo="secondary"
+        data-arts-header-sticky-class="bg-gray-4"
         data-arts-header-overlay-color-theme="light">
         <!-- Spacer removed (hidden via CSS above) — logo stays centered via flex -->
         <div class="header__col header__col_left lang-toggle-spacer" aria-hidden="true"></div>
@@ -1028,12 +1028,17 @@
     @media screen and (max-width: 1023px) {
       .grid_gallery_container {
         display: grid !important;
-        grid-template-columns: repeat(2, 1fr) !important;
-        grid-auto-rows: minmax(280px, 320px) !important;
-        grid-template-areas: unset !important;
+        grid-template-columns: 1fr !important;
+        grid-auto-rows: minmax(280px, auto) !important;
+        grid-template-areas: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
       }
       .grid_gallery_container .item {
         grid-area: auto !important;
+        min-width: 0 !important;
+        width: 100% !important;
       }
     }
 
@@ -1075,6 +1080,24 @@
 
         var items = Array.from(container.children);
         if (items.length < 2) return false;
+
+        var isMobile = window.matchMedia('(max-width: 1023px)').matches;
+
+        if (isMobile) {
+          items.forEach(function (item) {
+            item.style.gridArea = '';
+          });
+
+          var shuffled = items.slice();
+          for (var i = shuffled.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = shuffled[i];
+            shuffled[i] = shuffled[j];
+            shuffled[j] = tmp;
+          }
+          shuffled.forEach(function (node) { container.appendChild(node); });
+          return true;
+        }
 
         var areas = items
           .map(function (el) {

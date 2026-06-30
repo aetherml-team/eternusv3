@@ -256,6 +256,11 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
   left: 0;
   right: 0;
 }
+
+/* Sticky header: match index (dark bg-gray-4), ensure background paints on scroll */
+.page-wedding-details .header__bar.header__bar_sticky.bg-gray-4 {
+  background-color: var(--color-gray-4) !important;
+}
 .page-wedding-details .lang-toggle {
   position: fixed;
   right: 0;
@@ -266,6 +271,31 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
   padding-top: calc(1 * var(--header-min-gutters-vertical) * 1px);
   padding-bottom: calc(1 * var(--header-min-gutters-vertical) * 1px);
   padding-right: calc(1 * var(--header-min-gutters-horizontal) * 1px);
+}
+
+/* Wedding detail gallery: single column on mobile, no horizontal overflow */
+.page-wedding-details section:has(> .grid_gallery_container) {
+  overflow-x: clip;
+  max-width: 100%;
+}
+
+.page-wedding-details .grid_gallery_container {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+@media screen and (max-width: 1023px) {
+  .page-wedding-details .grid_gallery_container {
+    grid-template-columns: 1fr !important;
+    grid-template-areas: none !important;
+  }
+
+  .page-wedding-details .grid_gallery_container .item {
+    grid-area: auto !important;
+    min-width: 0;
+    width: 100%;
+  }
 }
 @media screen and (min-width: 360px) {
   .page-wedding-details .lang-toggle {
