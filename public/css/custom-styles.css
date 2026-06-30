@@ -1,3 +1,17 @@
+/* i18n: smooth language switch (no flash) */
+.i18n-switching [data-i18n],
+.i18n-switching [data-i18n-placeholder] {
+  transition: opacity 0.12s ease;
+}
+html.i18n-switching [data-i18n],
+html.i18n-switching [data-i18n-placeholder] {
+  opacity: 0;
+}
+html:not(.i18n-switching) [data-i18n],
+html:not(.i18n-switching) [data-i18n-placeholder] {
+  opacity: 1;
+}
+
 /* Keyframe Animations */
 @keyframes slideInFromRight {
     0% {
@@ -22,7 +36,7 @@
     position: relative;
     overflow: hidden;
     transition: height 0.5s ease-in-out;
-    padding-bottom: 2.5rem; /* space so Next button is never clipped */
+    padding-bottom: 3.5rem; /* space so Next/Submit button is never clipped (including when error message shows) */
   }
 
   /* Tighter spacing on step title/description so Next button fits */
@@ -39,6 +53,7 @@
   }
   .form-container .form-step .form__row:last-child {
     margin-bottom: 0;
+    padding-bottom: 0.5rem; /* keep Next/Submit button visible when error message appears above */
   }
   
   /* Form Steps */
@@ -241,6 +256,11 @@
   left: 0;
   right: 0;
 }
+
+/* Sticky header: match index (dark bg-gray-4), ensure background paints on scroll */
+.page-wedding-details .header__bar.header__bar_sticky.bg-gray-4 {
+  background-color: var(--color-gray-4) !important;
+}
 .page-wedding-details .lang-toggle {
   position: fixed;
   right: 0;
@@ -251,6 +271,31 @@
   padding-top: calc(1 * var(--header-min-gutters-vertical) * 1px);
   padding-bottom: calc(1 * var(--header-min-gutters-vertical) * 1px);
   padding-right: calc(1 * var(--header-min-gutters-horizontal) * 1px);
+}
+
+/* Wedding detail gallery: single column on mobile, no horizontal overflow */
+.page-wedding-details section:has(> .grid_gallery_container) {
+  overflow-x: clip;
+  max-width: 100%;
+}
+
+.page-wedding-details .grid_gallery_container {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+@media screen and (max-width: 1023px) {
+  .page-wedding-details .grid_gallery_container {
+    grid-template-columns: 1fr !important;
+    grid-template-areas: none !important;
+  }
+
+  .page-wedding-details .grid_gallery_container .item {
+    grid-area: auto !important;
+    min-width: 0;
+    width: 100%;
+  }
 }
 @media screen and (min-width: 360px) {
   .page-wedding-details .lang-toggle {
@@ -304,4 +349,169 @@
 .section-demo-screens-wall .section__content .rotating-button__label,
 .section-demo-screens-wall .section__content .subheading {
   color: #E8E6E0 !important;
+}
+
+/* ==========================================================================
+   Gallery “Coming Soon” cover – wedding detail pages with no photos yet
+   ========================================================================== */
+
+.gallery-coming-soon {
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.gallery-coming-soon::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 50%,
+    rgba(255, 255, 255, 0.03) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+.gallery-coming-soon__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.gallery-coming-soon__title {
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-accent-dark-theme, #FDF9CF);
+}
+
+.gallery-coming-soon__subtitle {
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+  color: var(--color-light-1, #DBDAD7);
+}
+
+@media screen and (min-width: 768px) {
+  .gallery-coming-soon {
+    min-height: 55vh;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .gallery-coming-soon {
+    min-height: 60vh;
+  }
+}
+
+/* ==========================================================================
+   Wedding detail: Teaser / Highlights / Documentary – display once, fitted in container
+   ========================================================================== */
+
+.section-wedding-videos {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+}
+
+.section-wedding-videos .section-video_single {
+  position: relative;
+  overflow: hidden;
+  min-height: 42vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.section-wedding-videos .section-video_single .section__background {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.section-wedding-videos .section-video_single .section__background img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.section-wedding-videos .section-video__content {
+  position: relative;
+  z-index: 50;
+  width: 100%;
+}
+
+.section-wedding-videos .section-video_single + .section-video_single {
+  margin-top: 0;
+}
+
+/* Larger play button container for Teaser / Highlights / Documentary */
+.section-wedding-videos .section-video__play .button-circle {
+  --button-size-min: 64;
+  --button-size-max: 120;
+  --button-paddings-min: 18;
+  --button-paddings-max: 24;
+}
+
+@media screen and (min-width: 768px) {
+  .section-wedding-videos .section-video_single {
+    min-height: 50vh;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .section-wedding-videos .section-video_single {
+    min-height: 55vh;
+  }
+}
+
+/* Preloader only: picture wrapper for WebP (isolated from layout sections) */
+.preloader__image > picture {
+  display: inline-block;
+  height: 100%;
+  max-height: 66vh;
+}
+
+/* Picture wrappers: fill parent exactly like a direct img (no layout change) */
+.js-animated-mask-inner > picture,
+.masthead__background > picture,
+.hover-zoom__inner > picture,
+.has-aspect-ratio > picture,
+.img-wrapper > picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.masthead__background > picture {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.masthead__background picture img.of-cover-absolute {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.has-aspect-ratio > picture {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.has-aspect-ratio > picture > img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }

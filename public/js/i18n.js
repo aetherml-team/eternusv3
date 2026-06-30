@@ -10,7 +10,37 @@ class i18n {
   constructor() {
     this.currentLang = 'en';
     this.translations = {};
+    this._translationCache = {}; // lang -> { translations object } to avoid refetch on every toggle
     this.supportedLanguages = ['en', 'es'];
+    this._initTimeoutIds = [];
+    this._isTranslating = false;
+    this._isSwitchingLanguage = false;
+    this._pendingTranslateTimer = null;
+  }
+
+  _cancelInitTimeouts() {
+    this._initTimeoutIds.forEach((id) => clearTimeout(id));
+    this._initTimeoutIds = [];
+  }
+
+  _translateDOMWithTransition() {
+    const root = document.documentElement;
+    if (!root) {
+      this.translateDOM();
+      this._isSwitchingLanguage = false;
+      return;
+    }
+    root.classList.add('i18n-switching');
+    const done = () => {
+      this._isSwitchingLanguage = false;
+    };
+    requestAnimationFrame(() => {
+      this.translateDOM();
+      requestAnimationFrame(() => {
+        root.classList.remove('i18n-switching');
+        done();
+      });
+    });
   }
 
   /**
@@ -46,26 +76,41 @@ class i18n {
     }
 
     await this.loadTranslations(this.currentLang);
+    if (document.documentElement) {
+      document.documentElement.setAttribute('lang', this.currentLang);
+    }
+    this.translateDOM();
   }
 
   /**
-   * Load translation file for a specific language
+   * Load translation file for a specific language.
    * @param {string} lang - Language code (e.g., 'en', 'es')
+   * @returns {Promise<string>} - The language actually loaded (lang or 'en' on fallback)
    */
   async loadTranslations(lang) {
+    if (this._translationCache[lang]) {
+      this.translations = this._translationCache[lang];
+      return lang;
+    }
+    const basePath = window.location.pathname.replace(/\/[^/]*$/, '') || '/';
+    const url = window.location.origin + basePath + '/lang/' + lang + '.json';
     try {
-      const response = await fetch(`./lang/${lang}.json`);
+      const response = await fetch(url);
       if (!response.ok) {
-        throw new Error(`Failed to load translations for ${lang}`);
+        throw new Error(`Failed to load translations for ${lang}: ${response.status}`);
       }
-      this.translations = await response.json();
-      console.log(`[i18n] Loaded ${lang} translations:`, Object.keys(this.translations).length, 'keys');
+      const data = await response.json();
+      this._translationCache[lang] = data;
+      this.translations = data;
+      return lang;
     } catch (error) {
       console.error('[i18n] Error loading translations:', error);
-      // Fallback to English if loading fails
       if (lang !== 'en') {
         await this.loadTranslations('en');
+        this.currentLang = 'en';
+        return 'en';
       }
+      return lang;
     }
   }
 
@@ -91,27 +136,52 @@ class i18n {
   }
 
   /**
-   * Change language dynamically
-   * @param {string} lang - Language code
-   * @param {boolean} reload - Whether to reload the page
+   * Change language dynamically (no page reload).
+   * Loads new translations, updates URL, persists preference, and re-translates the whole DOM.
+   * @param {string} lang - Language code (e.g. 'en', 'es')
    */
-  async setLanguage(lang, reload = true) {
+  async setLanguage(lang) {
     if (!this.supportedLanguages.includes(lang)) {
-      console.error(`Language ${lang} is not supported`);
+      console.error(`[i18n] Language ${lang} is not supported`);
       return;
     }
+    if (lang === this.currentLang) return;
 
-    await this.loadTranslations(lang);
-    this.currentLang = lang;
+    this._isSwitchingLanguage = true;
+    this._cancelInitTimeouts();
+    if (this._pendingTranslateTimer) {
+      clearTimeout(this._pendingTranslateTimer);
+      this._pendingTranslateTimer = null;
+    }
+
     try {
-      localStorage.setItem(I18N_STORAGE_KEY, lang);
-    } catch (e) {}
+      const loadedLang = await this.loadTranslations(lang);
+      if (loadedLang !== lang) {
+        console.warn('[i18n] Requested language not loaded; kept current state.');
+        this._isSwitchingLanguage = false;
+        return;
+      }
 
-    if (reload) {
+      this.currentLang = lang;
+      try {
+        localStorage.setItem(I18N_STORAGE_KEY, lang);
+      } catch (e) {}
+
       const url = new URL(window.location);
       url.searchParams.set('lang', lang);
-      window.history.pushState({}, '', url);
-      location.reload();
+      window.history.pushState({ lang }, '', url);
+
+      if (document.documentElement) {
+        document.documentElement.setAttribute('lang', lang);
+      }
+
+      this._translateDOMWithTransition();
+      if (typeof window.dispatchEvent === 'function') {
+        window.dispatchEvent(new CustomEvent('i18n:languageChange', { detail: { lang } }));
+      }
+    } catch (e) {
+      console.error('[i18n] setLanguage error:', e);
+      this._isSwitchingLanguage = false;
     }
   }
 
@@ -129,27 +199,45 @@ class i18n {
    * Or with fallback text: <span data-i18n="form.step0.label">Bride's Name</span>
    */
   translateDOM() {
-    console.log(`[i18n] Starting DOM translation for language: ${this.currentLang}`);
+    if (this._isTranslating) return;
+    this._isTranslating = true;
+    try {
+      this._translateDOM();
+    } finally {
+      this._isTranslating = false;
+    }
+  }
 
+  _translateDOM() {
     const elements = document.querySelectorAll('[data-i18n]');
-    console.log(`[i18n] Found ${elements.length} elements with data-i18n`);
-
-    elements.forEach((el) => {
+    // Process in reverse document order so updating a parent's innerHTML doesn't remove untranslated children
+    const list = Array.from(elements);
+    for (let i = list.length - 1; i >= 0; i--) {
+      const el = list[i];
       const key = el.getAttribute('data-i18n');
       const translation = this.t(key);
+      const wrapTag = el.getAttribute('data-i18n-wrap');
+      const wrapClass = el.getAttribute('data-i18n-wrap-class') || '';
 
-      // Check if element has innerHTML (for HTML content) or just text
-      if (el.innerHTML.includes('<') || translation.includes('<')) {
+      if (wrapTag) {
+        const allowHtml = el.hasAttribute('data-i18n-wrap-allow-html');
+        const cls = wrapClass ? ' class="' + wrapClass.replace(/"/g, '&quot;') + '"' : '';
+        const inner = allowHtml
+          ? String(translation)
+          : String(translation)
+              .replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;');
+        el.innerHTML = '<' + wrapTag + cls + '>' + inner + '</' + wrapTag + '>';
+      } else if (el.innerHTML.includes('<') || translation.includes('<')) {
         el.innerHTML = translation;
       } else {
         el.textContent = translation;
       }
-    });
+    }
 
     // Handle placeholders
     const placeholderElements = document.querySelectorAll('[data-i18n-placeholder]');
-    console.log(`[i18n] Found ${placeholderElements.length} elements with data-i18n-placeholder`);
-
     placeholderElements.forEach((el) => {
       const key = el.getAttribute('data-i18n-placeholder');
       const translation = this.t(key);
@@ -158,31 +246,31 @@ class i18n {
 
     // Handle aria-labels and titles
     const ariaElements = document.querySelectorAll('[data-i18n-aria]');
-    console.log(`[i18n] Found ${ariaElements.length} elements with data-i18n-aria`);
-
     ariaElements.forEach((el) => {
       const key = el.getAttribute('data-i18n-aria');
       const translation = this.t(key);
       el.setAttribute('aria-label', translation);
     });
 
-    // Handle cursor follower labels
-      const cursorElements = document.querySelectorAll('[data-i18n-cursor-label]');
-      console.log(`[i18n] Found ${cursorElements.length} elements with data-i18n-cursor-label`);
-
-      cursorElements.forEach((el) => {
-        const key = el.getAttribute('data-i18n-cursor-label');
-        const translation = this.t(key);
-        const raw = el.getAttribute('data-arts-cursor-follower-target');
-        if (!raw) return;
-        const updated = raw.replace(/label:\s*'[^']*'/, "label: '" + translation + "'");
+    // Cursor follower labels (custom cursor text, e.g. "Explore Project" / "Explorar proyecto")
+    const cursorElements = document.querySelectorAll('[data-i18n-cursor-label]');
+    cursorElements.forEach((el) => {
+      const key = el.getAttribute('data-i18n-cursor-label');
+      const translation = key ? this.t(key) : '';
+      const raw = el.getAttribute('data-arts-cursor-follower-target');
+      if (!raw || !translation) return;
+      try {
+        const opts = JSON.parse(raw);
+        opts.label = translation;
+        el.setAttribute('data-arts-cursor-follower-target', JSON.stringify(opts));
+      } catch (e) {
+        const escaped = translation.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+        const updated = raw.replace(/label:\s*['"]([^'"]*)['"]/, 'label: "' + escaped + '"');
         el.setAttribute('data-arts-cursor-follower-target', updated);
-      });
+      }
+    });
 
-    // Update language toggle state and bind clicks if present
     this._initLangToggle();
-
-    console.log(`[i18n] DOM translation complete`);
   }
 
   /**
@@ -204,7 +292,7 @@ class i18n {
           el.addEventListener('click', (e) => {
             e.preventDefault();
             if (lang !== this.currentLang) {
-              this.setLanguage(lang, true);
+              this.setLanguage(lang);
             }
           });
         }
@@ -213,63 +301,74 @@ class i18n {
   }
 }
 
-// Create global instance
+// Create global instance and expose for no-reload switching and post-AJAX translation
 const i18nInstance = new i18n();
+if (typeof window !== 'undefined') {
+  window.i18n = i18nInstance;
+}
 
-// Auto-initialize on DOM ready
+function onTransitionEnd() {
+  if (i18nInstance._isSwitchingLanguage) return;
+  i18nInstance.translateDOM();
+  setTimeout(function () {
+    if (i18nInstance._isSwitchingLanguage) return;
+    i18nInstance.translateDOM();
+  }, 100);
+}
+if (typeof document !== 'undefined') {
+  document.addEventListener('arts/barba/transition/end', onTransitionEnd);
+}
+
+function scheduleInitTranslations() {
+  const delays = [100, 600];
+  delays.forEach((ms) => {
+    const id = setTimeout(() => {
+      if (i18nInstance._isSwitchingLanguage) return;
+      i18nInstance.translateDOM();
+    }, ms);
+    i18nInstance._initTimeoutIds.push(id);
+  });
+}
+
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
     i18nInstance.init().then(() => {
-      // Multiple re-translations to ensure framework animations don't overwrite
-      setTimeout(() => i18nInstance.translateDOM(), 50);
-      setTimeout(() => i18nInstance.translateDOM(), 200);
-      setTimeout(() => i18nInstance.translateDOM(), 500);
-      setTimeout(() => i18nInstance.translateDOM(), 1000);
-      setTimeout(() => i18nInstance.translateDOM(), 2000);
+      scheduleInitTranslations();
     });
   });
 } else {
   i18nInstance.init().then(() => {
-    // Multiple re-translations to ensure framework animations don't overwrite
-    setTimeout(() => i18nInstance.translateDOM(), 50);
-    setTimeout(() => i18nInstance.translateDOM(), 200);
-    setTimeout(() => i18nInstance.translateDOM(), 500);
-    setTimeout(() => i18nInstance.translateDOM(), 1000);
-    setTimeout(() => i18nInstance.translateDOM(), 2000);
+    scheduleInitTranslations();
   });
 }
 
-// Also observe for dynamic content changes and re-translate
+// Observe for dynamic content and re-translate (debounced; never during language switch)
+var OBSERVER_DEBOUNCE_MS = 180;
 if (typeof MutationObserver !== 'undefined') {
-  // Create a mutation observer to watch for new elements being added
-  const observer = new MutationObserver((mutations) => {
-    // Check if any mutations added new elements with data-i18n
-    let hasI18nElements = false;
-    mutations.forEach((mutation) => {
-      if (mutation.addedNodes.length > 0) {
-        mutation.addedNodes.forEach((node) => {
-          if (node.nodeType === 1 && (node.getAttribute && node.getAttribute('data-i18n'))) {
-            hasI18nElements = true;
-          }
-          if (node.nodeType === 1 && node.querySelectorAll) {
-            if (node.querySelectorAll('[data-i18n]').length > 0) {
-              hasI18nElements = true;
-            }
-          }
-        });
+  const observer = new MutationObserver(function (mutations) {
+    if (i18nInstance._isSwitchingLanguage) return;
+    var hasI18nElements = false;
+    for (var i = 0; i < mutations.length; i++) {
+      var added = mutations[i].addedNodes;
+      for (var j = 0; j < added.length; j++) {
+        var node = added[j];
+        if (node.nodeType !== 1) continue;
+        if (node.getAttribute && node.getAttribute('data-i18n')) hasI18nElements = true;
+        if (node.querySelectorAll && node.querySelectorAll('[data-i18n]').length > 0) hasI18nElements = true;
       }
-    });
-    if (hasI18nElements) {
-      i18nInstance.translateDOM();
     }
+    if (!hasI18nElements) return;
+    if (i18nInstance._pendingTranslateTimer) clearTimeout(i18nInstance._pendingTranslateTimer);
+    i18nInstance._pendingTranslateTimer = setTimeout(function () {
+      i18nInstance._pendingTranslateTimer = null;
+      if (i18nInstance._isSwitchingLanguage) return;
+      i18nInstance.translateDOM();
+    }, OBSERVER_DEBOUNCE_MS);
   });
-
-  // Start observing after DOM is ready
-  setTimeout(() => {
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
+  setTimeout(function () {
+    if (document.body) {
+      observer.observe(document.body, { childList: true, subtree: true });
+    }
   }, 1000);
 }
 

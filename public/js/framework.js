@@ -1777,11 +1777,15 @@ class BaseComponent extends BaseAnimation {
 		if (lazyMedia.length) {
 			lazyMedia.forEach((element) => {
 				const
-					parent = element.parentElement,
 					width = element.getAttribute('width'),
 					height = element.getAttribute('height'),
 					isBackground = window.getComputedStyle(element).position === 'absolute',
 					isFullheight = element.classList.contains('full-height') || element.classList.contains('hs-full-height');
+				let parent = element.parentElement;
+
+				if (parent && parent.tagName === 'PICTURE') {
+					parent = parent.parentElement;
+				}
 
 				if (!isBackground && !isFullheight && parent && width && height && !element.closest('.custom-aspect-ratio') && !element.closest('.auto-width-height')) {
 					parent.style.setProperty('--media-width', width);

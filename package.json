@@ -2,9 +2,18 @@
   "repository": "https://github.com/vercel/examples.git",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "audit-images": "node scripts/audit-images.js",
+    "optimize-images": "node scripts/optimize-all-images.js",
+    "fix-image-paths": "node scripts/fix-image-paths.js",
+    "wrap-pictures": "node scripts/wrap-pictures.js",
+    "remove-missing-images": "node scripts/remove-missing-image-blocks.js",
+    "unwrap-pictures": "node scripts/unwrap-index-pictures.js"
+  },
   "devDependencies": {
     "@types/node": "^17.0.42",
     "@vercel/node": "^2.9.6",
+    "sharp": "^0.33.5",
     "typescript": "^4.7.3"
   }
 }

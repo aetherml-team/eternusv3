@@ -36,6 +36,18 @@
       }
     }
 
+    /* Step 4: validate email format */
+    if (step === 4 && isValid) {
+      const emailInput = stepElement.querySelector('input[name="email"]');
+      if (emailInput) {
+        const email = (emailInput.value || '').trim();
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email || !emailRegex.test(email)) {
+          isValid = false;
+        }
+      }
+    }
+
     if (isValid) {
       if (errorElement) errorElement.classList.add('d-none');
       if (step < totalSteps - 1) {
@@ -46,6 +58,8 @@
       }
     } else {
       if (errorElement) errorElement.classList.remove('d-none');
+      // Ensure container grows to fit the error message + button
+      updateContainerHeight();
     }
   };
 
@@ -110,23 +124,56 @@
     const reviewContainer = document.getElementById('review-info');
     if (!reviewContainer) return;
 
+    // Localized labels for the review step
+    const i18n = (typeof window !== 'undefined' && window.i18n) ? window.i18n : null;
+    const labels = {
+      brideName: i18n && i18n.t ? i18n.t('form.review.labels.brideName', "Bride's Name") : "Bride's Name",
+      groomName: i18n && i18n.t ? i18n.t('form.review.labels.groomName', "Groom's Name") : "Groom's Name",
+      weddingType: i18n && i18n.t ? i18n.t('form.review.labels.weddingType', 'Wedding Type') : 'Wedding Type',
+      budget: i18n && i18n.t ? i18n.t('form.review.labels.budget', 'Budget') : 'Budget',
+      email: i18n && i18n.t ? i18n.t('form.review.labels.email', 'Email') : 'Email',
+      additionalInfo: i18n && i18n.t ? i18n.t('form.review.labels.additionalInfo', 'Additional Information') : 'Additional Information'
+    };
+
     const brideName = (form.querySelector('input[name="bride_name"]') || {}).value || '';
     const groomName = (form.querySelector('input[name="groom_name"]') || {}).value || '';
     const weddingTypeEl = form.querySelector('input[name="wedding_type"]:checked');
-    const weddingType = weddingTypeEl ? weddingTypeEl.value : 'N/A';
+    let weddingType = 'N/A';
+    if (weddingTypeEl) {
+      const weddingTypeKeyMap = {
+        'Beach Wedding': 'form.step2.beachWedding',
+        'Garden Wedding': 'form.step2.gardenWedding',
+        'Destination Wedding': 'form.step2.destinationWedding'
+      };
+      const key = weddingTypeKeyMap[weddingTypeEl.value];
+      if (i18n && i18n.t && key) {
+        weddingType = i18n.t(key, weddingTypeEl.value);
+      } else {
+        weddingType = weddingTypeEl.value;
+      }
+    }
     const budgetEl = form.querySelector('input[name="budget"]:checked');
-    const budgetLabels = { A: 'Under $5,000', B: '$5,000 - $10,000', C: '$10,000 - $20,000', D: 'Above $20,000' };
-    const budget = budgetEl ? (budgetLabels[budgetEl.value] || budgetEl.value) : 'N/A';
+    let budget = 'N/A';
+    if (budgetEl) {
+      const budgetKeyMap = { A: 'form.step3.budget1', B: 'form.step3.budget2', C: 'form.step3.budget3', D: 'form.step3.budget4' };
+      const key = budgetKeyMap[budgetEl.value];
+      if (i18n && i18n.t && key) {
+        budget = i18n.t(key, budgetEl.value);
+      } else {
+        const fallbackLabels = { A: 'Under $5,000', B: '$5,000 - $10,000', C: '$10,000 - $20,000', D: 'Above $20,000' };
+        budget = fallbackLabels[budgetEl.value] || budgetEl.value;
+      }
+    }
     const email = (form.querySelector('input[name="email"]') || {}).value || 'N/A';
     const additionalInfo = (form.querySelector('textarea[name="additional_info"]') || {}).value.trim() || 'N/A';
 
     reviewContainer.innerHTML =
-      '<p><strong>Bride\'s Name:</strong> ' + escapeHtml(brideName) + '</p>' +
-      '<p><strong>Groom\'s Name:</strong> ' + escapeHtml(groomName) + '</p>' +
-      '<p><strong>Wedding Type:</strong> ' + escapeHtml(weddingType) + '</p>' +
-      '<p><strong>Budget:</strong> ' + escapeHtml(budget) + '</p>' +
-      '<p><strong>Email:</strong> ' + escapeHtml(email) + '</p>' +
-      '<p><strong>Additional Information:</strong> ' + escapeHtml(additionalInfo) + '</p>';
+      '<p><strong>' + escapeHtml(labels.brideName) + ':</strong> ' + escapeHtml(brideName) + '</p>' +
+      '<p><strong>' + escapeHtml(labels.groomName) + ':</strong> ' + escapeHtml(groomName) + '</p>' +
+      '<p><strong>' + escapeHtml(labels.weddingType) + ':</strong> ' + escapeHtml(weddingType) + '</p>' +
+      '<p><strong>' + escapeHtml(labels.budget) + ':</strong> ' + escapeHtml(budget) + '</p>' +
+      '<p><strong>' + escapeHtml(labels.email) + ':</strong> ' + escapeHtml(email) + '</p>' +
+      '<p><strong>' + escapeHtml(labels.additionalInfo) + ':</strong> ' + escapeHtml(additionalInfo) + '</p>';
 
     updateContainerHeight();
   }
@@ -164,4 +211,11 @@
   }
 
   window.addEventListener('resize', updateContainerHeight);
+
+  /* Re-render review step labels when language is toggled so they obey i18n */
+  window.addEventListener('i18n:languageChange', function () {
+    if (currentStep === totalSteps - 1) {
+      populateReviewInfo();
+    }
+  });
 })();

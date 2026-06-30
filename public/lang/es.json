@@ -6,10 +6,12 @@
     "submit": "Enviar",
     "loading": "Cargando...",
     "play": "Reproducir",
-    "scroll": "Seguir bajando"
+    "scroll": "Seguir bajando",
+    "over": "Mas de ",
+    "projects": "Proyectos"
   },
-  "aroundTheWorld":{
-    "title":"Alrededor del mundo"
+  "aroundTheWorld": {
+    "title": "Alrededor del mundo"
   },
   "nav": {
     "home": "Inicio",
@@ -18,12 +20,16 @@
     "packages": "Paquetes",
     "contact": "Contacto",
     "getInTouch": "Ponte en Contacto",
-    "project":"Explorar proyecto"
+    "project": "Explorar proyecto"
   },
   "hero": {
     "title": "Eternus",
     "subtitle": "Cuando las flores se marchitan y la música se detiene, todo lo que queda son los <span class=\"moments-we-remember\">momentos que recordamos</span>",
     "tagline": "Bodas Eternas"
+  },
+  "comingSoon": {
+    "title": "Próximamente",
+    "subtitle": "Estamos seleccionando los mejores momentos de esta boda. La galería estará disponible aquí pronto."
   },
   "sections": {
     "seeOurWork": "Ver nuestro trabajo",
@@ -38,7 +44,7 @@
     "promotional": "Video Promocional de Boda",
     "credits": "Créditos",
     "documentary": "Documental de Boda",
-    "location":"Ubicación"
+    "location": "Ubicación"
   },
   "destinations": {
     "ibiza": "Ibiza",
@@ -52,6 +58,7 @@
     "morocco": "Marruecos",
     "paris": "París",
     "newYork": "Nueva York",
+    "miami": "Miami",
     "RD": "República Dominicana",
     "Tulum": "Tulum",
     "VDG": "Valle De Guadalupe",
@@ -71,18 +78,18 @@
     "dimitri": "Dimitri Fafutis",
     "giorgos": "Giorgos Baroutsos"
   },
-  "team_profesion":{
-    "photographer":"Fotografo",
-    "director":"Director",
-    "photography_director":"Director de Fotografía",
-    "art_director":"Director de Arte",
-    "camera_lead":"Lider de camara",
-    "wedding_planner":"Wedding Planner"
+  "team_profesion": {
+    "photographer": "Fotografo",
+    "director": "Director",
+    "photography_director": "Director de Fotografía",
+    "art_director": "Director de Arte",
+    "camera_lead": "Lider de camara",
+    "wedding_planner": "Wedding Planner"
   },
   "form": {
     "step0": {
       "title": "¿Cuál es el nombre de la novia?",
-      "description": "Por favor proporciona el nombre de la novia para personalizar tu experiencia de boda con nosotros.",
+      "description": "Por favor proporciona el nombre de la novia para personalizar tu experiencia de boda.",
       "label": "Nombre de la Novia",
       "error": "¡Por favor ingresa el nombre de la novia!"
     },
@@ -132,11 +139,19 @@
       "description": "Cuéntanos detalles extras o solicitudes especiales para hacer tu boda perfecta.",
       "label": "Información Adicional",
       "placeholder": "Cuéntanos más sobre tu boda...",
-      "contactEmail":"correo electrónico de contacto"
+      "contactEmail": "correo electrónico de contacto"
     },
     "review": {
       "title": "Revisa tu Información",
-      "description": "Por favor revisa tus detalles antes de enviar."
+      "description": "Por favor revisa tus detalles antes de enviar.",
+      "labels": {
+        "brideName": "Nombre de la Novia",
+        "groomName": "Nombre del Novio",
+        "weddingType": "Tipo de Boda",
+        "budget": "Presupuesto",
+        "email": "Correo Electrónico",
+        "additionalInfo": "Información Adicional"
+      }
     }
   },
   "weddings": {
@@ -157,32 +172,32 @@
     "terms": "Términos",
     "privacyPolicy": "Política de Privacidad"
   },
-  "fer_ricky":{
-    "weddingDate":"13 de septiembre de 2025",
-    "weddingReflection":"La boda de Fer y Ricky en Valle de Guadalupe dejó una marca en nosotros. No solo por la magnitud de la producción, sino por el cariño que construimos con ellos durante esos días. Fueron tres celebraciones espectaculares: una boda civil elegante dentro de una cava de vinos, una ceremonia construida en medio del viñedo con una vista espectacular y una recepción bajo una estructura de madera diseñada especialmente para la ocasión, donde los lásers y la iluminación transformaron la noche en algo inolvidable. El cierre fue una fiesta vaquera de disfraces con actos de circo, malabares, burbujas y chisperos que elevaron todo a otro nivel. Un fin de semana extraordinario que dejo huella en nosotros."
+  "fer_ricky": {
+    "weddingDate": "13 de septiembre de 2025",
+    "weddingReflection": "La boda de Fer y Ricky en Valle de Guadalupe dejó una marca en nosotros. No solo por la magnitud de la producción, sino por el cariño que construimos con ellos durante esos días. Fueron tres celebraciones espectaculares: una boda civil elegante dentro de una cava de vinos, una ceremonia construida en medio del viñedo con una vista espectacular y una recepción bajo una estructura de madera diseñada especialmente para la ocasión, donde los lásers y la iluminación transformaron la noche en algo inolvidable. El cierre fue una fiesta vaquera de disfraces con actos de circo, malabares, burbujas y chisperos que elevaron todo a otro nivel. Un fin de semana extraordinario que dejo huella en nosotros."
   },
-  "july_ty":{
-    "weddingDate":"28 de Junio de 2025",
-    "weddingReflection":"La boda de July & Ty en Los Cabos fue el encuentro perfecto entre culturas, energía y paisaje. July, brasileña, y Ty, estadounidense, reunieron a todos frente al mar para una ceremonia con una vista abierta al Pacífico y un sunset simplemente espectacular. La celebración continuó con un ambiente increíble que mantuvo la energía toda la noche. Una boda vibrante, elegante y llena de personalidad."
+  "july_ty": {
+    "weddingDate": "28 de Junio de 2025",
+    "weddingReflection": "La boda de July & Ty en Los Cabos fue el encuentro perfecto entre culturas, energía y paisaje. July, brasileña, y Ty, estadounidense, reunieron a todos frente al mar para una ceremonia con una vista abierta al Pacífico y un sunset simplemente espectacular. La celebración continuó con un ambiente increíble que mantuvo la energía toda la noche. Una boda vibrante, elegante y llena de personalidad."
   },
-  "gaby-tono":{
-    "weddingDate":"5 de Abril de 2025",
-    "weddingReflection":" La boda de Gaby & Toño en Punta Mita fue un reflejo de su conexión única y de la alegríaque los caracteriza. En un hotel espectacular tuvimos una sesión de novios digna de película,rodeados del cariño y la unión de dos familias increíbles que hicieron del día algomuy especial. La ceremonia estuvo llena de amor y risas, y la noche cerró con una fiesta inolvidable que mantuvo viva la energía de todos."
+  "gaby-tono": {
+    "weddingDate": "5 de Abril de 2025",
+    "weddingReflection": " La boda de Gaby & Toño en Punta Mita fue un reflejo de su conexión única y de la alegríaque los caracteriza. En un hotel espectacular tuvimos una sesión de novios digna de película,rodeados del cariño y la unión de dos familias increíbles que hicieron del día algomuy especial. La ceremonia estuvo llena de amor y risas, y la noche cerró con una fiesta inolvidable que mantuvo viva la energía de todos."
   },
-  "domi-tavo":{
-    "weddingDate":"23 de Marzo de 2024",
-    "weddingReflection":"La celebración de Domi & Tavo en Tulum fue una experiencia llena de alegría y energía desbordante. Tres días de fiesta con fuegos artificiales, shows impresionantes y una pista de baile que nunca se apagó. Su vibra auténtica y contagiosa se refleja en cada momento de los videos, capturando la magia de una fiesta que duró hasta el amanecer."
+  "domi-tavo": {
+    "weddingDate": "23 de Marzo de 2024",
+    "weddingReflection": "La celebración de Domi & Tavo en Tulum fue una experiencia llena de alegría y energía desbordante. Tres días de fiesta con fuegos artificiales, shows impresionantes y una pista de baile que nunca se apagó. Su vibra auténtica y contagiosa se refleja en cada momento de los videos, capturando la magia de una fiesta que duró hasta el amanecer."
   },
-  "david-edurne":{
-    "weddingDate":"01 de Julio de 2023",
-    "weddingReflection":"La boda de David & Edurne en Menorca fue, sin duda, una de las experiencias más únicas que hemos vivido. Una pareja elegante y auténtica, cuyo amor parecía imposible de poner en palabras, sorprendió a todos con un evento fuera de lo común: desde una cena temática con un inesperado “secuestro” y proyecciones de más de siete metros, hasta una lluvia plateada de confeti que cubrió el cielo. La noche se convirtió en una aventura con personajes y zonas temáticas que contaban su historia única y divertida, cerrando con videojuegos llevados a la vida real, tirolesas y música que mantuvo a todos bailando hasta el amanecer."
+  "david-edurne": {
+    "weddingDate": "01 de Julio de 2023",
+    "weddingReflection": "La boda de David & Edurne en Menorca fue, sin duda, una de las experiencias más únicas que hemos vivido. Una pareja elegante y auténtica, cuyo amor parecía imposible de poner en palabras, sorprendió a todos con un evento fuera de lo común: desde una cena temática con un inesperado “secuestro” y proyecciones de más de siete metros, hasta una lluvia plateada de confeti que cubrió el cielo. La noche se convirtió en una aventura con personajes y zonas temáticas que contaban su historia única y divertida, cerrando con videojuegos llevados a la vida real, tirolesas y música que mantuvo a todos bailando hasta el amanecer."
   },
-  "izaak-simi":{
-    "weddingDate":"26 de Febrero de 2026",
-    "weddingReflection":"La boda de Issac & Simi en San Miguel de Allende fue una experiencia fuera de lo común. La ceremonia se levantó entre fuentes y una estructura llena de espejos que transformó por completo el lugar. Entre pantallas gigantes y un candy bar convertido en una nave espacial, los invitados vivieron un ambiente innovador y sorprendente, reflejo de una pareja que quería compartir algo único y memorable con todos los que aman. La fiesta no se quedó atrás: la energía no dejaba de subir y la pista de baile transmitía lo que realmente fue el evento, una auténtica locura."
+  "izaak-simi": {
+    "weddingDate": "26 de Febrero de 2026",
+    "weddingReflection": "La boda de Issac & Simi en San Miguel de Allende fue una experiencia fuera de lo común. La ceremonia se levantó entre fuentes y una estructura llena de espejos que transformó por completo el lugar. Entre pantallas gigantes y un candy bar convertido en una nave espacial, los invitados vivieron un ambiente innovador y sorprendente, reflejo de una pareja que quería compartir algo único y memorable con todos los que aman. La fiesta no se quedó atrás: la energía no dejaba de subir y la pista de baile transmitía lo que realmente fue el evento, una auténtica locura."
   },
-  "erika-joey":{
-    "weddingDate":"29 de Octubre de 2022",
-    "weddingReflection":"La boda de Erika & Joey en la Ciudad de México superó todas las expectativas. El lugar y la ceremonia quedarán en la memoria de todos, no solo por su belleza, sino por la energía y el amor que transmitían los novios a cada persona presente. Todo, desde los detalles más refinados hasta la fiesta, fue impactante y perfecto. Nadie se quedó fuera de la pista de baile en una celebración que marcó un antes y un después."
+  "erika-joey": {
+    "weddingDate": "29 de Octubre de 2022",
+    "weddingReflection": "La boda de Erika & Joey en la Ciudad de México superó todas las expectativas. El lugar y la ceremonia quedarán en la memoria de todos, no solo por su belleza, sino por la energía y el amor que transmitían los novios a cada persona presente. Todo, desde los detalles más refinados hasta la fiesta, fue impactante y perfecto. Nadie se quedó fuera de la pista de baile en una celebración que marcó un antes y un después."
   }
 }
