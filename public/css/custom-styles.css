@@ -437,3 +437,10 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
     min-height: 55vh;
   }
 }
+
+/* Preloader only: picture wrapper for WebP (isolated from layout sections) */
+.preloader__image > picture {
+  display: inline-block;
+  height: 100%;
+  max-height: 66vh;
+}

@@ -638,7 +638,7 @@ window.app = {
 	loadLazy: () => {
 		return new Promise((resolve) => {
 			app.lazy = new LazyLoad({
-				threshold: 800,
+				threshold: 300,
 				cancel_on_exit: false,
 				unobserve_entered: true
 			});
