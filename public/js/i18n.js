@@ -4,6 +4,17 @@
  * Defaults to English if no language is specified
  */
 
+(function () {
+  const root = document.documentElement;
+  const ua = navigator.userAgent;
+
+  if (/iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+    root.classList.add('is-ios');
+  } else if (/Android/i.test(ua)) {
+    root.classList.add('is-android');
+  }
+})();
+
 const I18N_STORAGE_KEY = 'eternus-lang';
 
 class i18n {
