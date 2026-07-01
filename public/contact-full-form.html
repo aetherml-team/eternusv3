@@ -439,6 +439,7 @@
                                             <input
                                             id="bride_name"
                                             class="input-float__input" type="text" name="bride_name" required
+                                              autocomplete="given-name" maxlength="80" minlength="5"
                                               data-pristine-required-message="Please enter the bride's name"  />
                                             <span class="input-float__label" data-i18n="form.step0.label">Bride's Name</span>
                                           </label>
@@ -468,7 +469,8 @@
                                       <div class="row form__row">
                                         <div class="col-12 form__col">
                                           <label class="input-float">
-                                            <input class="input-float__input" type="text" name="groom_name" required
+                                            <input id="groom_name" class="input-float__input" type="text" name="groom_name" required
+                                              autocomplete="given-name" maxlength="80" minlength="5"
                                               data-pristine-required-message="Please enter the groom's name" />
                                             <span class="input-float__label" data-i18n="form.step1.label">Groom's Name</span>
                                           </label>

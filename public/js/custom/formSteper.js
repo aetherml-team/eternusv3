@@ -9,6 +9,46 @@
     return document.getElementById('multiStepForm');
   }
 
+  /** Letters and spaces only (supports accented names e.g. José, María). */
+  function sanitizePersonName(value) {
+    return (value || '').replace(/[^\p{L}\s]/gu, '');
+  }
+
+  function isValidPersonName(value) {
+    return sanitizePersonName(value).trim().length > 0;
+  }
+
+  function bindPersonNameInput(input) {
+    if (!input || input.dataset.personNameBound === 'true') {
+      return;
+    }
+    input.dataset.personNameBound = 'true';
+
+    input.addEventListener('input', function () {
+      const sanitized = sanitizePersonName(input.value);
+      if (sanitized !== input.value) {
+        input.value = sanitized;
+      }
+    });
+
+    input.addEventListener('paste', function (e) {
+      e.preventDefault();
+      const pasted = (e.clipboardData || window.clipboardData).getData('text');
+      const start = input.selectionStart;
+      const end = input.selectionEnd;
+      const merged = input.value.slice(0, start) + pasted + input.value.slice(end);
+      input.value = sanitizePersonName(merged);
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+  }
+
+  function bindPersonNameInputs() {
+    var form = getForm();
+    if (!form) return;
+    bindPersonNameInput(form.querySelector('input[name="bride_name"]'));
+    bindPersonNameInput(form.querySelector('input[name="groom_name"]'));
+  }
+
   /**
    * Validates the current step and moves to the next step if valid.
    * Exposed globally so onclick handlers work.
@@ -31,6 +71,10 @@
         isValid = stepElement.querySelector('input[name="' + name + '"]:checked') !== null;
       } else {
         isValid = Array.from(requiredInputs).every(function (input) {
+          if (input.name === 'bride_name' || input.name === 'groom_name') {
+            input.value = sanitizePersonName(input.value).trim();
+            return isValidPersonName(input.value);
+          }
           return input.value.trim() !== '';
         });
       }
@@ -195,6 +239,8 @@
     /* Submit current step on Enter (except in textarea where Enter is newline) */
     var form = getForm();
     if (form) {
+      bindPersonNameInputs();
+
       form.addEventListener('keydown', function (e) {
         if (e.key !== 'Enter') return;
         if (e.target && e.target.tagName === 'TEXTAREA') return;
