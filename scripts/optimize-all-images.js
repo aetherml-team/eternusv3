@@ -12,23 +12,23 @@ const { collectFromAllHtml, toAssetsRel } = require('./lib/html-image-refs');
 const PUBLIC = path.join(__dirname, '..', 'public');
 const IMG = path.join(PUBLIC, 'img', 'assets');
 
-const WEBP_QUALITY = 81;
-const JPEG_QUALITY = 84;
+const WEBP_QUALITY = 86;
+const JPEG_QUALITY = 88;
 const PNG_QUALITY = 80;
 
 /** @type {Record<string, { maxWidth: number, jpegQuality?: number, webpQuality?: number }>} */
 const RULES = {
-  'hero/': { maxWidth: 480 },
+  'hero/': { maxWidth: 640, jpegQuality: 86, webpQuality: 84 },
   'preloader/': { maxWidth: 800 },
-  'section/sectionArcImages/': { maxWidth: 600 },
-  'places/': { maxWidth: 1000 },
+  'section/sectionArcImages/': { maxWidth: 800 },
+  'places/': { maxWidth: 1200 },
   'section/sectionTestimonials/fondoTestimonios.png': { maxWidth: 1600, webpQuality: 78, jpegQuality: 80 },
-  'packages/': { maxWidth: 1400 },
-  'team/': { maxWidth: 900 },
-  'placesDetails/': { maxWidth: 1200 },
-  'postsTestimonials/': { maxWidth: 1200 },
-  'postsPortfolio/': { maxWidth: 1200 },
-  'wedingDetails/': { maxWidth: 1200 },
+  'packages/': { maxWidth: 1600 },
+  'team/': { maxWidth: 1100 },
+  'placesDetails/': { maxWidth: 1400 },
+  'postsTestimonials/': { maxWidth: 1400 },
+  'postsPortfolio/': { maxWidth: 1400 },
+  'wedingDetails/': { maxWidth: 1800 },
 };
 
 const HERO_COVER_RE = /\/(Hero\.jpe?g|TeaserEdit[^/]*\.jpe?g|1\.jpg)$/i;
@@ -63,16 +63,16 @@ function getRule(relPath) {
   const normalized = relPath.replace(/\\/g, '/');
 
   if (TESTIMONIAL_RE.test(normalized)) return { maxWidth: 300 };
-  if (HERO_COVER_RE.test(normalized)) return { maxWidth: 1600 };
+  if (HERO_COVER_RE.test(normalized)) return { maxWidth: 1920 };
   if (PORTADA_RE.test(basename) || /\.png$/i.test(basename)) {
-    return { maxWidth: 1200 };
+    return { maxWidth: 1400 };
   }
 
   for (const [prefix, rule] of Object.entries(RULES)) {
     if (prefix.endsWith('/') && normalized.startsWith(prefix)) return rule;
   }
 
-  return { maxWidth: 1200 };
+  return { maxWidth: 1400 };
 }
 
 async function hasAlpha(image) {
@@ -123,7 +123,16 @@ async function optimizeFile(relPath) {
     fs.renameSync(jpegPath + '.tmp', jpegPath);
     const after = fs.statSync(jpegPath).size;
     const webpSize = fs.statSync(webpPath).size;
-    return { relPath: relPath.replace(/\.png$/i, '.jpg'), before, after, webpSize, converted: 'png→jpg' };
+    const outMeta = await sharp(jpegPath).metadata();
+    return {
+      relPath: relPath.replace(/\.png$/i, '.jpg'),
+      before,
+      after,
+      webpSize,
+      converted: 'png→jpg',
+      width: outMeta.width,
+      height: outMeta.height,
+    };
   } else {
     const isJpeg = ['.jpg', '.jpeg'].includes(ext);
     if (isJpeg) {
@@ -141,8 +150,17 @@ async function optimizeFile(relPath) {
 
   const after = fs.statSync(absPath).size;
   const webpSize = fs.statSync(webpPath).size;
+  const outMeta = await sharp(absPath).metadata();
 
-  return { relPath, before, after, webpSize, converted: null };
+  return {
+    relPath,
+    before,
+    after,
+    webpSize,
+    converted: null,
+    width: outMeta.width,
+    height: outMeta.height,
+  };
 }
 
 async function main() {
