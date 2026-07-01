@@ -9,11 +9,16 @@ class HeroRandomizer {
     this.totalImages = 76;
     this.imagesToDisplay = 24;
     this.selectedImages = [];
+    // hero-67/68 exist as .png only — no .jpg/.webp for the randomizer pool
+    this.excludedImages = new Set([67, 68]);
   }
 
   getAllImagePaths() {
     const images = [];
     for (let i = 1; i <= this.totalImages; i++) {
+      if (this.excludedImages.has(i)) {
+        continue;
+      }
       images.push(`${this.heroFolder}hero-${i}.jpg`);
     }
     return images;
@@ -78,7 +83,6 @@ class HeroRandomizer {
     const lanes = document.querySelectorAll('.js-screens-wall__list-lane');
 
     if (lanes.length === 0) {
-      console.warn('HeroRandomizer: No lanes found. Make sure the DOM is loaded.');
       return;
     }
 
@@ -100,22 +104,24 @@ class HeroRandomizer {
       window.app.lazy.update();
     }
   }
-
-  init() {
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', () => this.populate());
-    } else {
-      this.populate();
-    }
-  }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const randomizer = new HeroRandomizer();
-  randomizer.init();
-});
+function populateHeroWall() {
+  if (!document.querySelector('.js-screens-wall')) {
+    return;
+  }
 
-document.addEventListener('arts/barba/transition/init/after', () => {
-  const randomizer = new HeroRandomizer();
-  randomizer.populate();
+  new HeroRandomizer().populate();
+}
+
+// Full page load of index (once — do not listen to Barba's synthetic DOMContentLoaded)
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', populateHeroWall, { once: true });
+} else {
+  populateHeroWall();
+}
+
+// Barba AJAX: populate after next container is assigned, before ScreensWall inits
+document.addEventListener('arts/barba/transition/init/before', () => {
+  queueMicrotask(populateHeroWall);
 });
