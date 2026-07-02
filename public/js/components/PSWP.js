@@ -432,17 +432,20 @@ export default class PSWP extends BaseComponent {
 			});
 		}
 
-		// Use thumbnail aspect ratio at viewport-sized dimensions so lightbox is correct and full-size
-		// (avoids stretch from wrong data-pswp-* and avoids tiny display from raw thumbnail size)
 		if (itemData.type === 'image') {
-			const img = itemData.element.querySelector('img');
-			if (img && img.naturalWidth && img.naturalHeight) {
-				const minSize = 1920;
-				const w = img.naturalWidth;
-				const h = img.naturalHeight;
-				const scale = minSize / Math.max(w, h);
-				const W = Math.round(w * scale);
-				const H = Math.round(h * scale);
+			const el = itemData.element;
+			const pswpW = parseInt(el.getAttribute('data-pswp-width'), 10);
+			const pswpH = parseInt(el.getAttribute('data-pswp-height'), 10);
+			const img = el.querySelector('img');
+			let W = pswpW;
+			let H = pswpH;
+
+			if (!W || !H) {
+				W = parseInt(img?.getAttribute('width'), 10) || img?.naturalWidth || 0;
+				H = parseInt(img?.getAttribute('height'), 10) || img?.naturalHeight || 0;
+			}
+
+			if (W && H) {
 				itemData.w = W;
 				itemData.h = H;
 				itemData.width = W;

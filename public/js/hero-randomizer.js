@@ -51,21 +51,17 @@ class HeroRandomizer {
     const isVertical = this.isVerticalImage(imagePath);
     const width = 600;
     const height = isVertical ? 156 : 312;
-
     const webpPath = imagePath.replace(/\.jpe?g$/i, '.webp');
 
     div.innerHTML = `
       <div class="img-wrapper">
-        <picture>
-          <source type="image/webp" data-srcset="${webpPath}" />
-          <img class="lazy of-cover w-full h-full"
-            src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='100%25'%20height='100%25'%3E%3C/svg%3E"
-            decoding="async"
-            data-src="${imagePath}"
-            width="${width}"
-            height="${height}"
-            alt=""${priorityAttr} />
-        </picture>
+        <img class="lazy of-cover w-full h-full"
+          src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='100%25'%20height='100%25'%3E%3C/svg%3E"
+          decoding="async"
+          data-src="${webpPath}"
+          width="${width}"
+          height="${height}"
+          alt=""${priorityAttr} />
       </div>
     `;
 

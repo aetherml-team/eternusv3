@@ -5,6 +5,11 @@
   "scripts": {
     "audit-images": "node scripts/audit-images.js",
     "optimize-images": "node scripts/optimize-all-images.js",
+    "restore-images": "node scripts/restore-images-from-git.js",
+    "update-pswp-dimensions": "node scripts/update-pswp-dimensions.js",
+    "cleanup-dup-images": "node scripts/cleanup-dup-images.js",
+    "migrate-html-webp": "node scripts/migrate-html-webp.js",
+    "optimize-page-images": "node scripts/optimize-page-images.js",
     "fix-image-paths": "node scripts/fix-image-paths.js",
     "wrap-pictures": "node scripts/wrap-pictures.js",
     "remove-missing-images": "node scripts/remove-missing-image-blocks.js",
