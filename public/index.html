@@ -143,9 +143,9 @@
         <!-- Site logo --><a class="header__col header__col_center header__col_logo logo no-ajax" href="index.html">
           <div class="logo__wrapper-img">
             <!-- primary logo version (for use with light backgrounds)--><img class="logo__img-primary"
-              src="img/logo/logo-eternus.svg" width="39" height="20" loading="eager" alt="Eternus" />
+              src="img/logo/logo-eternus-dark.png" width="42" height="43" loading="eager" alt="Eternus" />
             <!-- secondary logo version (for use with dark backgrounds)--><img class="logo__img-secondary"
-              src="img/logo/logo-eternus.svg" width="39" height="20" loading="eager" alt="Eternus" />
+              src="img/logo/logo-eternus-light.png" width="42" height="43" loading="eager" alt="Eternus" />
           </div>
         </a>
         <!-- - Site logo -->
@@ -372,7 +372,7 @@
                           <div class="overflow-hidden aspect-square js-ajax-transition-element"><img
                               class="lazy of-cover-absolute js-ajax-transition-element__media"
                               src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='100%25'%20height='100%25'%3E%3C/svg%3E"
-                              decoding="async" data-src="img/assets/wedingDetails/Fer&Ricky/Fer&Ricky.webp" width="1920"
+                              decoding="async" data-src="img/assets/wedingDetails/Fer-Ricky/Fer-Ricky.webp" width="1920"
                               height="1280" alt="" />
 
                           </div>
@@ -815,7 +815,7 @@
                 <!-- Featured media -->
                 <div class="overflow-hidden w-100 h-100 hover-zoom__inner"><img class="lazy of-cover-absolute"
                     src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='100%25'%20height='100%25'%3E%3C/svg%3E"
-                    decoding="async" data-src="img/assets/places/MenorcaEspaña.webp" width="1280" height="1920" alt="" />
+                    decoding="async" data-src="img/assets/places/MenorcaEspana.webp" width="1280" height="1920" alt="" />
 
                   <div class="portfolio-item__overlay overlay overlay_dark overlay_opacity-40"></div>
                 </div>
@@ -961,76 +961,160 @@
             <div class="section__overlay overlay overlay_dark overlay_opacity-70"></div>
           </div>
         </section>
-        <section class="section section-pricing-cards">
-          <div class="pricing-table py-large js-parallax" data-arts-color-theme="dark"
-            data-arts-component-name="Parallax" data-arts-component-options="{inner: {factor: {y: 0.12}}}"
-            data-hover-group-class="pricing-table_hovered" data-arts-os-animation="true">
-            <!-- Background & overlay -->
-            <div class="pricing-table__background">
-              <div class="w-100 h-100 overflow-hidden" data-arts-os-animation-name="animatedMaskFromLeft">
-                <div class="w-100 h-100 js-animated-mask-inner"><img fetchpriority="low" class="lazy of-cover-absolute"
-                    src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='100%25'%20height='100%25'%3E%3C/svg%3E"
-                    decoding="async" data-src="img/assets/packages/EternusJ&R-6.webp" width="1920" height="1280"
-                    alt="" />
-
-                  <div class="pricing-table__overlay overlay overlay_dark overlay_opacity-70"></div>
-                </div>
+        <!-- section CONTACT FORM -->
+        <section id="contact-form" class="section section-contact-grid py-small" data-arts-color-theme="dark">
+          <div class="section-contact-grid__bg" aria-hidden="true">
+            <img class="section-contact-grid__bg-image lazy of-cover-absolute" alt=""
+              src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='100%25'%20height='100%25'%3E%3C/svg%3E"
+              decoding="async" data-src="img/assets/packages/EternusJ&R-6.webp" width="1920" height="1280" />
+            <div class="section-contact-grid__bg-overlay"></div>
+          </div>
+          <div class="container container-wide contact-grid__container js-ajax-transition-visible-element">
+            <div class="section__header text-center content content-width-1 mx-auto mb-2">
+              <div data-arts-component-name="Content" data-arts-split-text-preset="animatedLines">
+                <h2 class="h6 my-0">(&emsp;<span data-i18n="sections.contactForm">Get in Touch</span>&emsp;)</h2>
               </div>
+              <p class="h4 color-accent mt-3 mb-1 contact-grid__title" data-i18n="form.index.title"
+                data-i18n-no-animate>Let's plan your eternal day</p>
+              <p class="section-contact-grid__lede text-muted mb-0 contact-grid__lede" data-i18n="form.index.description"
+                data-i18n-no-animate>Tell us about your wedding and pick a time to meet our team.</p>
             </div>
-            <!-- - Background & overlay -->
-            <div class="pricing-table__content container">
-              <!-- Wedding Day Title & Price (Centered) -->
-              <div class="row justify-content-center text-center mb-5 pb-5">
-                <div class="col-12">
-                  <div class="pricing-table__header">
-                    <h3 class="h3 pricing-table__heading my-0" data-arts-split-text-preset="animatedChars"
-                      data-i18n="packages.eternalHistory">Hagamos que su historia sea eterna</h3>
+            <form id="contactForm" class="form contact-grid__form text-left" action="/api/send"
+              method="POST" novalidate="novalidate" data-submit-json data-arts-color-theme="dark">
+              <p id="contact-form-errors" class="contact-grid__error-banner text-danger small mb-2 d-none" data-i18n="form.index.submitError">
+                Please complete all required fields before submitting.</p>
+              <p id="contact-form-api-error" class="contact-grid__error-banner text-danger small mb-2 d-none" data-i18n="form.index.submitFailed">
+                We couldn't send your message right now. Please try again in a moment.</p>
+              <p id="contact-form-success" class="contact-grid__success-banner small mb-2 d-none" data-i18n="form.index.submitSuccess">
+                Thanks for your message! We will reply to you as soon as possible.</p>
+              <div class="row g-2 contact-grid__row">
+                <div class="col-12 col-xl-7 contact-grid__fields">
+                  <div class="contact-grid__panel contact-grid__panel--form">
+                  <div class="row form__row g-2">
+                    <div class="col-12 col-md-6 form__col">
+                      <label for="contact_bride_name" class="input-float">
+                        <input id="contact_bride_name" class="input-float__input" type="text" name="bride_name"
+                          required autocomplete="given-name" inputmode="text" maxlength="80" minlength="2" />
+                        <span class="input-float__label" data-i18n="form.step0.label">Bride's Name</span>
+                      </label>
+                      <p id="contact-form-bride-error" class="text-danger small mt-1 mb-0 d-none"
+                        data-i18n="form.step0.error">Please enter the bride's name!</p>
+                      <p id="contact-form-bride-invalid" class="text-danger small mt-1 mb-0 d-none"
+                        data-i18n="form.step0.errorInvalid">Names must contain letters only.</p>
+                    </div>
+                    <div class="col-12 col-md-6 form__col">
+                      <label for="contact_groom_name" class="input-float">
+                        <input id="contact_groom_name" class="input-float__input" type="text" name="groom_name"
+                          required autocomplete="family-name" inputmode="text" maxlength="80" minlength="2" />
+                        <span class="input-float__label" data-i18n="form.step1.label">Groom's Name</span>
+                      </label>
+                      <p id="contact-form-groom-error" class="text-danger small mt-1 mb-0 d-none"
+                        data-i18n="form.step1.error">Please enter the groom's name!</p>
+                      <p id="contact-form-groom-invalid" class="text-danger small mt-1 mb-0 d-none"
+                        data-i18n="form.step1.errorInvalid">Names must contain letters only.</p>
+                    </div>
+                    <div class="col-12 form__col">
+                      <label class="input-float">
+                        <input class="input-float__input" type="email" name="email" required
+                          autocomplete="email" />
+                        <span class="input-float__label" data-i18n="form.step3Email.label">Email</span>
+                      </label>
+                      <p id="contact-form-email-error" class="text-danger small mt-1 mb-0 d-none"
+                        data-i18n="form.step3Email.error">Please enter a valid email!</p>
+                    </div>
+                    <div class="col-12 form__col contact-grid__field-group">
+                      <p class="subheading contact-grid__field-label mb-1" data-i18n="form.step2.title">What Kind of Wedding Are You
+                        Planning?</p>
+                      <div class="contact-grid__radios">
+                        <label class="input-checkbox contact-grid__radio-tile">
+                          <input class="input-checkbox__checkbox" type="radio" name="wedding_type"
+                            value="Beach Wedding" required />
+                          <span class="input-checkbox__label" data-i18n="form.step2.beachWedding">Beach
+                            Wedding</span>
+                        </label>
+                        <label class="input-checkbox contact-grid__radio-tile">
+                          <input class="input-checkbox__checkbox" type="radio" name="wedding_type"
+                            value="Garden Wedding" required />
+                          <span class="input-checkbox__label" data-i18n="form.step2.gardenWedding">Garden
+                            Wedding</span>
+                        </label>
+                        <label class="input-checkbox contact-grid__radio-tile">
+                          <input class="input-checkbox__checkbox" type="radio" name="wedding_type"
+                            value="Destination Wedding" required />
+                          <span class="input-checkbox__label" data-i18n="form.step2.destinationWedding">Destination
+                            Wedding</span>
+                        </label>
+                      </div>
+                      <p id="contact-form-type-error" class="text-danger small mt-2 mb-0 d-none"
+                        data-i18n="form.step2.error">Please select a wedding type!</p>
+                    </div>
+                    <div class="col-12 form__col contact-grid__field-group">
+                      <p class="subheading contact-grid__field-label mb-1" data-i18n="form.step3.title">What is Your Wedding Budget?</p>
+                      <div class="contact-grid__radios contact-grid__radios--budget">
+                        <label class="input-checkbox contact-grid__radio-tile">
+                          <input class="input-checkbox__checkbox" type="radio" name="budget" value="A" required />
+                          <span class="input-checkbox__label" data-i18n="form.step3.budget1">Under $5,000</span>
+                        </label>
+                        <label class="input-checkbox contact-grid__radio-tile">
+                          <input class="input-checkbox__checkbox" type="radio" name="budget" value="B" required />
+                          <span class="input-checkbox__label" data-i18n="form.step3.budget2">$5,000 – $10,000</span>
+                        </label>
+                        <label class="input-checkbox contact-grid__radio-tile">
+                          <input class="input-checkbox__checkbox" type="radio" name="budget" value="C" required />
+                          <span class="input-checkbox__label" data-i18n="form.step3.budget3">$10,000 – $20,000</span>
+                        </label>
+                        <label class="input-checkbox contact-grid__radio-tile">
+                          <input class="input-checkbox__checkbox" type="radio" name="budget" value="D" required />
+                          <span class="input-checkbox__label" data-i18n="form.step3.budget4">Above $20,000</span>
+                        </label>
+                      </div>
+                      <p id="contact-form-budget-error" class="text-danger small mt-2 mb-0 d-none"
+                        data-i18n="form.step3.error">Please select a budget range!</p>
+                    </div>
+                    <div class="col-12 form__col">
+                      <label class="input-float">
+                        <textarea class="px-2 input-float__input input-float__input_textarea" name="additional_info"
+                          rows="2"></textarea>
+                        <span class="px-2 input-float__label" data-i18n="form.step5.label">Additional
+                          Information</span>
+                      </label>
+                    </div>
+                    <div class="col-12 form__col contact-grid__submit">
+                      <button type="submit" class="contact-grid__submit-cta" disabled aria-disabled="true">
+                        <span data-i18n="common.submit">Submit</span>
+                      </button>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+                <div class="col-12 col-xl-5 contact-grid__scheduler">
+                  <div class="contact-grid__scheduler-inner">
+                    <div class="contact-grid__panel contact-grid__panel--scheduler">
+                      <p class="subheading contact-grid__scheduler-eyebrow mb-1" data-i18n="form.stepMeeting.eyebrow">Private Consultation</p>
+                      <h3 class="h6 mt-0 color-accent mb-0 contact-grid__scheduler-title" data-i18n="form.stepMeeting.title">When would you like to meet
+                      with us?</h3>
+                    <p class="contact-grid__scheduler-desc text-muted mb-2" data-i18n="form.stepMeeting.description">Pick a date and time for a
+                      consultation call with our team.</p>
+                    <input type="hidden" name="meeting_date" required />
+                    <input type="hidden" name="meeting_time" required />
+                    <div id="meeting-calendar"></div>
+                    <p id="meeting-date-display"
+                      class="meeting-scheduler__selected-date meeting-scheduler__selected-date--compact color-accent d-none"></p>
+                    <div class="contact-grid__times-wrap">
+                      <p class="subheading contact-grid__times-label mb-1" data-i18n="form.stepMeeting.timeLabel">Available times</p>
+                      <p id="meeting-timezone-label" class="meeting-scheduler__timezone small text-muted mb-2"></p>
+                      <div id="meeting-time-slots"></div>
+                    </div>
+                    <p id="contact-form-meeting-error" class="text-danger small mt-3 mb-0 d-none"
+                      data-i18n="form.stepMeeting.error">Please select a meeting date and time.</p>
+                    </div>
                   </div>
                 </div>
               </div>
-              <!-- Service Options -->
-              <div class="row justify-content-center align-items-center g-2 mb-5">
-
-                <!-- Video -->
-                <div class="col-12 col-md-4 text-center" data-arts-os-animation-name="animatedJump">
-                  <h5 class="h5 mb-3" data-i18n="packages.video">Video</h5>
-                  <a class="button button_icon button-circle ui-element"
-                    data-arts-cursor-follower-target="{magnetic: 0.25, scale: 'current', color: 'var(--color-accent-dark-theme)'}"
-                    href="contact-full-form.html">
-                    <span class="button__label button__label-normal">
-                      <span class="button__title" data-i18n="common.bookNow">Book Now</span>
-                    </span>
-                  </a>
-                </div>
-                <!-- Photo & Video -->
-                <div class="col-12 col-md-4 text-center" data-arts-os-animation-name="animatedJump">
-                  <h5 class="h5 block mb-3" data-i18n="packages.photoAndVideo">Photo & Video</h5>
-                  <a class="button button_icon button-circle ui-element"
-                    data-arts-cursor-follower-target="{magnetic: 0.25, scale: 'current', color: 'var(--color-accent-dark-theme)'}"
-                    href="contact-full-form.html">
-                    <span class="button__label button__label-normal">
-                      <span class="button__title" data-i18n="common.bookNow">Book Now</span>
-                    </span>
-                  </a>
-                </div>
-
-                <!-- Photo -->
-                <div class="col-12 col-md-4 text-center" data-arts-os-animation-name="animatedJump">
-                  <h5 class="h5 mb-3" data-i18n="packages.photo">Photo</h5>
-                  <a class="button button_icon button-circle ui-element"
-                    data-arts-cursor-follower-target="{magnetic: 0.25, scale: 'current', color: 'var(--color-accent-dark-theme)'}"
-                    href="contact-full-form.html">
-                    <span class="button__label button__label-normal">
-                      <span class="button__title" data-i18n="common.bookNow">Book Now</span>
-                    </span>
-                  </a>
-                </div>
-
-              </div>
-            </div>
+            </form>
           </div>
         </section>
-        <!-- - section PRICING TABLES -->
+        <!-- - section CONTACT FORM -->
         <!-- section TEAM -->
         <section class="section section-team container text-center py-large" data-arts-component-name="Content"
           data-arts-os-animation="true">
@@ -1230,7 +1314,8 @@
   <script src="js/framework.js"></script>
   <script src="js/app.js"></script>
   <script src="js/hero-randomizer.js"></script>
-  <script src="js/custom/formSteper.js"></script>
+  <script id="meeting-scheduler" src="js/custom/meetingScheduler.js"></script>
+  <script id="contact-form-js" src="js/custom/contactForm.js"></script>
   <!-- - TEMPLATE SCRIPTS -->
 </body>
 

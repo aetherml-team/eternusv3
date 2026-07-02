@@ -11,6 +11,7 @@
     <meta content="telephone=no" name="format-detection" />
     <meta name="HandheldFriendly" content="true" />
     <meta name="description" content="Eternus | Wedding photograhpy" />
+    <script>location.replace('index.html#contact-form');</script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap"
         rel="stylesheet" />
@@ -149,10 +150,10 @@
                 <!-- Site logo --><a class="header__col header__col_center header__col_logo logo no-ajax" href="index.html">
                     <div class="logo__wrapper-img">
                         <!-- primary logo version (for use with light backgrounds)--><img class="logo__img-primary"
-                            src="img/logo/logo-eternus.svg" width="39" height="20" loading="eager"
+                            src="img/logo/logo-eternus-dark.png" width="42" height="43" loading="eager"
                             alt="Asli HTML5 Template" />
                         <!-- secondary logo version (for use with dark backgrounds)--><img class="logo__img-secondary"
-                            src="img/logo/logo-eternus.svg" width="39" height="20" loading="eager"
+                            src="img/logo/logo-eternus-light.png" width="42" height="43" loading="eager"
                             alt="Asli HTML5 Template" />
                     </div>
                 </a>
@@ -394,6 +395,7 @@
                                           <h3 class="h4 mt-0 color-accent" data-i18n="form.step0.title">What is the Bride's Name?</h3>
                                           <p class="text-muted small" data-i18n="form.step0.description">Please provide the bride's name to personalize your wedding planning experience.</p>
                                           <p id="error-step-0" class="text-danger small mt-2 d-none" data-i18n="form.step0.error">Please enter the bride's name!</p>
+                                          <p id="error-step-0-invalid" class="text-danger small mt-2 d-none" data-i18n="form.step0.errorInvalid">Names must contain letters only (no numbers or special characters).</p>
                                         </div>
                                       </div>
                                       <div class="row form__row">
@@ -402,7 +404,7 @@
                                             <input
                                             id="bride_name"
                                             class="input-float__input" type="text" name="bride_name" required
-                                              autocomplete="given-name" maxlength="80" minlength="5"
+                                              autocomplete="given-name" inputmode="text" maxlength="80" minlength="2"
                                               data-pristine-required-message="Please enter the bride's name"  />
                                             <span class="input-float__label" data-i18n="form.step0.label">Bride's Name</span>
                                           </label>
@@ -427,13 +429,14 @@
                                           <h3 class="h4 mt-0 color-accent" data-i18n="form.step1.title">What is the Groom's Name?</h3>
                                           <p class="text-muted small" data-i18n="form.step1.description">Please provide the groom's name to personalize your wedding planning experience.</p>
                                           <p id="error-step-1" class="text-danger small mt-2 d-none" data-i18n="form.step1.error">Please enter the groom's name!</p>
+                                          <p id="error-step-1-invalid" class="text-danger small mt-2 d-none" data-i18n="form.step1.errorInvalid">Names must contain letters only (no numbers or special characters).</p>
                                         </div>
                                       </div>
                                       <div class="row form__row">
                                         <div class="col-12 form__col">
                                           <label class="input-float">
                                             <input id="groom_name" class="input-float__input" type="text" name="groom_name" required
-                                              autocomplete="given-name" maxlength="80" minlength="5"
+                                              autocomplete="family-name" inputmode="text" maxlength="80" minlength="2"
                                               data-pristine-required-message="Please enter the groom's name" />
                                             <span class="input-float__label" data-i18n="form.step1.label">Groom's Name</span>
                                           </label>
@@ -573,9 +576,43 @@
                                         </div>
                                       </div>
                                     </div>
-                                
-                                    <!-- Step 5: Additional Information -->
+
+                                    <!-- Step 5: Schedule a meeting -->
                                     <div class="form-step" id="step-5">
+                                      <div class="row form__row">
+                                        <div class="col form__col">
+                                          <h3 class="h4 mt-0 color-accent" data-i18n="form.stepMeeting.title">When would you like to meet with us?</h3>
+                                          <p class="text-muted small" data-i18n="form.stepMeeting.description">Pick a date and time for a consultation call with our team.</p>
+                                          <p id="error-step-5" class="text-danger small mt-2 d-none" data-i18n="form.stepMeeting.error">Please select a meeting date and time.</p>
+                                        </div>
+                                      </div>
+                                      <input type="hidden" name="meeting_date" required />
+                                      <input type="hidden" name="meeting_time" required />
+                                      <div class="row form__row">
+                                        <div class="col-12 form__col">
+                                          <div id="meeting-calendar"></div>
+                                          <p id="meeting-date-display" class="meeting-scheduler__selected-date color-accent small mt-2 mb-0 d-none"></p>
+                                        </div>
+                                      </div>
+                                      <div class="row form__row">
+                                        <div class="col-12 form__col">
+                                          <p class="small text-muted mb-2" data-i18n="form.stepMeeting.timeLabel">Available times</p>
+                                          <p id="meeting-timezone-label" class="meeting-scheduler__timezone small text-muted mb-2"></p>
+                                          <div id="meeting-time-slots"></div>
+                                        </div>
+                                      </div>
+                                      <div class="row form__row">
+                                        <div class="col form__col_submit text-center">
+                                          <button class="button button-circle ui-element" onclick="validateAndNextStep(5)" type="button"
+                                              data-arts-cursor-follower-target="{color: 'var(--color-accent-dark-theme)', scale: 'current', magnetic: 0.25}">
+                                              <span class="button__label"><span class="button__title" data-i18n="common.next">Next</span></span>
+                                            </button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                
+                                    <!-- Step 6: Additional Information -->
+                                    <div class="form-step" id="step-6">
                                       <div class="row form__row">
                                         <div class="col form__col">
                                           <h3 class="h4 mt-0 color-accent" data-i18n="form.step5.title">Additional Information</h3>
@@ -593,7 +630,7 @@
                                       </div>
                                       <div class="row form__row">
                                         <div class="col form__col_submit text-center">
-                                          <button class="button button-circle ui-element" onclick="validateAndNextStep(5)" type="button"
+                                          <button class="button button-circle ui-element" onclick="validateAndNextStep(6)" type="button"
                                               data-arts-cursor-follower-target="{color: 'var(--color-accent-dark-theme)', scale: 'current', magnetic: 0.25}">
                                               <span class="button__label"><span class="button__title" data-i18n="common.next">Next</span></span>
                                             </button>
@@ -601,8 +638,8 @@
                                       </div>
                                     </div>
                                 
-                                    <!-- Step 6: Review & Submit -->
-                                    <div class="form-step" id="step-6">
+                                    <!-- Step 7: Review & Submit -->
+                                    <div class="form-step" id="step-7">
                                       <div class="row form__row">
                                         <div class="col form__col">
                                           <h3 class="h4 mt-0 color-accent" data-i18n="form.review.title">Review Your Information</h3>
@@ -619,7 +656,7 @@
                                       </div>
                                       <div class="row form__row">
                                         <div class="col form__col_submit text-center">
-                                          <button class="button button-circle ui-element" onclick="validateAndNextStep(6)" type="button"
+                                          <button class="button button-circle ui-element" onclick="validateAndNextStep(7)" type="button"
                                               data-arts-cursor-follower-target="{color: 'var(--color-accent-dark-theme)', scale: 'current', magnetic: 0.25}">
                                               <span class="button__label"><span class="button__title" data-i18n="common.submit">Submit</span></span>
                                             </button>
@@ -784,7 +821,8 @@
     <script src="js/vendor.js"></script>
     <script src="js/framework.js"></script>
     <script src="js/app.js"></script>
-    <script src="js/custom/formSteper.js"></script>
+    <script id="meeting-scheduler" src="js/custom/meetingScheduler.js"></script>
+    <script id="form-steper" src="js/custom/formSteper.js"></script>
     <!-- - TEMPLATE SCRIPTS -->
 </body>
 
