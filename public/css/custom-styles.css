@@ -696,7 +696,7 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
 }
 
 .section-contact-grid .meeting-scheduler__weekday {
-  width: 1.5rem;
+  width: 1.75rem;
   text-align: center;
 }
 
@@ -706,17 +706,17 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
 
 .section-contact-grid .meeting-scheduler__day {
   aspect-ratio: 1;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.75rem;
+  height: 1.75rem;
   min-height: 0;
-  max-width: 1.5rem;
-  font-size: 0.625rem;
+  max-width: 1.75rem;
+  font-size: 0.6875rem;
   border-radius: 50%;
 }
 
 .section-contact-grid .meeting-scheduler__day--empty {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.75rem;
+  height: 1.75rem;
   min-height: 0;
 }
 
