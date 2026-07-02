@@ -7,33 +7,47 @@
 const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
-const { collectFromAllHtml, toAssetsRel } = require('./lib/html-image-refs');
+const { collectFromAllHtml, toAssetsRel, toSourceRel } = require('./lib/html-image-refs');
 
 const PUBLIC = path.join(__dirname, '..', 'public');
 const IMG = path.join(PUBLIC, 'img', 'assets');
 
-const WEBP_QUALITY = 86;
-const JPEG_QUALITY = 88;
+const WEBP_QUALITY = 90;
+const JPEG_QUALITY = 92;
 const PNG_QUALITY = 80;
+const WEBP_EFFORT = 6;
+const RESIZE_KERNEL = sharp.kernel.lanczos3;
 
 /** @type {Record<string, { maxWidth: number, jpegQuality?: number, webpQuality?: number }>} */
 const RULES = {
-  'hero/': { maxWidth: 640, jpegQuality: 86, webpQuality: 84 },
+  'hero/': { maxWidth: 960, jpegQuality: 90, webpQuality: 88 },
   'preloader/': { maxWidth: 800 },
-  'section/sectionArcImages/': { maxWidth: 800 },
-  'places/': { maxWidth: 1200 },
+  'section/sectionArcImages/': { maxWidth: 1000 },
+  'places/': { maxWidth: 1600 },
   'section/sectionTestimonials/fondoTestimonios.png': { maxWidth: 1600, webpQuality: 78, jpegQuality: 80 },
-  'packages/': { maxWidth: 1600 },
-  'team/': { maxWidth: 1100 },
-  'placesDetails/': { maxWidth: 1400 },
-  'postsTestimonials/': { maxWidth: 1400 },
-  'postsPortfolio/': { maxWidth: 1400 },
-  'wedingDetails/': { maxWidth: 1800 },
+  'packages/': { maxWidth: 1800 },
+  'team/': { maxWidth: 1500 },
+  'placesDetails/': { maxWidth: 1800 },
+  'postsTestimonials/': { maxWidth: 1800 },
+  'postsPortfolio/': { maxWidth: 1800 },
+  'wedingDetails/': { maxWidth: 2400 },
 };
 
 const HERO_COVER_RE = /\/(Hero\.jpe?g|TeaserEdit[^/]*\.jpe?g|1\.jpg)$/i;
 const TESTIMONIAL_RE = /\/Testimonial\.jpe?g$/i;
 const PORTADA_RE = /portada|cover/i;
+
+function resolveProcessPath(rel) {
+  if (/\.webp$/i.test(rel)) {
+    const { jpg, jpeg, png } = toSourceRel(rel);
+    const candidates = [jpg, jpeg, png].filter(Boolean);
+    for (const c of candidates) {
+      if (fs.existsSync(path.join(IMG, c))) return c;
+    }
+    return jpg;
+  }
+  return rel;
+}
 
 function collectFiles() {
   const files = new Set();
@@ -41,7 +55,7 @@ function collectFiles() {
 
   for (const imgPath of all) {
     const rel = toAssetsRel(imgPath);
-    if (rel) files.add(rel);
+    if (rel) files.add(resolveProcessPath(rel));
   }
 
   const heroDir = path.join(IMG, 'hero');
@@ -63,16 +77,16 @@ function getRule(relPath) {
   const normalized = relPath.replace(/\\/g, '/');
 
   if (TESTIMONIAL_RE.test(normalized)) return { maxWidth: 300 };
-  if (HERO_COVER_RE.test(normalized)) return { maxWidth: 1920 };
+  if (HERO_COVER_RE.test(normalized)) return { maxWidth: 2560, jpegQuality: 92, webpQuality: 90 };
   if (PORTADA_RE.test(basename) || /\.png$/i.test(basename)) {
-    return { maxWidth: 1400 };
+    return { maxWidth: 1920, jpegQuality: 92, webpQuality: 90 };
   }
 
   for (const [prefix, rule] of Object.entries(RULES)) {
     if (prefix.endsWith('/') && normalized.startsWith(prefix)) return rule;
   }
 
-  return { maxWidth: 1400 };
+  return { maxWidth: 1800 };
 }
 
 async function hasAlpha(image) {
@@ -106,6 +120,7 @@ async function optimizeFile(relPath) {
     width: maxWidth,
     withoutEnlargement: true,
     fit: 'inside',
+    kernel: RESIZE_KERNEL,
   });
 
   const meta = await sharp(absPath).metadata();
@@ -113,12 +128,12 @@ async function optimizeFile(relPath) {
 
   if (useAlpha) {
     await pipeline.png({ quality: PNG_QUALITY, compressionLevel: 9, effort: 10 }).toFile(absPath + '.tmp');
-    await sharp(absPath + '.tmp').webp({ quality: webpQ, effort: 4 }).toFile(webpPath);
+    await sharp(absPath + '.tmp').webp({ quality: webpQ, effort: WEBP_EFFORT }).toFile(webpPath);
     fs.renameSync(absPath + '.tmp', absPath);
   } else if (ext === '.png') {
     const jpegPath = absPath.replace(/\.png$/i, '.jpg');
     await pipeline.jpeg({ quality: jpegQ, progressive: true, mozjpeg: true }).toFile(jpegPath + '.tmp');
-    await sharp(jpegPath + '.tmp').webp({ quality: webpQ, effort: 4 }).toFile(webpPath);
+    await sharp(jpegPath + '.tmp').webp({ quality: webpQ, effort: WEBP_EFFORT }).toFile(webpPath);
     fs.unlinkSync(absPath);
     fs.renameSync(jpegPath + '.tmp', jpegPath);
     const after = fs.statSync(jpegPath).size;
@@ -140,7 +155,7 @@ async function optimizeFile(relPath) {
     } else {
       await pipeline.toFile(absPath + '.tmp');
     }
-    await sharp(absPath + '.tmp').webp({ quality: webpQ, effort: 4 }).toFile(webpPath);
+    await sharp(absPath + '.tmp').webp({ quality: webpQ, effort: WEBP_EFFORT }).toFile(webpPath);
     fs.renameSync(absPath + '.tmp', absPath);
   }
 

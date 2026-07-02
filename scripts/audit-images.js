@@ -23,7 +23,7 @@ function main() {
 
   console.log('=== Image audit (HTML-referenced raster files) ===\n');
   console.log(`Unique references: ${all.length}`);
-  console.log(`On disk: ${global.count} files, ${mb(global.bytes)} MB fallback, ${mb(global.webpBytes)} MB webp`);
+  console.log(`On disk: ${global.count} files, ${mb(global.bytes)} MB webp`);
   console.log(`Missing: ${global.missing.length}`);
 
   if (global.missing.length) {
@@ -41,7 +41,7 @@ function main() {
 
   for (const row of pageRows) {
     console.log(
-      `${row.page}: ${row.refs} refs, ${mb(row.bytes)} MB fallback, ${row.missing.length} missing`
+      `${row.page}: ${row.refs} refs, ${mb(row.bytes)} MB, ${row.missing.length} missing`
     );
   }
 
@@ -65,14 +65,9 @@ function main() {
     );
   }
 
-  console.log('\n--- WebP coverage ---');
-  const withWebp = all.filter((ref) => {
-    const { abs, exists } = require('./lib/html-image-refs').resolveOnDisk(ref);
-    if (!exists) return false;
-    const webp = abs.replace(/\.[^.]+$/, '.webp');
-    return require('fs').existsSync(webp);
-  });
-  console.log(`${withWebp.length} / ${global.count} on-disk refs have .webp siblings`);
+  console.log('\n--- Format ---');
+  const webpRefs = all.filter((ref) => /\.webp$/i.test(ref)).length;
+  console.log(`${webpRefs} / ${all.length} references use WebP`);
 }
 
 main();

@@ -26,36 +26,39 @@ function replacePswpAttrs(html, width, height) {
 }
 
 function replaceImgDimensions(block, width, height) {
-  let out = block;
-  if (/\bwidth="[^"]*"/i.test(out)) {
-    out = out.replace(/\bwidth="[^"]*"/i, `width="${width}"`);
-  }
-  if (/\bheight="[^"]*"/i.test(out)) {
-    out = out.replace(/\bheight="[^"]*"/i, `height="${height}"`);
-  }
-  return out;
+  return block.replace(/<img\b[^>]*>/gi, (imgTag) => {
+    let out = imgTag;
+    if (/\bwidth="[^"]*"/i.test(out)) {
+      out = out.replace(/\bwidth="[^"]*"/i, `width="${width}"`);
+    }
+    if (/\bheight="[^"]*"/i.test(out)) {
+      out = out.replace(/\bheight="[^"]*"/i, `height="${height}"`);
+    }
+    return out;
+  });
 }
 
 async function processFile(filePath) {
   const html = fs.readFileSync(filePath, 'utf8');
-  const anchorRe = /<a\b[^>]*\bdata-pswp-width="[^"]*"[^>]*>/gi;
+  const anchorBlockRe = /<a\b[^>]*\bdata-pswp-width="[^"]*"[^>]*>[\s\S]*?<\/a>/gi;
   let updated = 0;
   let missing = 0;
   let result = html;
 
-  const anchors = [...html.matchAll(anchorRe)];
-  for (const m of anchors) {
-    const tag = m[0];
-    const hrefMatch = tag.match(/\bhref="(img\/[^"]+)"/i);
+  const blocks = [...html.matchAll(anchorBlockRe)];
+  for (const m of blocks) {
+    const block = m[0];
+    const hrefMatch = block.match(/\bhref="(img\/[^"]+)"/i);
     if (!hrefMatch) continue;
     const dims = await dimensionsForSrc(hrefMatch[1]);
     if (!dims) {
       missing++;
       continue;
     }
-    const newTag = replacePswpAttrs(tag, dims.width, dims.height);
-    if (newTag !== tag) {
-      result = result.replace(tag, newTag);
+    let newBlock = replacePswpAttrs(block, dims.width, dims.height);
+    newBlock = replaceImgDimensions(newBlock, dims.width, dims.height);
+    if (newBlock !== block) {
+      result = result.replace(block, newBlock);
       updated++;
     }
   }
