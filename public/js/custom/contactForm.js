@@ -6,6 +6,89 @@
   const NAME_MAX_LENGTH = 80;
   const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+  const FIELD_ERROR_MAP = {
+    bride: {
+      errorIds: ['contact-form-bride-error', 'contact-form-bride-invalid'],
+      getCol: function (form) {
+        var input = form.querySelector('input[name="bride_name"]');
+        return input ? input.closest('.form__col') : null;
+      },
+      getFocus: function (form) {
+        return form.querySelector('input[name="bride_name"]');
+      },
+      isValid: function (form) {
+        var input = form.querySelector('input[name="bride_name"]');
+        return input && isValidPersonName(input.value);
+      },
+    },
+    groom: {
+      errorIds: ['contact-form-groom-error', 'contact-form-groom-invalid'],
+      getCol: function (form) {
+        var input = form.querySelector('input[name="groom_name"]');
+        return input ? input.closest('.form__col') : null;
+      },
+      getFocus: function (form) {
+        return form.querySelector('input[name="groom_name"]');
+      },
+      isValid: function (form) {
+        var input = form.querySelector('input[name="groom_name"]');
+        return input && isValidPersonName(input.value);
+      },
+    },
+    email: {
+      errorIds: ['contact-form-email-error'],
+      getCol: function (form) {
+        var input = form.querySelector('input[name="email"]');
+        return input ? input.closest('.form__col') : null;
+      },
+      getFocus: function (form) {
+        return form.querySelector('input[name="email"]');
+      },
+      isValid: function (form) {
+        var input = form.querySelector('input[name="email"]');
+        return input && EMAIL_RE.test((input.value || '').trim());
+      },
+    },
+    wedding_type: {
+      errorIds: ['contact-form-type-error'],
+      getCol: function (form) {
+        var group = form.querySelector('.contact-grid__radios:not(.contact-grid__radios--budget)');
+        return group ? group.closest('.form__col') : null;
+      },
+      getFocus: function (form) {
+        return form.querySelector('input[name="wedding_type"]');
+      },
+      isValid: function (form) {
+        return !!form.querySelector('input[name="wedding_type"]:checked');
+      },
+    },
+    budget: {
+      errorIds: ['contact-form-budget-error'],
+      getCol: function (form) {
+        var group = form.querySelector('.contact-grid__radios--budget');
+        return group ? group.closest('.form__col') : null;
+      },
+      getFocus: function (form) {
+        return form.querySelector('input[name="budget"]');
+      },
+      isValid: function (form) {
+        return !!form.querySelector('input[name="budget"]:checked');
+      },
+    },
+    meeting: {
+      errorIds: ['contact-form-meeting-error'],
+      getCol: function () {
+        return document.querySelector('.contact-grid__panel--scheduler');
+      },
+      getFocus: function () {
+        return document.querySelector('#meeting-calendar .meeting-scheduler__day:not(.meeting-scheduler__day--empty)');
+      },
+      isValid: function () {
+        return isMeetingValid();
+      },
+    },
+  };
+
   function getForm() {
     return document.getElementById('contactForm');
   }
@@ -14,8 +97,12 @@
     return !!(window.MeetingScheduler && window.MeetingScheduler.isValid());
   }
 
-  function t(key, fallback) {
-    return window.i18n && window.i18n.t ? window.i18n.t(key, fallback) : fallback;
+  function t(key, fallback, vars) {
+    var text = window.i18n && window.i18n.t ? window.i18n.t(key, fallback) : fallback;
+    if (!vars || !text) return text;
+    return String(text).replace(/\{(\w+)\}/g, function (_, name) {
+      return vars[name] != null ? vars[name] : '';
+    });
   }
 
   function sanitizePersonName(value) {
@@ -72,6 +159,8 @@
     input.addEventListener('input', function () {
       var sanitized = sanitizePersonName(input.value);
       if (sanitized !== input.value) input.value = sanitized;
+      clearFieldIfValid('bride');
+      clearFieldIfValid('groom');
       updateSubmitButton();
     });
 
@@ -90,11 +179,51 @@
     if (el) el.classList.toggle('d-none', !show);
   }
 
-  function hideAllErrors() {
+  function setFieldInvalid(fieldKey, invalid) {
+    var form = getForm();
+    if (!form) return;
+    var config = FIELD_ERROR_MAP[fieldKey];
+    if (!config) return;
+
+    var col = config.getCol(form);
+    if (col) col.classList.toggle('contact-grid__field--invalid', invalid);
+
+    if (fieldKey === 'wedding_type' || fieldKey === 'budget') {
+      var radios = col && col.querySelector('.contact-grid__radios');
+      if (radios) radios.classList.toggle('contact-grid__radios--invalid', invalid);
+    }
+
+    if (fieldKey === 'meeting' && col) {
+      col.classList.toggle('contact-grid__panel--invalid', invalid);
+    }
+
+    var focusEl = config.getFocus(form);
+    if (focusEl) focusEl.setAttribute('aria-invalid', invalid ? 'true' : 'false');
+  }
+
+  function clearFieldInvalidStates() {
+    Object.keys(FIELD_ERROR_MAP).forEach(function (key) {
+      setFieldInvalid(key, false);
+    });
+  }
+
+  function clearFieldIfValid(fieldKey) {
+    var form = getForm();
+    if (!form) return;
+    var config = FIELD_ERROR_MAP[fieldKey];
+    if (!config || !config.isValid(form)) return;
+
+    config.errorIds.forEach(function (id) {
+      showError(id, false);
+    });
+    setFieldInvalid(fieldKey, false);
+    showError('contact-form-errors', false);
+  }
+
+  function clearValidationMessages() {
     [
       'contact-form-errors',
       'contact-form-api-error',
-      'contact-form-success',
       'contact-form-bride-error',
       'contact-form-bride-invalid',
       'contact-form-groom-error',
@@ -106,24 +235,57 @@
     ].forEach(function (id) {
       showError(id, false);
     });
+    clearFieldInvalidStates();
+  }
+
+  function hideAllErrors() {
+    clearValidationMessages();
+    showError('contact-form-success', false);
+
+    var meetingDetail = document.getElementById('contact-form-success-meeting');
+    if (meetingDetail) meetingDetail.classList.add('d-none');
+
+    var form = getForm();
+    if (form) form.classList.remove('contact-form--submitted');
+  }
+
+  function scrollToStatus(el) {
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function focusFirstInvalid(form) {
+    var order = ['bride', 'groom', 'email', 'wedding_type', 'budget', 'meeting'];
+    for (var i = 0; i < order.length; i++) {
+      var key = order[i];
+      var config = FIELD_ERROR_MAP[key];
+      if (!config || config.isValid(form)) continue;
+
+      var target = config.getFocus(form);
+      if (target && typeof target.focus === 'function') {
+        try {
+          target.focus({ preventScroll: true });
+        } catch (e) {
+          target.focus();
+        }
+      }
+
+      var col = config.getCol(form);
+      if (col) col.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
   }
 
   function isFormComplete(form) {
-    var brideInput = form.querySelector('input[name="bride_name"]');
-    var groomInput = form.querySelector('input[name="groom_name"]');
-    var emailInput = form.querySelector('input[name="email"]');
-
-    if (!brideInput || !isValidPersonName(brideInput.value)) return false;
-    if (!groomInput || !isValidPersonName(groomInput.value)) return false;
-    if (!emailInput || !EMAIL_RE.test((emailInput.value || '').trim())) return false;
-    if (!form.querySelector('input[name="wedding_type"]:checked')) return false;
-    if (!form.querySelector('input[name="budget"]:checked')) return false;
-    if (!isMeetingValid()) return false;
-    return true;
+    return Object.keys(FIELD_ERROR_MAP).every(function (key) {
+      return FIELD_ERROR_MAP[key].isValid(form);
+    });
   }
 
   function validateForm(form) {
-    hideAllErrors();
+    clearValidationMessages();
+    showError('contact-form-success', false);
+    form.classList.remove('contact-form--submitted');
     var valid = true;
 
     var brideInput = form.querySelector('input[name="bride_name"]');
@@ -134,9 +296,11 @@
       if (!brideInput.value) {
         showError('contact-form-bride-error', brideRaw.length === 0);
         showError('contact-form-bride-invalid', brideRaw.length > 0);
+        setFieldInvalid('bride', true);
         valid = false;
       } else if (!isValidPersonName(brideInput.value)) {
         showError('contact-form-bride-invalid', true);
+        setFieldInvalid('bride', true);
         valid = false;
       }
     }
@@ -147,9 +311,11 @@
       if (!groomInput.value) {
         showError('contact-form-groom-error', groomRaw.length === 0);
         showError('contact-form-groom-invalid', groomRaw.length > 0);
+        setFieldInvalid('groom', true);
         valid = false;
       } else if (!isValidPersonName(groomInput.value)) {
         showError('contact-form-groom-invalid', true);
+        setFieldInvalid('groom', true);
         valid = false;
       }
     }
@@ -159,32 +325,55 @@
       var email = (emailInput.value || '').trim();
       if (!email || !EMAIL_RE.test(email)) {
         showError('contact-form-email-error', true);
+        setFieldInvalid('email', true);
         valid = false;
       }
     }
 
     if (!form.querySelector('input[name="wedding_type"]:checked')) {
       showError('contact-form-type-error', true);
+      setFieldInvalid('wedding_type', true);
       valid = false;
     }
 
     if (!form.querySelector('input[name="budget"]:checked')) {
       showError('contact-form-budget-error', true);
+      setFieldInvalid('budget', true);
       valid = false;
     }
 
     if (!isMeetingValid()) {
       showError('contact-form-meeting-error', true);
+      setFieldInvalid('meeting', true);
       valid = false;
     }
 
     if (!valid) {
       showError('contact-form-errors', true);
-      var firstError = form.querySelector('.text-danger:not(.d-none)');
-      if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      var summary = document.getElementById('contact-form-errors');
+      scrollToStatus(summary);
+      focusFirstInvalid(form);
     }
 
     return valid;
+  }
+
+  function setSubmitting(isSubmitting) {
+    var form = getForm();
+    if (!form) return;
+    var btn = form.querySelector('button[type="submit"]');
+    if (!btn) return;
+
+    btn.classList.toggle('is-submitting', isSubmitting);
+    btn.disabled = isSubmitting || !isFormComplete(form);
+    btn.setAttribute('aria-disabled', btn.disabled ? 'true' : 'false');
+    btn.setAttribute('aria-busy', isSubmitting ? 'true' : 'false');
+
+    if (isSubmitting) {
+      btn.dataset.submitting = 'true';
+    } else {
+      delete btn.dataset.submitting;
+    }
   }
 
   function updateSubmitButton() {
@@ -204,6 +393,36 @@
     });
   }
 
+  function formatMeetingSummary(meetingDate, meetingTime) {
+    if (!meetingDate || !meetingTime) return '';
+
+    var locale = window.i18n && window.i18n.currentLang === 'es' ? 'es-MX' : 'en-US';
+    var parts = meetingDate.split('-').map(Number);
+    if (parts.length !== 3) return '';
+
+    var dateObj = new Date(parts[0], parts[1] - 1, parts[2]);
+    var dateLabel = new Intl.DateTimeFormat(locale, {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    }).format(dateObj);
+
+    var timeParts = meetingTime.split(':').map(Number);
+    var timeObj = new Date(2000, 0, 1, timeParts[0] || 0, timeParts[1] || 0);
+    var timeLabel = new Intl.DateTimeFormat(locale, {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    }).format(timeObj);
+
+    return t(
+      'form.index.submitSuccessMeeting',
+      'Your consultation is scheduled for {date} at {time}.',
+      { date: dateLabel, time: timeLabel }
+    );
+  }
+
   function showApiError(status, detail) {
     var technicalMessage;
     if (status === 405 || status === 0) {
@@ -216,26 +435,44 @@
     }
     console.error('[contactForm]', technicalMessage);
 
-    var el = document.getElementById('contact-form-api-error');
-    if (!el) return;
-    el.textContent = t(
-      'form.index.submitFailed',
-      "We couldn't send your message right now. Please try again in a moment."
-    );
     showError('contact-form-api-error', true);
-    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    var el = document.getElementById('contact-form-api-error');
+    scrollToStatus(el);
+  }
+
+  function showSuccess(meetingDate, meetingTime) {
+    clearValidationMessages();
+    showError('contact-form-api-error', false);
+    showError('contact-form-success', true);
+
+    var meetingEl = document.getElementById('contact-form-success-meeting');
+    var meetingText = formatMeetingSummary(meetingDate, meetingTime);
+    if (meetingEl) {
+      if (meetingText) {
+        meetingEl.textContent = meetingText;
+        meetingEl.classList.remove('d-none');
+      } else {
+        meetingEl.textContent = '';
+        meetingEl.classList.add('d-none');
+      }
+    }
+
+    var form = getForm();
+    if (form) form.classList.add('contact-form--submitted');
+
+    var successEl = document.getElementById('contact-form-success');
+    scrollToStatus(successEl);
   }
 
   function submitForm(form) {
-    var btn = form.querySelector('button[type="submit"]');
-    if (btn) {
-      btn.dataset.submitting = 'true';
-      btn.disabled = true;
-    }
+    setSubmitting(true);
 
     if (window.MeetingScheduler && window.MeetingScheduler.sync) {
       window.MeetingScheduler.sync();
     }
+
+    var meetingDate = (form.querySelector('input[name="meeting_date"]') || {}).value || '';
+    var meetingTime = (form.querySelector('input[name="meeting_time"]') || {}).value || '';
 
     var action = form.getAttribute('action') || '/api/send';
     var body = Object.fromEntries(new FormData(form));
@@ -247,18 +484,15 @@
     })
       .then(function (res) {
         if (res.status >= 200 && res.status < 300) {
-          hideAllErrors();
-          showError('contact-form-success', true);
+          showSuccess(meetingDate, meetingTime);
           form.reset();
           if (window.MeetingScheduler && window.MeetingScheduler.refresh) {
             window.MeetingScheduler.refresh();
           }
-          var successEl = document.getElementById('contact-form-success');
-          if (successEl) successEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
           return;
         }
-        return res.text().then(function (body) {
-          showApiError(res.status, body);
+        return res.text().then(function (responseBody) {
+          showApiError(res.status, responseBody);
         });
       })
       .catch(function (err) {
@@ -266,9 +500,29 @@
         showApiError(0);
       })
       .finally(function () {
-        if (btn) delete btn.dataset.submitting;
+        setSubmitting(false);
         updateSubmitButton();
       });
+  }
+
+  function bindLiveValidation(form) {
+    var emailInput = form.querySelector('input[name="email"]');
+    if (emailInput && emailInput.dataset.liveValidationBound !== 'true') {
+      emailInput.dataset.liveValidationBound = 'true';
+      emailInput.addEventListener('input', function () {
+        clearFieldIfValid('email');
+        updateSubmitButton();
+      });
+    }
+
+    form.querySelectorAll('input[name="wedding_type"], input[name="budget"]').forEach(function (input) {
+      if (input.dataset.liveValidationBound === 'true') return;
+      input.dataset.liveValidationBound = 'true';
+      input.addEventListener('change', function () {
+        clearFieldIfValid(input.name === 'wedding_type' ? 'wedding_type' : 'budget');
+        updateSubmitButton();
+      });
+    });
   }
 
   function ensureMeetingScheduler(callback) {
@@ -300,6 +554,7 @@
 
     bindPersonNameInput(form.querySelector('input[name="bride_name"]'));
     bindPersonNameInput(form.querySelector('input[name="groom_name"]'));
+    bindLiveValidation(form);
 
     if (form.dataset.contactFormBound === 'true') {
       ensureMeetingScheduler(updateSubmitButton);
@@ -312,7 +567,10 @@
       if (e.target && e.target.name === 'email') updateSubmitButton();
     });
 
-    document.addEventListener('meeting-scheduler:change', updateSubmitButton);
+    document.addEventListener('meeting-scheduler:change', function () {
+      clearFieldIfValid('meeting');
+      updateSubmitButton();
+    });
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();

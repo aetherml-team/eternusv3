@@ -91,9 +91,15 @@
     "index": {
       "title": "Planemos tu día eterno",
       "description": "Cuéntanos sobre tu boda y elige un horario para conocer a nuestro equipo.",
-      "submitError": "Por favor completa todos los campos requeridos antes de enviar.",
-      "submitSuccess": "¡Gracias por tu mensaje! Te responderemos lo antes posible.",
-      "submitFailed": "No pudimos enviar tu mensaje en este momento. Por favor inténtalo de nuevo en unos instantes."
+      "submitErrorTitle": "Casi listo",
+      "submitError": "Por favor revisa los campos resaltados a continuación.",
+      "submitSuccessTitle": "¡Todo listo!",
+      "submitSuccess": "Recibimos tus datos y nos pondremos en contacto contigo pronto.",
+      "submitSuccessMeeting": "Tu consulta está programada para el {date} a las {time}.",
+      "submitFailedTitle": "Algo salió mal",
+      "submitFailed": "No pudimos enviar tu mensaje en este momento.",
+      "submitFailedRetry": "Por favor inténtalo de nuevo en unos instantes.",
+      "submitting": "Enviando…"
     },
     "step0": {
       "title": "¿Cuál es el nombre de la novia?",

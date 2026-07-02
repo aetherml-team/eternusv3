@@ -981,12 +981,48 @@
             </div>
             <form id="contactForm" class="form contact-grid__form text-left" action="/api/send"
               method="POST" novalidate="novalidate" data-submit-json data-arts-color-theme="dark">
-              <p id="contact-form-errors" class="contact-grid__error-banner text-danger small mb-2 d-none" data-i18n="form.index.submitError">
-                Please complete all required fields before submitting.</p>
-              <p id="contact-form-api-error" class="contact-grid__error-banner text-danger small mb-2 d-none" data-i18n="form.index.submitFailed">
-                We couldn't send your message right now. Please try again in a moment.</p>
-              <p id="contact-form-success" class="contact-grid__success-banner small mb-2 d-none" data-i18n="form.index.submitSuccess">
-                Thanks for your message! We will reply to you as soon as possible.</p>
+              <div id="contact-form-status" class="contact-form-status mb-2" aria-live="polite">
+                <div id="contact-form-errors" class="contact-form-alert contact-form-alert--error d-none" role="alert">
+                  <span class="contact-form-alert__icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
+                      <path d="M10 6v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                      <circle cx="10" cy="14" r="0.75" fill="currentColor"/>
+                    </svg>
+                  </span>
+                  <div class="contact-form-alert__content">
+                    <p class="contact-form-alert__title mb-0" data-i18n="form.index.submitErrorTitle">Almost there</p>
+                    <p class="contact-form-alert__text mb-0" data-i18n="form.index.submitError">Please check the highlighted fields below.</p>
+                  </div>
+                </div>
+                <div id="contact-form-api-error" class="contact-form-alert contact-form-alert--error d-none" role="alert">
+                  <span class="contact-form-alert__icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
+                      <path d="M10 6v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                      <circle cx="10" cy="14" r="0.75" fill="currentColor"/>
+                    </svg>
+                  </span>
+                  <div class="contact-form-alert__content">
+                    <p class="contact-form-alert__title mb-0" data-i18n="form.index.submitFailedTitle">Something went wrong</p>
+                    <p class="contact-form-alert__text mb-0" data-i18n="form.index.submitFailed">We couldn't send your message right now.</p>
+                    <p class="contact-form-alert__hint mb-0" data-i18n="form.index.submitFailedRetry">Please try again in a moment.</p>
+                  </div>
+                </div>
+                <div id="contact-form-success" class="contact-form-alert contact-form-alert--success d-none" role="status">
+                  <span class="contact-form-alert__icon" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="11" cy="11" r="10" stroke="currentColor" stroke-width="1.5"/>
+                      <path d="M7 11.5l2.5 2.5L15 8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                  <div class="contact-form-alert__content">
+                    <p class="contact-form-alert__title mb-0" data-i18n="form.index.submitSuccessTitle">You're all set!</p>
+                    <p class="contact-form-alert__text mb-0" data-i18n="form.index.submitSuccess">We've received your details and will be in touch soon.</p>
+                    <p id="contact-form-success-meeting" class="contact-form-alert__detail mb-0 d-none"></p>
+                  </div>
+                </div>
+              </div>
               <div class="row g-2 contact-grid__row">
                 <div class="col-12 col-xl-7 contact-grid__fields">
                   <div class="contact-grid__panel contact-grid__panel--form">
@@ -1081,7 +1117,11 @@
                     </div>
                     <div class="col-12 form__col contact-grid__submit">
                       <button type="submit" class="contact-grid__submit-cta" disabled aria-disabled="true">
-                        <span data-i18n="common.submit">Submit</span>
+                        <span class="contact-grid__submit-label" data-i18n="common.submit">Submit</span>
+                        <span class="contact-grid__submit-loading d-none" aria-hidden="true">
+                          <span class="contact-grid__submit-spinner"></span>
+                          <span data-i18n="form.index.submitting">Sending…</span>
+                        </span>
                       </button>
                     </div>
                   </div>
