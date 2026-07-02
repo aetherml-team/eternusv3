@@ -44,7 +44,8 @@
     "promotional": "Wedding Promotional",
     "credits": "Credits",
     "documentary": "Wedding Documentary",
-    "location": "Location"
+    "location": "Location",
+    "contactForm": "Get in Touch"
   },
   "destinations": {
     "ibiza": "Ibiza",
@@ -86,17 +87,24 @@
     "wedding_planner": "Wedding Planner"
   },
   "form": {
+    "index": {
+      "title": "Let's plan your eternal day",
+      "description": "Tell us about your wedding and pick a time to meet our team.",
+      "submitError": "Please complete all required fields before submitting."
+    },
     "step0": {
       "title": "What is the Bride's Name?",
       "description": "Please provide the bride's name to personalize your wedding experience with us.",
       "label": "Bride's Name",
-      "error": "Please enter the bride's name!"
+      "error": "Please enter the bride's name!",
+      "errorInvalid": "Names must contain letters only (no numbers or special characters)."
     },
     "step1": {
       "title": "What is the Groom's Name?",
       "description": "Please provide the groom's name to personalize your wedding experience.",
       "label": "Groom's Name",
-      "error": "Please enter the groom's name!"
+      "error": "Please enter the groom's name!",
+      "errorInvalid": "Names must contain letters only (no numbers or special characters)."
     },
     "step2": {
       "title": "What Kind of Wedding Are You Planning?",
@@ -120,6 +128,16 @@
       "description": "Provide your wedding date to check our availability.",
       "label": "Wedding Date",
       "error": "Please select a wedding date!"
+    },
+    "stepMeeting": {
+      "eyebrow": "Private Consultation",
+      "selectedDate": "Selected:",
+      "title": "When would you like to meet with us?",
+      "description": "Pick a date and time for a consultation call with our team.",
+      "timeLabel": "Available times",
+      "selectDateHint": "Select a date to see available times.",
+      "noSlots": "No times available for this day. Please choose another date.",
+      "error": "Please select a meeting date and time."
     },
     "step3Email": {
       "title": "What Is Your Email?",
@@ -149,6 +167,7 @@
         "weddingType": "Wedding Type",
         "budget": "Budget",
         "email": "Email",
+        "meetingDateTime": "Meeting",
         "additionalInfo": "Additional Information"
       }
     }

@@ -1,13 +1,20 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node'
-import {weddingContact } from '../public/js/templates/weddingContact'
+import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { weddingContact } from '../public/js/templates/weddingContact';
+import { validateContactForm } from './lib/validateForm';
 
-export default async function handler(req:VercelRequest, res:VercelResponse) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { email, bride_name, groom_name, budget, wedding_type, additional_info } = req.body;
-  console.log(req.body, 'this body')
+  const validation = validateContactForm(req.body || {});
+  if (!validation.ok) {
+    return res.status(400).json({ error: validation.error });
+  }
+
+  const { bride_name, groom_name, budget, email, wedding_type, additional_info, meeting_date, meeting_time } =
+    validation.data;
+
   const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
   if (!RESEND_API_KEY) {
@@ -25,7 +32,16 @@ export default async function handler(req:VercelRequest, res:VercelResponse) {
         to: email,
         from: 'onboarding@resend.dev',
         subject: 'Wedding Planner Form Submission',
-        html: weddingContact({ bride_name, groom_name, budget, wedding_type, additional_info, email}),
+        html: weddingContact({
+          bride_name,
+          groom_name,
+          budget,
+          wedding_type,
+          additional_info,
+          email,
+          meeting_date,
+          meeting_time,
+        }),
       }),
     });
 
@@ -36,7 +52,8 @@ export default async function handler(req:VercelRequest, res:VercelResponse) {
       const error = await response.json();
       return res.status(response.status).json({ error: error.message });
     }
-  } catch (err) {
-    return res.status(500).json({ error: 'Failed to send email', details: err.message });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    return res.status(500).json({ error: 'Failed to send email', details: message });
   }
 }

@@ -1,6 +1,10 @@
 export const weddingCustomer = (details) => {
-  const { bride_name, groom_name, budget, additional_info, wedding_type } =
+  const { bride_name, groom_name, budget, additional_info, wedding_type, meeting_date, meeting_time } =
     details;
+  const meetingLine =
+    meeting_date && meeting_time
+      ? `<li><strong>Meeting:</strong> ${meeting_date} ${meeting_time}</li>`
+      : '';
   return `
     <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
@@ -149,6 +153,7 @@ export const weddingCustomer = (details) => {
             <li><strong>Groom:</strong> ${groom_name}</li>
             <li><strong>Budget:</strong> ${budget}</li>
             <li><strong>Wedding Type:</strong> ${wedding_type}</li>
+            ${meetingLine}
             <li><strong>Additional Information:</strong> ${additional_info}</li>
           </ul>
           <p>

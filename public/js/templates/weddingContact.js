@@ -1,5 +1,6 @@
 export const weddingContact = (details) => {
-    const { bride_name, groom_name, budget, email, additional_info, wedding_type } = details
+    const { bride_name, groom_name, budget, email, additional_info, wedding_type, meeting_date, meeting_time } = details
+    const meetingDisplay = meeting_date && meeting_time ? `${meeting_date} ${meeting_time}` : 'N/A'
     return `
     <!DOCTYPE html>
 <html lang="en">
@@ -117,6 +118,10 @@ export const weddingContact = (details) => {
         <tr>
           <th>Wedding Type</th>
           <td>${wedding_type}</td>
+        </tr>
+        <tr>
+          <th>Meeting</th>
+          <td>${meetingDisplay}</td>
         </tr>
         <tr>
           <th>Additional Info</th>

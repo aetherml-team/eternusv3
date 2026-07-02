@@ -44,7 +44,8 @@
     "promotional": "Video Promocional de Boda",
     "credits": "Créditos",
     "documentary": "Documental de Boda",
-    "location": "Ubicación"
+    "location": "Ubicación",
+    "contactForm": "Ponte en Contacto"
   },
   "destinations": {
     "ibiza": "Ibiza",
@@ -87,17 +88,24 @@
     "wedding_planner": "Wedding Planner"
   },
   "form": {
+    "index": {
+      "title": "Planemos tu día eterno",
+      "description": "Cuéntanos sobre tu boda y elige un horario para conocer a nuestro equipo.",
+      "submitError": "Por favor completa todos los campos requeridos antes de enviar."
+    },
     "step0": {
       "title": "¿Cuál es el nombre de la novia?",
       "description": "Por favor proporciona el nombre de la novia para personalizar tu experiencia de boda.",
       "label": "Nombre de la Novia",
-      "error": "¡Por favor ingresa el nombre de la novia!"
+      "error": "¡Por favor ingresa el nombre de la novia!",
+      "errorInvalid": "Los nombres solo pueden contener letras (sin números ni caracteres especiales)."
     },
     "step1": {
       "title": "¿Cuál es el nombre del novio?",
       "description": "Por favor proporciona el nombre del novio para personalizar tu experiencia de boda.",
       "label": "Nombre del Novio",
-      "error": "¡Por favor ingresa el nombre del novio!"
+      "error": "¡Por favor ingresa el nombre del novio!",
+      "errorInvalid": "Los nombres solo pueden contener letras (sin números ni caracteres especiales)."
     },
     "step2": {
       "title": "¿Qué tipo de boda estás planeando?",
@@ -121,6 +129,16 @@
       "description": "Proporciona tu fecha de boda para verificar nuestra disponibilidad.",
       "label": "Fecha de Boda",
       "error": "¡Por favor selecciona una fecha de boda!"
+    },
+    "stepMeeting": {
+      "eyebrow": "Consulta Privada",
+      "selectedDate": "Seleccionado:",
+      "title": "¿Cuándo te gustaría reunirte con nosotros?",
+      "description": "Elige una fecha y hora para una llamada de consulta con nuestro equipo.",
+      "timeLabel": "Horarios disponibles",
+      "selectDateHint": "Selecciona una fecha para ver los horarios disponibles.",
+      "noSlots": "No hay horarios disponibles para este día. Por favor elige otra fecha.",
+      "error": "Por favor selecciona una fecha y hora para la reunión."
     },
     "step3Email": {
       "title": "¿Cuál es tu Correo Electrónico?",
@@ -150,6 +168,7 @@
         "weddingType": "Tipo de Boda",
         "budget": "Presupuesto",
         "email": "Correo Electrónico",
+        "meetingDateTime": "Reunión",
         "additionalInfo": "Información Adicional"
       }
     }
