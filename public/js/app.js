@@ -638,7 +638,7 @@ window.app = {
 	loadLazy: () => {
 		return new Promise((resolve) => {
 			app.lazy = new LazyLoad({
-				threshold: 300,
+				threshold: 900,
 				cancel_on_exit: false,
 				unobserve_entered: true
 			});
@@ -860,3 +860,10 @@ app.loaded = new Promise((resolve) => {
 });
 app.setup();
 app.init();
+
+(function loadWeddingImagePrefetch() {
+	var script = document.createElement('script');
+	script.src = 'js/custom/weddingImagePrefetch.js';
+	script.async = true;
+	document.head.appendChild(script);
+})();

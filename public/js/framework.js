@@ -1802,7 +1802,7 @@ class BaseComponent extends BaseAnimation {
 
 			ScrollTrigger.create({
 				trigger: this.element,
-				start: () => `top-=1000px bottom`,
+				start: () => `top-=1500px bottom`,
 				scrub: false,
 				containerAnimation: this.containerAnimation,
 				once: true,

@@ -90,9 +90,15 @@
     "index": {
       "title": "Let's plan your eternal day",
       "description": "Tell us about your wedding and pick a time to meet our team.",
-      "submitError": "Please complete all required fields before submitting.",
-      "submitSuccess": "Thanks for your message! We will reply to you as soon as possible.",
-      "submitFailed": "We couldn't send your message right now. Please try again in a moment."
+      "submitErrorTitle": "Almost there",
+      "submitError": "Please check the highlighted fields below.",
+      "submitSuccessTitle": "You're all set!",
+      "submitSuccess": "We've received your details and will be in touch soon.",
+      "submitSuccessMeeting": "Your consultation is scheduled for {date} at {time}.",
+      "submitFailedTitle": "Something went wrong",
+      "submitFailed": "We couldn't send your message right now.",
+      "submitFailedRetry": "Please try again in a moment.",
+      "submitting": "Sending…"
     },
     "step0": {
       "title": "What is the Bride's Name?",
