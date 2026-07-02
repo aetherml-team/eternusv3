@@ -90,7 +90,9 @@
     "index": {
       "title": "Let's plan your eternal day",
       "description": "Tell us about your wedding and pick a time to meet our team.",
-      "submitError": "Please complete all required fields before submitting."
+      "submitError": "Please complete all required fields before submitting.",
+      "submitSuccess": "Thanks for your message! We will reply to you as soon as possible.",
+      "submitFailed": "We couldn't send your message right now. Please try again in a moment."
     },
     "step0": {
       "title": "What is the Bride's Name?",
@@ -132,9 +134,11 @@
     "stepMeeting": {
       "eyebrow": "Private Consultation",
       "selectedDate": "Selected:",
+      "scheduled": "Meeting confirmed:",
       "title": "When would you like to meet with us?",
       "description": "Pick a date and time for a consultation call with our team.",
       "timeLabel": "Available times",
+      "timeZone": "Times shown in {zone}",
       "selectDateHint": "Select a date to see available times.",
       "noSlots": "No times available for this day. Please choose another date.",
       "error": "Please select a meeting date and time."

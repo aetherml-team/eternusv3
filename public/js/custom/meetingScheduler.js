@@ -121,6 +121,50 @@
     if (timeInput) timeInput.value = selectedTime || '';
   }
 
+  function notifyChange() {
+    document.dispatchEvent(new CustomEvent('meeting-scheduler:change'));
+  }
+
+  function getTimeZoneDisplay() {
+    const locale = getLocale();
+    const date = new Date();
+    let name = 'Mexico City';
+    let offset = '';
+    try {
+      const nameParts = new Intl.DateTimeFormat(locale, {
+        timeZone: TIMEZONE,
+        timeZoneName: 'long',
+      }).formatToParts(date);
+      const tzName = nameParts.find(function (p) {
+        return p.type === 'timeZoneName';
+      });
+      if (tzName && tzName.value) name = tzName.value;
+
+      const offsetParts = new Intl.DateTimeFormat(locale, {
+        timeZone: TIMEZONE,
+        timeZoneName: 'shortOffset',
+      }).formatToParts(date);
+      const tzOffset = offsetParts.find(function (p) {
+        return p.type === 'timeZoneName';
+      });
+      if (tzOffset && tzOffset.value) offset = ' (' + tzOffset.value + ')';
+    } catch (e) {
+      /* keep defaults */
+    }
+    return name + offset;
+  }
+
+  function updateTimezoneLabel() {
+    const el = document.getElementById('meeting-timezone-label');
+    if (!el) return;
+    const zone = getTimeZoneDisplay();
+    const template =
+      window.i18n && window.i18n.t
+        ? window.i18n.t('form.stepMeeting.timeZone', 'Times shown in {zone}')
+        : 'Times shown in {zone}';
+    el.textContent = template.replace('{zone}', zone);
+  }
+
   function updateDateDisplay() {
     const el = document.getElementById('meeting-date-display');
     if (!el) return;
@@ -184,6 +228,7 @@
           selectedTime = time;
           syncHiddenInputs();
           renderTimeSlots();
+          notifyChange();
         });
       }
       grid.appendChild(btn);
@@ -277,6 +322,7 @@
           updateDateDisplay();
           renderCalendar();
           renderTimeSlots();
+          notifyChange();
         });
       }
       daysEl.appendChild(btn);
@@ -309,6 +355,7 @@
     selectedTime = null;
     syncHiddenInputs();
     updateDateDisplay();
+    updateTimezoneLabel();
     renderCalendar();
     renderTimeSlots();
     initialized = true;
@@ -320,6 +367,7 @@
       return;
     }
     updateDateDisplay();
+    updateTimezoneLabel();
     var slots = document.getElementById('meeting-time-slots');
     localizeHints(slots);
     renderCalendar();
@@ -356,6 +404,7 @@
     init: init,
     refresh: refresh,
     refreshLocale: refreshLocale,
+    sync: syncHiddenInputs,
     isValid: isValid,
     getFormattedDateTime: getFormattedDateTime,
     TIME_SLOTS: TIME_SLOTS,

@@ -143,9 +143,9 @@
         <!-- Site logo --><a class="header__col header__col_center header__col_logo logo no-ajax" href="index.html">
           <div class="logo__wrapper-img">
             <!-- primary logo version (for use with light backgrounds)--><img class="logo__img-primary"
-              src="img/logo/logo-eternus.svg" width="39" height="20" loading="eager" alt="Eternus" />
+              src="img/logo/logo-eternus-dark.png" width="42" height="43" loading="eager" alt="Eternus" />
             <!-- secondary logo version (for use with dark backgrounds)--><img class="logo__img-secondary"
-              src="img/logo/logo-eternus.svg" width="39" height="20" loading="eager" alt="Eternus" />
+              src="img/logo/logo-eternus-light.png" width="42" height="43" loading="eager" alt="Eternus" />
           </div>
         </a>
         <!-- - Site logo -->
@@ -372,7 +372,7 @@
                           <div class="overflow-hidden aspect-square js-ajax-transition-element"><img
                               class="lazy of-cover-absolute js-ajax-transition-element__media"
                               src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='100%25'%20height='100%25'%3E%3C/svg%3E"
-                              decoding="async" data-src="img/assets/wedingDetails/Fer&Ricky/Fer&Ricky.webp" width="1920"
+                              decoding="async" data-src="img/assets/wedingDetails/Fer-Ricky/Fer-Ricky.webp" width="1920"
                               height="1280" alt="" />
 
                           </div>
@@ -815,7 +815,7 @@
                 <!-- Featured media -->
                 <div class="overflow-hidden w-100 h-100 hover-zoom__inner"><img class="lazy of-cover-absolute"
                     src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='100%25'%20height='100%25'%3E%3C/svg%3E"
-                    decoding="async" data-src="img/assets/places/MenorcaEspaña.webp" width="1280" height="1920" alt="" />
+                    decoding="async" data-src="img/assets/places/MenorcaEspana.webp" width="1280" height="1920" alt="" />
 
                   <div class="portfolio-item__overlay overlay overlay_dark overlay_opacity-40"></div>
                 </div>
@@ -979,13 +979,14 @@
               <p class="section-contact-grid__lede text-muted mb-0 contact-grid__lede" data-i18n="form.index.description"
                 data-i18n-no-animate>Tell us about your wedding and pick a time to meet our team.</p>
             </div>
-            <form id="contactForm" class="form js-form-ajax contact-grid__form text-left" action="/api/send"
-              method="POST" novalidate="novalidate" data-submit-json data-arts-component-name="FormAJAX"
-              data-message-success="Thanks for your message! We will reply to you as soon as possible."
-              data-message-error="Something went wrong :( Please contact me directly at &lt;a href='mailto:dimitri@gmail.com'&gt;dimitri@gmail.com&lt;/a&gt;"
-              data-arts-color-theme="dark">
+            <form id="contactForm" class="form contact-grid__form text-left" action="/api/send"
+              method="POST" novalidate="novalidate" data-submit-json data-arts-color-theme="dark">
               <p id="contact-form-errors" class="contact-grid__error-banner text-danger small mb-2 d-none" data-i18n="form.index.submitError">
                 Please complete all required fields before submitting.</p>
+              <p id="contact-form-api-error" class="contact-grid__error-banner text-danger small mb-2 d-none" data-i18n="form.index.submitFailed">
+                We couldn't send your message right now. Please try again in a moment.</p>
+              <p id="contact-form-success" class="contact-grid__success-banner small mb-2 d-none" data-i18n="form.index.submitSuccess">
+                Thanks for your message! We will reply to you as soon as possible.</p>
               <div class="row g-2 contact-grid__row">
                 <div class="col-12 col-xl-7 contact-grid__fields">
                   <div class="contact-grid__panel contact-grid__panel--form">
@@ -1079,7 +1080,7 @@
                       </label>
                     </div>
                     <div class="col-12 form__col contact-grid__submit">
-                      <button type="submit" class="contact-grid__submit-cta">
+                      <button type="submit" class="contact-grid__submit-cta" disabled aria-disabled="true">
                         <span data-i18n="common.submit">Submit</span>
                       </button>
                     </div>
@@ -1101,6 +1102,7 @@
                       class="meeting-scheduler__selected-date meeting-scheduler__selected-date--compact color-accent d-none"></p>
                     <div class="contact-grid__times-wrap">
                       <p class="subheading contact-grid__times-label mb-1" data-i18n="form.stepMeeting.timeLabel">Available times</p>
+                      <p id="meeting-timezone-label" class="meeting-scheduler__timezone small text-muted mb-2"></p>
                       <div id="meeting-time-slots"></div>
                     </div>
                     <p id="contact-form-meeting-error" class="text-danger small mt-3 mb-0 d-none"

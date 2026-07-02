@@ -634,6 +634,20 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
   letter-spacing: 0.2em;
 }
 
+.contact-grid__submit-cta:disabled,
+.contact-grid__submit-cta[aria-disabled="true"] {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+  background-size: 0% 1px;
+  text-shadow: none;
+}
+
+.contact-grid__success-banner {
+  color: #b8e6c8;
+  letter-spacing: 0.02em;
+}
+
 .section-contact-grid .input-float__input_textarea {
   border-color: rgba(253, 249, 207, 0.14);
   background-color: rgba(255, 255, 255, 0.02);
@@ -742,6 +756,24 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
 .section-contact-grid .meeting-scheduler__hint {
   padding: 0.4rem 0.15rem;
   font-size: 0.7rem;
+}
+
+.meeting-scheduler__timezone {
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  margin-top: -0.15rem;
+}
+
+.section-contact-grid .meeting-scheduler__timezone {
+  font-size: 0.6rem;
+  margin-top: -0.1rem;
+  margin-bottom: 0.35rem !important;
+}
+
+.section-contact-grid .meeting-scheduler__selected-date--compact {
+  margin-top: 0.5rem;
 }
 
 .section-contact-grid .meeting-scheduler__day--selected {
@@ -871,6 +903,16 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
     padding-top: 4rem;
     padding-bottom: 4rem;
   }
+}
+
+/* ==========================================================================
+   Site logo (full Eternus mark)
+   ========================================================================== */
+
+.header .logo__wrapper-img img {
+  width: auto;
+  height: 2.85rem;
+  max-width: none;
 }
 
 /* ==========================================================================

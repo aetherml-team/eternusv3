@@ -10,6 +10,10 @@
     return document.getElementById('contactForm');
   }
 
+  function isMeetingValid() {
+    return !!(window.MeetingScheduler && window.MeetingScheduler.isValid());
+  }
+
   function t(key, fallback) {
     return window.i18n && window.i18n.t ? window.i18n.t(key, fallback) : fallback;
   }
@@ -68,6 +72,7 @@
     input.addEventListener('input', function () {
       var sanitized = sanitizePersonName(input.value);
       if (sanitized !== input.value) input.value = sanitized;
+      updateSubmitButton();
     });
 
     input.addEventListener('paste', function (e) {
@@ -88,6 +93,8 @@
   function hideAllErrors() {
     [
       'contact-form-errors',
+      'contact-form-api-error',
+      'contact-form-success',
       'contact-form-bride-error',
       'contact-form-bride-invalid',
       'contact-form-groom-error',
@@ -101,10 +108,23 @@
     });
   }
 
+  function isFormComplete(form) {
+    var brideInput = form.querySelector('input[name="bride_name"]');
+    var groomInput = form.querySelector('input[name="groom_name"]');
+    var emailInput = form.querySelector('input[name="email"]');
+
+    if (!brideInput || !isValidPersonName(brideInput.value)) return false;
+    if (!groomInput || !isValidPersonName(groomInput.value)) return false;
+    if (!emailInput || !EMAIL_RE.test((emailInput.value || '').trim())) return false;
+    if (!form.querySelector('input[name="wedding_type"]:checked')) return false;
+    if (!form.querySelector('input[name="budget"]:checked')) return false;
+    if (!isMeetingValid()) return false;
+    return true;
+  }
+
   function validateForm(form) {
     hideAllErrors();
     var valid = true;
-    var summary = [];
 
     var brideInput = form.querySelector('input[name="bride_name"]');
     var groomInput = form.querySelector('input[name="groom_name"]');
@@ -153,7 +173,7 @@
       valid = false;
     }
 
-    if (!window.MeetingScheduler || !window.MeetingScheduler.isValid()) {
+    if (!isMeetingValid()) {
       showError('contact-form-meeting-error', true);
       valid = false;
     }
@@ -165,6 +185,90 @@
     }
 
     return valid;
+  }
+
+  function updateSubmitButton() {
+    var form = getForm();
+    if (!form) return;
+    var btn = form.querySelector('button[type="submit"]');
+    if (!btn || btn.dataset.submitting === 'true') return;
+    var ready = isFormComplete(form);
+    btn.disabled = !ready;
+    btn.setAttribute('aria-disabled', ready ? 'false' : 'true');
+  }
+
+  function sanitizePersonNames(form) {
+    ['bride_name', 'groom_name'].forEach(function (name) {
+      var input = form.querySelector('input[name="' + name + '"]');
+      if (input) input.value = sanitizePersonName(input.value);
+    });
+  }
+
+  function showApiError(status, detail) {
+    var technicalMessage;
+    if (status === 405 || status === 0) {
+      technicalMessage =
+        'Form API unavailable (HTTP ' +
+        status +
+        '). Local dev: run npm start from the project root. Production: ensure /api/send is deployed on Vercel.';
+    } else {
+      technicalMessage = 'Form submit failed (HTTP ' + status + ')' + (detail ? ': ' + detail : '') + '.';
+    }
+    console.error('[contactForm]', technicalMessage);
+
+    var el = document.getElementById('contact-form-api-error');
+    if (!el) return;
+    el.textContent = t(
+      'form.index.submitFailed',
+      "We couldn't send your message right now. Please try again in a moment."
+    );
+    showError('contact-form-api-error', true);
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function submitForm(form) {
+    var btn = form.querySelector('button[type="submit"]');
+    if (btn) {
+      btn.dataset.submitting = 'true';
+      btn.disabled = true;
+    }
+
+    if (window.MeetingScheduler && window.MeetingScheduler.sync) {
+      window.MeetingScheduler.sync();
+    }
+
+    var action = form.getAttribute('action') || '/api/send';
+    var body = Object.fromEntries(new FormData(form));
+
+    fetch(action, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })
+      .then(function (res) {
+        if (res.status >= 200 && res.status < 300) {
+          hideAllErrors();
+          showError('contact-form-success', true);
+          form.reset();
+          if (window.MeetingScheduler && window.MeetingScheduler.refresh) {
+            window.MeetingScheduler.refresh();
+          }
+          var successEl = document.getElementById('contact-form-success');
+          if (successEl) successEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          return;
+        }
+        return res.text().then(function (body) {
+          showApiError(res.status, body);
+        });
+      })
+      .catch(function (err) {
+        console.error('[contactForm]', err);
+        showApiError(0);
+      })
+      .finally(function () {
+        if (btn) delete btn.dataset.submitting;
+        updateSubmitButton();
+      });
   }
 
   function ensureMeetingScheduler(callback) {
@@ -198,31 +302,30 @@
     bindPersonNameInput(form.querySelector('input[name="groom_name"]'));
 
     if (form.dataset.contactFormBound === 'true') {
-      ensureMeetingScheduler();
+      ensureMeetingScheduler(updateSubmitButton);
       return;
     }
     form.dataset.contactFormBound = 'true';
 
-    form.addEventListener(
-      'submit',
-      function (e) {
-        sanitizePersonNames(form);
-        if (!validateForm(form)) {
-          e.preventDefault();
-          e.stopImmediatePropagation();
-        }
-      },
-      true
-    );
-
-    ensureMeetingScheduler();
-  }
-
-  function sanitizePersonNames(form) {
-    ['bride_name', 'groom_name'].forEach(function (name) {
-      var input = form.querySelector('input[name="' + name + '"]');
-      if (input) input.value = sanitizePersonName(input.value);
+    form.addEventListener('change', updateSubmitButton);
+    form.addEventListener('input', function (e) {
+      if (e.target && e.target.name === 'email') updateSubmitButton();
     });
+
+    document.addEventListener('meeting-scheduler:change', updateSubmitButton);
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      sanitizePersonNames(form);
+      if (!validateForm(form)) {
+        updateSubmitButton();
+        return;
+      }
+      submitForm(form);
+    });
+
+    ensureMeetingScheduler(updateSubmitButton);
   }
 
   if (document.readyState === 'loading') {

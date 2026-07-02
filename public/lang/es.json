@@ -91,7 +91,9 @@
     "index": {
       "title": "Planemos tu día eterno",
       "description": "Cuéntanos sobre tu boda y elige un horario para conocer a nuestro equipo.",
-      "submitError": "Por favor completa todos los campos requeridos antes de enviar."
+      "submitError": "Por favor completa todos los campos requeridos antes de enviar.",
+      "submitSuccess": "¡Gracias por tu mensaje! Te responderemos lo antes posible.",
+      "submitFailed": "No pudimos enviar tu mensaje en este momento. Por favor inténtalo de nuevo en unos instantes."
     },
     "step0": {
       "title": "¿Cuál es el nombre de la novia?",
@@ -133,9 +135,11 @@
     "stepMeeting": {
       "eyebrow": "Consulta Privada",
       "selectedDate": "Seleccionado:",
+      "scheduled": "Reunión confirmada:",
       "title": "¿Cuándo te gustaría reunirte con nosotros?",
       "description": "Elige una fecha y hora para una llamada de consulta con nuestro equipo.",
       "timeLabel": "Horarios disponibles",
+      "timeZone": "Horarios en {zone}",
       "selectDateHint": "Selecciona una fecha para ver los horarios disponibles.",
       "noSlots": "No hay horarios disponibles para este día. Por favor elige otra fecha.",
       "error": "Por favor selecciona una fecha y hora para la reunión."

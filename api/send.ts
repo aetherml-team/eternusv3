@@ -8,7 +8,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const validation = validateContactForm(req.body || {});
-  if (!validation.ok) {
+  if (validation.ok === false) {
     return res.status(400).json({ error: validation.error });
   }
 
