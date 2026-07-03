@@ -2537,6 +2537,12 @@ class Utilities {
 
 	_updateMobileBarVh() {
 		document.documentElement.style.setProperty('--fix-bar-vh', `${document.documentElement.clientHeight * 0.01}px`);
+		// Touch devices: URL bar show/hide fires resize and refresh() jumps scroll
+		// (especially when flinging up from the page bottom). ignoreMobileResize alone
+		// does not help when refresh is called explicitly.
+		if (typeof ScrollTrigger !== 'undefined' && ScrollTrigger.isTouch === 1) {
+			return;
+		}
 		ScrollTrigger.refresh(true);
 	}
 
