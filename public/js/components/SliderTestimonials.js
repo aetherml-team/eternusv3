@@ -45,6 +45,7 @@ export default class SliderTestimonials extends BaseComponent {
 		};
 
 		this.dotsTL = gsap.timeline();
+		this._lastResizeWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
 
 		this.setup();
 	}
@@ -568,6 +569,13 @@ export default class SliderTestimonials extends BaseComponent {
 	}
 
 	_onResize() {
+		const width = window.innerWidth;
+		// Ignore mobile browser chrome height-only resizes (scroll jump at page bottom).
+		if (this._lastResizeWidth === width) {
+			return;
+		}
+		this._lastResizeWidth = width;
+
 		const currentIndex = this.slider.currentIndex;
 
 		this._adjustSlideHeight(this.elements.sections[currentIndex], 0);

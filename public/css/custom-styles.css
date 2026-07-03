@@ -1413,10 +1413,19 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
 html {
   background-color: #060B14;
   color-scheme: dark;
+  /* Prevent browser scroll anchoring from fighting upward flings (mobile). */
+  overflow-anchor: none;
 }
 
 body {
   background-color: #060B14;
+  overflow-anchor: none;
+}
+
+#page-wrapper,
+.page-wrapper__content,
+[data-barba="container"] {
+  overflow-anchor: none;
 }
 
 body.page-wedding-details,
