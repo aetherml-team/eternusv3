@@ -12,19 +12,23 @@ const { collectFromAllHtml, toAssetsRel, toSourceRel } = require('./lib/html-ima
 const PUBLIC = path.join(__dirname, '..', 'public');
 const IMG = path.join(PUBLIC, 'img', 'assets');
 
-const WEBP_QUALITY = 90;
-const JPEG_QUALITY = 92;
-const PNG_QUALITY = 80;
+const WEBP_QUALITY = 80;
+const JPEG_QUALITY = 82;
+const PNG_QUALITY = 72;
 const WEBP_EFFORT = 6;
 const RESIZE_KERNEL = sharp.kernel.lanczos3;
 
+/** Juli & Ty gallery — extra pass for slow 4G (~10% smaller than site defaults). */
+const JULY_TY_V2_RULE = { maxWidth: 2200, jpegQuality: 74, webpQuality: 72 };
+
 /** @type {Record<string, { maxWidth: number, jpegQuality?: number, webpQuality?: number }>} */
 const RULES = {
-  'hero/': { maxWidth: 960, jpegQuality: 90, webpQuality: 88 },
+  'wedingDetails/JulyTyV2/': JULY_TY_V2_RULE,
+  'hero/': { maxWidth: 960, jpegQuality: 80, webpQuality: 78 },
   'preloader/': { maxWidth: 800 },
   'section/sectionArcImages/': { maxWidth: 1000 },
   'places/': { maxWidth: 1600 },
-  'section/sectionTestimonials/fondoTestimonios.png': { maxWidth: 1600, webpQuality: 78, jpegQuality: 80 },
+  'section/sectionTestimonials/fondoTestimonios.png': { maxWidth: 1600, webpQuality: 70, jpegQuality: 72 },
   'packages/': { maxWidth: 1800 },
   'team/': { maxWidth: 1500 },
   'placesDetails/': { maxWidth: 1800 },
@@ -76,13 +80,17 @@ function getRule(relPath) {
   const basename = path.basename(relPath);
   const normalized = relPath.replace(/\\/g, '/');
 
-  if (TESTIMONIAL_RE.test(normalized)) return { maxWidth: 300 };
-  if (HERO_COVER_RE.test(normalized)) return { maxWidth: 2560, jpegQuality: 92, webpQuality: 90 };
-  if (PORTADA_RE.test(basename) || /\.png$/i.test(basename)) {
-    return { maxWidth: 1920, jpegQuality: 92, webpQuality: 90 };
+  if (normalized.startsWith('wedingDetails/JulyTyV2/')) {
+    return JULY_TY_V2_RULE;
   }
 
-  for (const [prefix, rule] of Object.entries(RULES)) {
+  if (TESTIMONIAL_RE.test(normalized)) return { maxWidth: 300 };
+  if (HERO_COVER_RE.test(normalized)) return { maxWidth: 2560, jpegQuality: 84, webpQuality: 82 };
+  if (PORTADA_RE.test(basename) || /\.png$/i.test(basename)) {
+    return { maxWidth: 1920, jpegQuality: 84, webpQuality: 82 };
+  }
+
+  for (const [prefix, rule] of Object.entries(RULES).sort((a, b) => b[0].length - a[0].length)) {
     if (prefix.endsWith('/') && normalized.startsWith(prefix)) return rule;
   }
 

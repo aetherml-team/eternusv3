@@ -11,9 +11,9 @@ const sharp = require('sharp');
 const PUBLIC = path.join(__dirname, '..', 'public');
 const IMG = path.join(PUBLIC, 'img', 'assets');
 
-const WEBP_QUALITY = 81;
-const JPEG_QUALITY = 84;
-const PNG_QUALITY = 80;
+const WEBP_QUALITY = 72;
+const JPEG_QUALITY = 75;
+const PNG_QUALITY = 72;
 
 /** @type {Record<string, { maxWidth: number, jpegQuality?: number, webpQuality?: number }>} */
 const RULES = {
@@ -32,7 +32,7 @@ const RULES = {
   'wedingDetails/Izaak-Simi/Testimonial.jpg': { maxWidth: 300 },
   'wedingDetails/David&Edurne/Testimonial.jpg': { maxWidth: 300 },
   'places/': { maxWidth: 1000 },
-  'section/sectionTestimonials/fondoTestimonios.png': { maxWidth: 1600, webpQuality: 78, jpegQuality: 80 },
+  'section/sectionTestimonials/fondoTestimonios.png': { maxWidth: 1600, webpQuality: 70, jpegQuality: 72 },
   'packages/': { maxWidth: 1400 },
   'team/': { maxWidth: 900 },
 };

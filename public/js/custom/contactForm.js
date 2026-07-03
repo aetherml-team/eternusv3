@@ -159,8 +159,7 @@
     input.addEventListener('input', function () {
       var sanitized = sanitizePersonName(input.value);
       if (sanitized !== input.value) input.value = sanitized;
-      clearFieldIfValid('bride');
-      clearFieldIfValid('groom');
+      clearFieldIfValid(input.name === 'bride_name' ? 'bride' : 'groom');
       updateSubmitButton();
     });
 
@@ -250,8 +249,13 @@
   }
 
   function scrollToStatus(el) {
-    if (!el) return;
-    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    if (!el || el.classList.contains('d-none')) return;
+    var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var isCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
+    if (isCoarsePointer) {
+      return;
+    }
+    el.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'nearest' });
   }
 
   function focusFirstInvalid(form) {
@@ -269,9 +273,6 @@
           target.focus();
         }
       }
-
-      var col = config.getCol(form);
-      if (col) col.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
   }
@@ -527,24 +528,28 @@
 
   function ensureMeetingScheduler(callback) {
     if (!document.getElementById('meeting-calendar')) return;
-    if (window.MeetingScheduler) {
-      window.MeetingScheduler.init();
+    function runScheduler() {
+      if (!window.MeetingScheduler) return;
+      if (window.MeetingScheduler.initIfNeeded) {
+        window.MeetingScheduler.initIfNeeded();
+      } else {
+        window.MeetingScheduler.init();
+      }
       if (callback) callback();
+    }
+    if (window.MeetingScheduler) {
+      runScheduler();
       return;
     }
     var existing = document.getElementById('meeting-scheduler');
-    function run() {
-      if (window.MeetingScheduler) window.MeetingScheduler.init();
-      if (callback) callback();
-    }
     if (existing) {
-      existing.addEventListener('load', run, { once: true });
+      existing.addEventListener('load', runScheduler, { once: true });
       return;
     }
     var script = document.createElement('script');
     script.id = 'meeting-scheduler';
     script.src = 'js/custom/meetingScheduler.js';
-    script.onload = run;
+    script.onload = runScheduler;
     document.body.appendChild(script);
   }
 

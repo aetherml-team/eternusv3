@@ -347,12 +347,24 @@
     });
   }
 
-  function init() {
+  function isMounted() {
+    const mount = document.getElementById('meeting-calendar');
+    return !!(mount && mount.querySelector('.meeting-scheduler'));
+  }
+
+  function init(options) {
+    const force = !!(options && options.force);
+    if (initialized && isMounted() && !force) {
+      return;
+    }
+
     const t = todayParts();
     viewYear = t.year;
     viewMonth = t.month - 1;
-    selectedDate = null;
-    selectedTime = null;
+    if (force || !initialized) {
+      selectedDate = null;
+      selectedTime = null;
+    }
     syncHiddenInputs();
     updateDateDisplay();
     updateTimezoneLabel();
@@ -361,8 +373,14 @@
     initialized = true;
   }
 
+  function initIfNeeded() {
+    if (!initialized || !isMounted()) {
+      init();
+    }
+  }
+
   function refreshLocale() {
-    if (!initialized) {
+    if (!initialized || !isMounted()) {
       init();
       return;
     }
@@ -374,8 +392,8 @@
   }
 
   function refresh() {
-    if (!initialized) {
-      init();
+    if (!initialized || !isMounted()) {
+      init({ force: true });
       return;
     }
     renderCalendar();
@@ -402,6 +420,10 @@
 
   window.MeetingScheduler = {
     init: init,
+    initIfNeeded: initIfNeeded,
+    isInitialized: function () {
+      return initialized && isMounted();
+    },
     refresh: refresh,
     refreshLocale: refreshLocale,
     sync: syncHiddenInputs,
@@ -416,12 +438,12 @@
 
   function tryInitIfActiveStep() {
     if (document.getElementById('contactForm') && document.getElementById('meeting-calendar')) {
-      init();
+      initIfNeeded();
       return;
     }
     var step = document.getElementById('step-5');
     if (step && step.classList.contains('active') && document.getElementById('meeting-calendar')) {
-      init();
+      initIfNeeded();
     }
   }
 
