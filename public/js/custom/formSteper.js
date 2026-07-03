@@ -139,7 +139,11 @@
     if (!document.getElementById('meeting-calendar')) return;
     loadMeetingSchedulerScript(function () {
       if (window.MeetingScheduler) {
-        window.MeetingScheduler.init();
+        if (window.MeetingScheduler.initIfNeeded) {
+          window.MeetingScheduler.initIfNeeded();
+        } else {
+          window.MeetingScheduler.init();
+        }
         updateContainerHeight();
         window.setTimeout(updateContainerHeight, 100);
       }

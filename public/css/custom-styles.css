@@ -102,6 +102,20 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
 }
 
 /* Meeting scheduler (contact form) */
+#meeting-calendar {
+  min-height: 19.5rem;
+  overflow-anchor: none;
+}
+
+#meeting-time-slots {
+  min-height: 5.5rem;
+  overflow-anchor: none;
+}
+
+#meeting-timezone-label {
+  min-height: 1.25rem;
+}
+
 .meeting-scheduler {
   width: 100%;
   max-width: 100%;
@@ -348,6 +362,7 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
   background-color: #060b14;
   padding-top: 1.5rem !important;
   padding-bottom: 1.5rem !important;
+  overflow-anchor: none;
 }
 
 @media screen and (min-width: 768px) {
@@ -461,6 +476,7 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
 
 .contact-grid__row {
   align-items: stretch;
+  overflow-anchor: none;
 }
 
 .contact-grid__field-label,
@@ -563,6 +579,11 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
 
 .contact-grid__scheduler-inner {
   height: 100%;
+  overflow-anchor: none;
+}
+
+.contact-form-status {
+  overflow-anchor: none;
 }
 
 @media screen and (min-width: 992px) {

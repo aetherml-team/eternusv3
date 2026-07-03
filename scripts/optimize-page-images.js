@@ -18,24 +18,27 @@ if (!PAGES.length) {
   process.exit(1);
 }
 
-const WEBP_QUALITY = 90;
-const JPEG_QUALITY = 92;
-const PNG_QUALITY = 80;
+const WEBP_QUALITY = 80;
+const JPEG_QUALITY = 82;
+const PNG_QUALITY = 72;
 const WEBP_EFFORT = 6;
 const RESIZE_KERNEL = sharp.kernel.lanczos3;
 
+const JULY_TY_V2_RULE = { maxWidth: 2200, jpegQuality: 74, webpQuality: 72 };
+
 const RULES = {
-  'hero/': { maxWidth: 960, jpegQuality: 90, webpQuality: 88 },
-  'preloader/': { maxWidth: 1365, jpegQuality: 92, webpQuality: 90 },
-  'section/sectionArcImages/': { maxWidth: 1920, jpegQuality: 92, webpQuality: 90 },
-  'places/': { maxWidth: 1920, jpegQuality: 92, webpQuality: 90 },
-  'section/sectionTestimonials/fondoTestimonios.png': { maxWidth: 1600, webpQuality: 78, jpegQuality: 80 },
+  'wedingDetails/JulyTyV2/': JULY_TY_V2_RULE,
+  'hero/': { maxWidth: 960, jpegQuality: 80, webpQuality: 78 },
+  'preloader/': { maxWidth: 1365, jpegQuality: 82, webpQuality: 80 },
+  'section/sectionArcImages/': { maxWidth: 1920, jpegQuality: 82, webpQuality: 80 },
+  'places/': { maxWidth: 1920, jpegQuality: 82, webpQuality: 80 },
+  'section/sectionTestimonials/fondoTestimonios.png': { maxWidth: 1600, webpQuality: 70, jpegQuality: 72 },
   'packages/': { maxWidth: 1800 },
-  'team/': { maxWidth: 1920, jpegQuality: 92, webpQuality: 90 },
+  'team/': { maxWidth: 1920, jpegQuality: 82, webpQuality: 80 },
   'placesDetails/': { maxWidth: 1920 },
   'postsTestimonials/': { maxWidth: 1800 },
   'postsPortfolio/': { maxWidth: 1800 },
-  'wedingDetails/': { maxWidth: 2400, jpegQuality: 92, webpQuality: 90 },
+  'wedingDetails/': { maxWidth: 2400, jpegQuality: 82, webpQuality: 80 },
 };
 
 const HERO_COVER_RE = /\/(Hero\.jpe?g|TeaserEdit[^/]*\.jpe?g|1\.jpg)$/i;
@@ -198,16 +201,19 @@ async function resolveSource(relPath) {
 function getRule(relPath) {
   const basename = path.basename(relPath);
   const normalized = relPath.replace(/\\/g, '/');
-  if (TESTIMONIAL_RE.test(normalized)) return { maxWidth: 400, jpegQuality: 90, webpQuality: 88 };
-  if (HERO_COVER_RE.test(normalized)) return { maxWidth: 2560, jpegQuality: 92, webpQuality: 90 };
-  if (PORTADA_RE.test(basename) || /portada/i.test(basename)) {
-    return { maxWidth: 2400, jpegQuality: 92, webpQuality: 90 };
+  if (normalized.startsWith('wedingDetails/JulyTyV2/')) {
+    return JULY_TY_V2_RULE;
   }
-  if (/\.png$/i.test(basename)) return { maxWidth: 1920, jpegQuality: 92, webpQuality: 90 };
-  for (const [prefix, rule] of Object.entries(RULES)) {
+  if (TESTIMONIAL_RE.test(normalized)) return { maxWidth: 400, jpegQuality: 80, webpQuality: 78 };
+  if (HERO_COVER_RE.test(normalized)) return { maxWidth: 2560, jpegQuality: 84, webpQuality: 82 };
+  if (PORTADA_RE.test(basename) || /portada/i.test(basename)) {
+    return { maxWidth: 2400, jpegQuality: 84, webpQuality: 82 };
+  }
+  if (/\.png$/i.test(basename)) return { maxWidth: 1920, jpegQuality: 82, webpQuality: 80 };
+  for (const [prefix, rule] of Object.entries(RULES).sort((a, b) => b[0].length - a[0].length)) {
     if (prefix.endsWith('/') && normalized.startsWith(prefix)) return rule;
   }
-  return { maxWidth: 1920, jpegQuality: 92, webpQuality: 90 };
+  return { maxWidth: 1920, jpegQuality: 82, webpQuality: 80 };
 }
 
 async function optimizeFile(relPath) {
