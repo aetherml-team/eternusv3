@@ -1800,9 +1800,14 @@ class BaseComponent extends BaseAnimation {
 				}
 			});
 
+			const isTouch = typeof ScrollTrigger !== 'undefined' && ScrollTrigger.isTouch === 1;
+			const leadPx = isTouch
+				? Math.max(2800, Math.round((window.innerHeight || 800) * 3))
+				: 1800;
+
 			ScrollTrigger.create({
 				trigger: this.element,
-				start: () => `top-=1500px bottom`,
+				start: () => `top-=${leadPx}px bottom`,
 				scrub: false,
 				containerAnimation: this.containerAnimation,
 				once: true,
