@@ -637,8 +637,16 @@ window.app = {
 
 	loadLazy: () => {
 		return new Promise((resolve) => {
+			// Mobile scrolls fast; load images ~2.5 viewports ahead so they
+			// finish before entering the screen (avoids empty dark gaps).
+			const isTouch = typeof ScrollTrigger !== 'undefined' && ScrollTrigger.isTouch === 1;
+			const vh = window.innerHeight || 800;
+			const threshold = isTouch
+				? Math.max(2200, Math.round(vh * 2.75))
+				: Math.max(1200, Math.round(vh * 1.5));
+
 			app.lazy = new LazyLoad({
-				threshold: 900,
+				threshold,
 				cancel_on_exit: false,
 				unobserve_entered: true
 			});

@@ -1,13 +1,22 @@
 /**
  * Tiered wedding image prefetch: index intent + in-page priority loading.
+ * On mobile, hydrate gallery images well before they enter the viewport
+ * so scrolling does not show empty dark placeholders.
  */
 (function () {
   const prefetched = new Set();
   const queue = [];
   let active = 0;
-  const MAX_CONCURRENT = 3;
-  const PRIORITY_COUNT = 6;
+  const MAX_CONCURRENT = 4;
+  const PRIORITY_COUNT = 8;
   const WEDDING_PATH_RE = /wedding-details-|details-sofi-armando/i;
+
+  function isTouchDevice() {
+    return (
+      (typeof ScrollTrigger !== 'undefined' && ScrollTrigger.isTouch === 1) ||
+      window.matchMedia('(pointer: coarse)').matches
+    );
+  }
 
   function isSlowConnection() {
     const conn = navigator.connection;
@@ -92,6 +101,11 @@
       return;
     }
 
+    if (app && app.lazy && typeof app.lazy.load === 'function') {
+      app.lazy.load(img);
+      return;
+    }
+
     img.src = img.getAttribute('data-src');
     img.removeAttribute('data-src');
     img.classList.remove('lazy');
@@ -105,6 +119,44 @@
     return WEDDING_PATH_RE.test(window.location.pathname);
   }
 
+  function leadMarginPx() {
+    const vh = window.innerHeight || 800;
+    if (isSlowConnection()) return Math.round(vh * 1.25);
+    if (isTouchDevice()) return Math.max(2400, Math.round(vh * 3));
+    return Math.max(1600, Math.round(vh * 2));
+  }
+
+  /**
+   * Force-load gallery images as they approach the viewport (DOM hydrate,
+   * not only cache prefetch), so mobile scroll never shows empty tiles.
+   */
+  function observeUpcomingImages(scope) {
+    if (typeof IntersectionObserver === 'undefined') return;
+
+    const imgs = scope.querySelectorAll('img.lazy[data-src]');
+    if (!imgs.length) return;
+
+    const margin = leadMarginPx();
+    const observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          loadLazyElement(entry.target);
+          observer.unobserve(entry.target);
+        });
+      },
+      {
+        root: null,
+        rootMargin: margin + 'px 0px',
+        threshold: 0,
+      }
+    );
+
+    imgs.forEach(function (img) {
+      observer.observe(img);
+    });
+  }
+
   function hydrateWeddingPage(root) {
     const scope = root || getPageRoot();
     const imgs = Array.prototype.slice.call(scope.querySelectorAll('img.lazy[data-src]'));
@@ -112,15 +164,30 @@
 
     const slow = isSlowConnection();
     const moderate = isModerateConnection();
-    const priorityLimit = slow ? 2 : moderate ? 4 : PRIORITY_COUNT;
+    const touch = isTouchDevice();
+    const priorityLimit = slow ? 3 : moderate ? 6 : touch ? PRIORITY_COUNT + 2 : PRIORITY_COUNT;
 
     imgs.slice(0, priorityLimit).forEach(loadLazyElement);
 
-    if (slow) return;
+    if (slow) {
+      observeUpcomingImages(scope);
+      return;
+    }
 
+    // Prefetch remaining into cache, and also hydrate via IO well ahead of view.
     imgs.slice(priorityLimit).forEach(function (img) {
       enqueue(img.getAttribute('data-src'));
     });
+    observeUpcomingImages(scope);
+  }
+
+  /**
+   * Index (and other pages): hydrate lazy images ahead of scroll so sections
+   * like portfolio / places do not flash empty on mobile.
+   */
+  function hydrateScrollAhead(root) {
+    if (isWeddingPage()) return;
+    observeUpcomingImages(root || getPageRoot());
   }
 
   function getHeroFromLink(link) {
@@ -140,7 +207,7 @@
 
     if (isSlowConnection()) return;
 
-    const docLimit = isModerateConnection() ? 8 : 14;
+    const docLimit = isModerateConnection() ? 8 : isTouchDevice() ? 12 : 14;
 
     fetch(href, { credentials: 'same-origin' })
       .then(function (res) {
@@ -191,7 +258,7 @@
           observer.unobserve(link);
         });
       },
-      { rootMargin: '240px', threshold: 0.15 }
+      { rootMargin: '400px', threshold: 0.1 }
     );
 
     links.forEach(function (link) {
@@ -204,6 +271,8 @@
 
     if (isWeddingPage()) {
       hydrateWeddingPage(root);
+    } else {
+      hydrateScrollAhead(root);
     }
 
     bindIndexCards(root);
