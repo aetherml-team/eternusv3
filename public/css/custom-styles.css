@@ -582,10 +582,6 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
   overflow-anchor: none;
 }
 
-.contact-form-status {
-  overflow-anchor: none;
-}
-
 @media screen and (min-width: 992px) {
   .contact-grid__scheduler-inner {
     position: sticky;
@@ -608,34 +604,57 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
   letter-spacing: 0.02em;
 }
 
-.contact-form-status {
+.eternus-toast-stack {
+  position: fixed;
+  z-index: 10050;
+  right: 1rem;
+  bottom: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
+  width: min(22rem, calc(100vw - 2rem));
+  pointer-events: none;
 }
 
-.contact-form-alert {
+.eternus-toast {
   display: flex;
   align-items: flex-start;
   gap: 0.85rem;
-  padding: 1rem 1.15rem;
+  padding: 1rem 1rem 1rem 1.15rem;
   border-radius: 12px;
   border: 1px solid transparent;
-  animation: contact-form-alert-in 0.45s ease;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  pointer-events: auto;
+  animation: eternus-toast-in 0.4s ease;
 }
 
-@keyframes contact-form-alert-in {
+.eternus-toast--out {
+  animation: eternus-toast-out 0.3s ease forwards;
+}
+
+@keyframes eternus-toast-in {
   from {
     opacity: 0;
-    transform: translateY(-6px);
+    transform: translateY(12px) scale(0.98);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
-.contact-form-alert__icon {
+@keyframes eternus-toast-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+.eternus-toast__icon {
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -643,12 +662,13 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
   margin-top: 0.1rem;
 }
 
-.contact-form-alert__content {
+.eternus-toast__content {
   flex: 1;
   min-width: 0;
+  padding-right: 0.25rem;
 }
 
-.contact-form-alert__title {
+.eternus-toast__title {
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.12em;
@@ -656,20 +676,20 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
   margin-bottom: 0.25rem;
 }
 
-.contact-form-alert__text {
+.eternus-toast__message {
   font-size: 0.875rem;
   line-height: 1.45;
   opacity: 0.95;
 }
 
-.contact-form-alert__hint {
+.eternus-toast__hint {
   font-size: 0.8rem;
   line-height: 1.4;
   opacity: 0.75;
   margin-top: 0.35rem;
 }
 
-.contact-form-alert__detail {
+.eternus-toast__detail {
   font-size: 0.8rem;
   line-height: 1.45;
   margin-top: 0.45rem;
@@ -678,24 +698,73 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
   opacity: 0.9;
 }
 
-.contact-form-alert--error {
-  color: #f5b8be;
-  border-color: rgba(220, 53, 69, 0.4);
-  background: rgba(220, 53, 69, 0.1);
+.eternus-toast__close {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin: -0.15rem -0.15rem 0 0;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font-size: 1.25rem;
+  line-height: 1;
+  opacity: 0.65;
+  cursor: pointer;
+  transition: opacity 0.2s ease, background 0.2s ease;
 }
 
-.contact-form-alert--error .contact-form-alert__icon {
+.eternus-toast__close:hover,
+.eternus-toast__close:focus-visible {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.08);
+  outline: none;
+}
+
+.eternus-toast--error {
+  color: #f5b8be;
+  border-color: rgba(220, 53, 69, 0.4);
+  background: rgba(28, 12, 14, 0.94);
+  backdrop-filter: blur(12px);
+}
+
+.eternus-toast--error .eternus-toast__icon {
   color: #ff8a94;
 }
 
-.contact-form-alert--success {
+.eternus-toast--success {
   color: #d4f0dc;
   border-color: rgba(72, 187, 120, 0.45);
-  background: rgba(72, 187, 120, 0.12);
+  background: rgba(12, 24, 16, 0.94);
+  backdrop-filter: blur(12px);
 }
 
-.contact-form-alert--success .contact-form-alert__icon {
+.eternus-toast--success .eternus-toast__icon {
   color: #7ddea0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eternus-toast {
+    animation: none;
+  }
+
+  .eternus-toast--out {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .eternus-toast-stack {
+    right: 0.75rem;
+    left: 0.75rem;
+    width: auto;
+    bottom: max(0.75rem, env(safe-area-inset-bottom));
+  }
 }
 
 .contact-grid__field--invalid .input-float__input {
@@ -717,18 +786,6 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
 .contact-grid__panel--scheduler.contact-grid__panel--invalid {
   outline: 1px solid rgba(220, 53, 69, 0.45);
   outline-offset: 3px;
-}
-
-#contactForm.contact-form--submitted .contact-grid__row {
-  opacity: 0.55;
-  pointer-events: none;
-  transition: opacity 0.4s ease;
-}
-
-#contactForm.contact-form--submitted .contact-form-status,
-#contactForm.contact-form--submitted .contact-grid__submit {
-  opacity: 1;
-  pointer-events: auto;
 }
 
 .contact-grid__submit-loading {
@@ -1008,33 +1065,31 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
    Testimonials & Reserve Now – equal balanced height
    ========================================================================== */
 
-/* Shared min-height so both sections feel equal and balanced */
-.section-testimonials,
+/* Shared min-height — pricing only; testimonials uses compact layout below */
 .section-pricing-cards .pricing-table {
   min-height: 50vh;
 }
 
 @media screen and (min-width: 768px) {
-  .section-testimonials,
   .section-pricing-cards .pricing-table {
     min-height: 55vh;
   }
 }
 
 @media screen and (min-width: 992px) {
-  .section-testimonials,
   .section-pricing-cards .pricing-table {
     min-height: 58vh;
   }
 }
 
-/* Testimonials: more prominent – increase padding and center content */
+/* Testimonials: compact vertical rhythm */
 .section-testimonials {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-top: 3.5rem;
-  padding-bottom: 3.5rem;
+  min-height: 0;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
 .section-testimonials .section__content {
@@ -1045,15 +1100,297 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
 
 @media screen and (min-width: 768px) {
   .section-testimonials {
-    padding-top: 4.5rem;
-    padding-bottom: 4.5rem;
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
   }
 }
 
 @media screen and (min-width: 992px) {
   .section-testimonials {
-    padding-top: 5rem;
-    padding-bottom: 5rem;
+    padding-top: 2.75rem;
+    padding-bottom: 2.75rem;
+  }
+}
+
+/* Testimonials — films chapter visual language (slider behaviour unchanged) */
+.section-testimonials--films {
+  --wf-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --wf-duration: 0.9s;
+  --wf-radius: 12px;
+  --wf-radius-inner: 8px;
+  --wf-frame-pad: clamp(0.4rem, 0.9vw, 0.6rem);
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.section-testimonials {
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.section-testimonials__header {
+  position: relative;
+  z-index: 1;
+  padding-bottom: 1.25rem !important;
+}
+
+.section-testimonials__header .mt-medium {
+  margin-top: 1rem !important;
+}
+
+.section-testimonials__lede {
+  max-width: 28rem;
+  color: var(--color-light-1, #dbdada);
+}
+
+.section-testimonials__background {
+  transform: translateZ(0);
+}
+
+.section-testimonials__bg-image {
+  will-change: transform;
+  filter: saturate(0.75) brightness(0.85);
+}
+
+.section-testimonials__overlay {
+  background:
+    linear-gradient(180deg, rgba(6, 11, 20, 0.55) 0%, rgba(6, 11, 20, 0.82) 45%, rgba(5, 9, 16, 0.92) 100%),
+    radial-gradient(ellipse 65% 45% at 50% 18%, rgba(253, 249, 207, 0.06) 0%, transparent 58%);
+}
+
+.section-testimonials--films::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+.section-testimonials .slider-testimonials__container {
+  position: relative;
+  z-index: 2;
+}
+
+.section-testimonials .slider-testimonials__controls {
+  position: relative;
+  z-index: 2;
+}
+
+.section-testimonials .slider-testimonials__item-text {
+  max-width: 42rem;
+}
+
+.section-testimonials .slider-testimonials__item-text .h5 {
+  font-family: var(--font-secondary);
+  font-weight: 300;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+  color: var(--color-light-1, #dbdada);
+}
+
+.section-testimonials--films .testimonial-photo-shell {
+  --size-min: 108;
+  --size-max: 152;
+  width: calc(1 * var(--size-min) * 1px);
+  margin-inline: auto;
+  cursor: default;
+  pointer-events: none;
+  transition:
+    border-color var(--wf-duration) var(--wf-ease),
+    box-shadow var(--wf-duration) var(--wf-ease),
+    transform var(--wf-duration) var(--wf-ease);
+}
+
+.section-testimonials--films .slider-testimonials__dot[current] .testimonial-photo-shell {
+  pointer-events: auto;
+}
+
+@media screen and (min-width: 360px) {
+  .section-testimonials--films .testimonial-photo-shell {
+    width: calc(1 * (var(--size-min) * 1px + (var(--size-max) - var(--size-min)) * (100vw - 360px) / 1560));
+  }
+}
+
+@media screen and (min-width: 1920px) {
+  .section-testimonials--films .testimonial-photo-shell {
+    width: calc(1 * var(--size-max) * 1px);
+  }
+}
+
+.section-testimonials--films .testimonial-photo-shell.section-wedding-film__shell {
+  padding: var(--wf-frame-pad);
+}
+
+.section-testimonials--films .testimonial-photo-wrapper {
+  position: relative;
+  width: 100%;
+  height: auto !important;
+  aspect-ratio: 5 / 6;
+  overflow: hidden;
+  border-radius: var(--wf-radius-inner);
+  background-color: #000;
+  cursor: default;
+  box-shadow: none;
+}
+
+.section-testimonials--films .slider-testimonials__dot-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--wf-radius-inner);
+  overflow: hidden;
+  transition: transform var(--wf-duration) var(--wf-ease);
+}
+
+.section-testimonials--films .slider-testimonials__dot-image img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  object-fit: cover;
+}
+
+.section-testimonials--films .section-wedding-film__scrim {
+  background: linear-gradient(
+    185deg,
+    rgba(0, 0, 0, 0.02) 0%,
+    rgba(0, 0, 0, 0.12) 42%,
+    rgba(0, 0, 0, 0.42) 78%,
+    rgba(0, 0, 0, 0.72) 100%
+  );
+}
+
+.section-testimonials--films .slider-testimonials__dot[current] .testimonial-photo-shell {
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 14px 40px rgba(0, 0, 0, 0.28);
+}
+
+.section-testimonials--films .testimonial-photo-shell:hover,
+.section-testimonials--films .slider-testimonials__dot[current] .testimonial-photo-shell:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 20px 56px rgba(0, 0, 0, 0.32);
+  transform: translateY(-2px);
+}
+
+.section-testimonials--films .testimonial-photo-shell:hover::before,
+.section-testimonials--films .slider-testimonials__dot[current] .testimonial-photo-shell:hover::before {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.section-testimonials--films .slider-testimonials__dot[current] .section-wedding-film__veil {
+  --overlay-opacity: 0.22;
+  transition: --overlay-opacity var(--wf-duration) var(--wf-ease);
+}
+
+.section-testimonials--films .testimonial-photo-shell:hover .section-wedding-film__veil,
+.section-testimonials--films .slider-testimonials__dot[current] .testimonial-photo-shell:hover .section-wedding-film__veil {
+  --overlay-opacity: 0.1;
+}
+
+.section-testimonials--films .slider-testimonials__dot[current] .section-wedding-film__scrim {
+  opacity: 1;
+  transition: opacity var(--wf-duration) var(--wf-ease);
+}
+
+.section-testimonials--films .testimonial-photo-shell:hover .section-wedding-film__scrim,
+.section-testimonials--films .slider-testimonials__dot[current] .testimonial-photo-shell:hover .section-wedding-film__scrim {
+  opacity: 0.76;
+}
+
+.section-testimonials--films .slider-testimonials__dot[current] .section-wedding-film__shine {
+  animation: testimonial-frame-shine 1.15s var(--wf-ease) forwards;
+}
+
+.section-testimonials--films .testimonial-photo-shell:hover .section-wedding-film__shine,
+.section-testimonials--films .slider-testimonials__dot[current] .testimonial-photo-shell:hover .section-wedding-film__shine {
+  animation: none;
+  transform: translateX(130%) skewX(-12deg);
+}
+
+.section-testimonials--films .testimonial-photo-shell:hover .slider-testimonials__dot-image,
+.section-testimonials--films .slider-testimonials__dot[current] .testimonial-photo-shell:hover .slider-testimonials__dot-image {
+  transform: scale(1.05);
+}
+
+@keyframes testimonial-frame-shine {
+  from {
+    transform: translateX(-130%) skewX(-12deg);
+  }
+
+  to {
+    transform: translateX(130%) skewX(-12deg);
+  }
+}
+
+.section-testimonials .testimonial-name {
+  font-size: clamp(0.75rem, 1.2vw, 0.9rem);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-top: 0.65rem !important;
+}
+
+.section-testimonials .testimonial-name::before {
+  content: "";
+  display: block;
+  width: 1.5rem;
+  height: 1px;
+  margin: 0.45rem auto 0;
+  background: currentColor;
+  opacity: 0.55;
+  transform: scaleX(0.35);
+  transform-origin: center;
+  transition: transform var(--wf-duration, 0.9s) var(--wf-ease, ease), width var(--wf-duration, 0.9s) var(--wf-ease, ease);
+}
+
+.section-testimonials .slider-testimonials__dot[current] .testimonial-name::before {
+  width: 2.5rem;
+  transform: scaleX(1);
+}
+
+.section-testimonials .slider-testimonials__dot {
+  cursor: default;
+}
+
+.section-testimonials .slider-testimonials__dots {
+  margin-top: clamp(0.85rem, 2.5vw, 1.25rem);
+}
+
+.section-testimonials .slider-testimonials__item-text.mt-5,
+.section-testimonials .slider-testimonials__item-subheading.mt-5 {
+  margin-top: 1.25rem !important;
+}
+
+.section-testimonials .slider-testimonials__item-text.mt-4,
+.section-testimonials .slider-testimonials__item-subheading.mt-4 {
+  margin-top: 1rem !important;
+}
+
+@media screen and (min-width: 992px) {
+  .section-testimonials--films .slider-testimonials {
+    gap: 2.5rem;
+  }
+
+  .section-testimonials--films .slider-testimonials__container {
+    max-width: 32rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-testimonials__bg-image,
+  .section-testimonials--films .slider-testimonials__dot[current] .section-wedding-film__shine {
+    animation: none;
+    transition: none;
   }
 }
 
@@ -1300,9 +1637,391 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
 }
 
 /* ==========================================================================
-   Wedding detail: Teaser / Highlights / Documentary – display once, fitted in container
+   Wedding detail: Films chapter — luxury editorial + motion
    ========================================================================== */
 
+.section-wedding-films {
+  --wf-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --wf-duration: 0.9s;
+  --wf-radius: 12px;
+  --wf-radius-inner: 8px;
+  --wf-frame-pad: clamp(0.45rem, 1vw, 0.7rem);
+  --wf-stack-gap: clamp(0.85rem, 2.5vw, 1.15rem);
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+}
+
+.section-wedding-films__header {
+  position: relative;
+}
+
+.section-wedding-films__lede {
+  max-width: 28rem;
+}
+
+.section-wedding-films__hero-wrap {
+  margin-bottom: var(--wf-stack-gap);
+}
+
+.section-wedding-film--hero {
+  margin: 0;
+  padding: 0;
+  min-height: 0;
+}
+
+.section-wedding-film--hero .section-wedding-film__shell {
+  margin: 0;
+}
+
+.section-wedding-film {
+  position: relative;
+  overflow: visible;
+  background: transparent;
+  isolation: isolate;
+}
+
+.section-wedding-film__shell {
+  position: relative;
+  padding: var(--wf-frame-pad);
+  border-radius: var(--wf-radius);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 12px 40px rgba(0, 0, 0, 0.18);
+  transition:
+    border-color var(--wf-duration) var(--wf-ease),
+    box-shadow var(--wf-duration) var(--wf-ease),
+    transform var(--wf-duration) var(--wf-ease);
+}
+
+.section-wedding-film__shell::before {
+  content: '';
+  position: absolute;
+  inset: var(--wf-frame-pad);
+  border-radius: var(--wf-radius-inner);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  pointer-events: none;
+  z-index: 6;
+  transition: border-color var(--wf-duration) var(--wf-ease);
+}
+
+.section-wedding-film__shell:has(.section-wedding-film__link:hover)::before,
+.section-wedding-film__shell:has(.section-wedding-film__link:focus-visible)::before {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.section-wedding-film__shell:has(.section-wedding-film__link:hover),
+.section-wedding-film__shell:has(.section-wedding-film__link:focus-visible) {
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 20px 56px rgba(0, 0, 0, 0.32);
+  transform: translateY(-2px);
+}
+
+.section-wedding-film__link {
+  position: relative;
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  overflow: hidden;
+  border-radius: var(--wf-radius-inner);
+}
+
+.section-wedding-film--hero .section-wedding-film__link {
+  height: auto;
+}
+
+.section-wedding-film__media {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--wf-radius-inner);
+  height: auto;
+}
+
+.section-wedding-film__media > .hover-zoom__inner,
+.section-wedding-film__media [data-arts-os-animation-name="animatedMask"],
+.section-wedding-film__media .js-animated-mask-inner {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+}
+
+.section-wedding-film__link .hover-zoom__inner {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.section-wedding-film__media img,
+.section-wedding-film__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.section-wedding-film__grain {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.045;
+  mix-blend-mode: soft-light;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+.section-wedding-film__link.hover-zoom .hover-zoom__inner,
+.section-wedding-film__link.hover-zoom .hover-zoom__zoom {
+  transition: transform var(--wf-duration) var(--wf-ease);
+}
+
+.section-wedding-film__link.hover-zoom:hover:not(:focus) .hover-zoom__inner,
+.section-wedding-film__link.hover-zoom:hover:not(:focus) .hover-zoom__zoom,
+.section-wedding-film__link.hover-zoom:focus-visible .hover-zoom__inner,
+.section-wedding-film__link.hover-zoom:focus-visible .hover-zoom__zoom {
+  transform: scale(1.05);
+}
+
+.section-wedding-film__veil {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  border-radius: inherit;
+  --overlay-opacity: 0.26;
+  transition: --overlay-opacity var(--wf-duration) var(--wf-ease);
+}
+
+.section-wedding-film__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    185deg,
+    rgba(0, 0, 0, 0.05) 0%,
+    rgba(0, 0, 0, 0.02) 38%,
+    rgba(0, 0, 0, 0.45) 72%,
+    rgba(0, 0, 0, 0.82) 100%
+  );
+  transition: opacity var(--wf-duration) var(--wf-ease);
+}
+
+.section-wedding-film__shine {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    108deg,
+    transparent 42%,
+    rgba(255, 255, 255, 0.07) 50%,
+    transparent 58%
+  );
+  transform: translateX(-130%) skewX(-12deg);
+  transition: transform 1.15s var(--wf-ease);
+}
+
+.section-wedding-film__content,
+.section-wedding-film__caption {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 7;
+  padding: clamp(1.35rem, 3.2vw, 2.35rem) clamp(1.1rem, 2.8vw, 2rem);
+  transform: translateY(0);
+  transition: transform var(--wf-duration) var(--wf-ease);
+}
+
+.section-wedding-film__eyebrow {
+  display: inline-block;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: color var(--wf-duration) var(--wf-ease), letter-spacing var(--wf-duration) var(--wf-ease);
+}
+
+.section-wedding-film__eyebrow::after {
+  content: '';
+  display: block;
+  width: 1.5rem;
+  height: 1px;
+  margin-top: 0.6rem;
+  background: currentColor;
+  transform: scaleX(0.3);
+  transform-origin: left center;
+  transition: transform var(--wf-duration) var(--wf-ease), width var(--wf-duration) var(--wf-ease);
+}
+
+.section-wedding-film__meta h3,
+.section-wedding-film__caption h3,
+.section-wedding-film__caption h4 {
+  margin: 0;
+}
+
+.section-wedding-film__description {
+  max-width: 34rem;
+  color: rgba(255, 255, 255, 0.68);
+  line-height: 1.55;
+  font-weight: 400;
+  opacity: 0.92;
+  transition: opacity var(--wf-duration) var(--wf-ease), color var(--wf-duration) var(--wf-ease);
+}
+
+.section-wedding-film__caption .section-wedding-film__description {
+  max-width: 28rem;
+}
+
+.section-wedding-film__meta > * + *,
+.section-wedding-film__caption > * + * {
+  margin-top: 0.45rem;
+}
+
+.section-wedding-film__link:hover .section-wedding-film__veil,
+.section-wedding-film__link:focus-visible .section-wedding-film__veil {
+  --overlay-opacity: 0.1;
+}
+
+.section-wedding-film__link:hover .section-wedding-film__scrim,
+.section-wedding-film__link:focus-visible .section-wedding-film__scrim {
+  opacity: 0.76;
+}
+
+.section-wedding-film__link:hover .section-wedding-film__shine,
+.section-wedding-film__link:focus-visible .section-wedding-film__shine {
+  transform: translateX(130%) skewX(-12deg);
+}
+
+.section-wedding-film__link:hover .section-wedding-film__content,
+.section-wedding-film__link:hover .section-wedding-film__caption,
+.section-wedding-film__link:focus-visible .section-wedding-film__content,
+.section-wedding-film__link:focus-visible .section-wedding-film__caption {
+  transform: translateY(-0.45rem);
+}
+
+.section-wedding-film__link:hover .section-wedding-film__eyebrow,
+.section-wedding-film__link:focus-visible .section-wedding-film__eyebrow {
+  letter-spacing: 0.2em;
+}
+
+.section-wedding-film__link:hover .section-wedding-film__eyebrow::after,
+.section-wedding-film__link:focus-visible .section-wedding-film__eyebrow::after {
+  width: 3rem;
+  transform: scaleX(1);
+}
+
+.section-wedding-film__link:hover .section-wedding-film__description,
+.section-wedding-film__link:focus-visible .section-wedding-film__description {
+  opacity: 1;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+/* Hero */
+.section-wedding-film--hero .section-wedding-film__link {
+  display: block;
+}
+
+.section-wedding-film--hero .section-wedding-film__media {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: min(62vh, 820px);
+}
+
+.section-wedding-film--hero .section-wedding-film__scrim {
+  background: linear-gradient(
+    185deg,
+    rgba(0, 0, 0, 0.02) 0%,
+    rgba(0, 0, 0, 0.08) 46%,
+    rgba(0, 0, 0, 0.5) 80%,
+    rgba(0, 0, 0, 0.88) 100%
+  );
+}
+
+/* Secondary pair */
+.section-wedding-films__pair {
+  margin-top: 0;
+}
+
+.section-wedding-films__pair-col + .section-wedding-films__pair-col {
+  margin-top: var(--wf-stack-gap);
+}
+
+.section-wedding-film--secondary .section-wedding-film__media--secondary {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  max-height: min(48vh, 560px);
+}
+
+.section-wedding-film--secondary .section-wedding-film__caption {
+  padding-top: 2.25rem;
+}
+
+@media screen and (min-width: 1024px) {
+  .section-wedding-films {
+    --wf-radius: 14px;
+    --wf-radius-inner: 10px;
+    --wf-stack-gap: 1.15rem;
+  }
+
+  .section-wedding-film--hero .section-wedding-film__media {
+    max-height: min(58vh, 820px);
+  }
+
+  .section-wedding-films__pair-col {
+    padding-inline: 0.45rem;
+  }
+
+  .section-wedding-films__pair-col:first-child {
+    padding-left: 0;
+  }
+
+  .section-wedding-films__pair-col:last-child {
+    padding-right: 0;
+  }
+
+  .section-wedding-films__pair-col--offset {
+    margin-top: 4.5rem;
+  }
+
+  .section-wedding-film--secondary .section-wedding-film__media--secondary {
+    max-height: min(44vh, 560px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-wedding-film__shell,
+  .section-wedding-film__link.hover-zoom .hover-zoom__inner,
+  .section-wedding-film__link.hover-zoom .hover-zoom__zoom,
+  .section-wedding-film__veil,
+  .section-wedding-film__scrim,
+  .section-wedding-film__shine,
+  .section-wedding-film__content,
+  .section-wedding-film__caption,
+  .section-wedding-film__eyebrow,
+  .section-wedding-film__eyebrow::after,
+  .section-wedding-film__description {
+    transition: none;
+  }
+
+  .section-wedding-film__shell:has(.section-wedding-film__link:hover),
+  .section-wedding-film__shell:has(.section-wedding-film__link:focus-visible) {
+    transform: none;
+  }
+}
+
+/* Legacy stacked video blocks (other wedding pages) */
 .section-wedding-videos {
   position: relative;
   width: 100%;
@@ -1341,7 +2060,6 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
   margin-top: 0;
 }
 
-/* Larger play button container for Teaser / Highlights / Documentary */
 .section-wedding-videos .section-video__play .button-circle {
   --button-size-min: 64;
   --button-size-max: 120;
@@ -1350,12 +2068,41 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
 }
 
 @media screen and (min-width: 768px) {
+  .section-wedding-film--hero,
+  .section-wedding-film--hero .section-wedding-film__link,
+  .section-wedding-film--hero .section-wedding-film__media {
+    min-height: 78vh;
+  }
+
+  .section-wedding-film--secondary .section-wedding-film__media--secondary {
+    min-height: 46vh;
+  }
+
   .section-wedding-videos .section-video_single {
     min-height: 50vh;
   }
 }
 
 @media screen and (min-width: 1024px) {
+  .section-wedding-film--hero,
+  .section-wedding-film--hero .section-wedding-film__link,
+  .section-wedding-film--hero .section-wedding-film__media {
+    min-height: 85vh;
+  }
+
+  .section-wedding-films__pair-col + .section-wedding-films__pair-col {
+    margin-top: 0;
+    padding-left: 0.5rem;
+  }
+
+  .section-wedding-films__pair-col:first-child {
+    padding-right: 0.5rem;
+  }
+
+  .section-wedding-film--secondary .section-wedding-film__media--secondary {
+    min-height: 50vh;
+  }
+
   .section-wedding-videos .section-video_single {
     min-height: 55vh;
   }
@@ -1438,4 +2185,51 @@ body.page-wedding-details .page-wrapper__content {
 html.is-android body,
 html.is-ios body {
   overscroll-behavior-y: none;
+}
+
+/* ==========================================================================
+   Legal pages (Terms, Privacy)
+   ========================================================================== */
+
+.legal-page__container {
+  max-width: 42rem;
+}
+
+.legal-page__notice {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.55);
+  padding: 0.85rem 1rem;
+  border-left: 2px solid rgba(253, 249, 207, 0.35);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.legal-page__body h2 {
+  margin-top: 2rem;
+  margin-bottom: 0.65rem;
+}
+
+.legal-page__body h2:first-child {
+  margin-top: 0;
+}
+
+.legal-page__body p,
+.legal-page__body li {
+  color: rgba(255, 255, 255, 0.78);
+  line-height: 1.65;
+}
+
+.legal-page__body ul {
+  padding-left: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.legal-page__body a {
+  color: var(--color-accent-dark-theme, #fdf9cf);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.legal-page__footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }

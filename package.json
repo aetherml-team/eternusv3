@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "npx serve public",
     "start": "npx vercel dev",
+    "validate:i18n": "node -e \"['en','es'].forEach(l=>JSON.parse(require('fs').readFileSync('public/lang/'+l+'.json'))); console.log('i18n JSON OK');\"",
+    "validate:assets": "node scripts/audit-images.js",
     "audit-images": "node scripts/audit-images.js",
     "optimize-images": "node scripts/optimize-all-images.js",
     "restore-images": "node scripts/restore-images-from-git.js",

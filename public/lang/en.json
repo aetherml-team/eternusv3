@@ -6,6 +6,7 @@
     "submit": "Submit",
     "loading": "Loading...",
     "play": "Play",
+    "watchFilm": "Watch Film",
     "scroll": "Scroll down",
     "over": "Over",
     "projects": "Projects"
@@ -36,6 +37,7 @@
     "ourWay": "Places that are part of our way",
     "destinations": "Destinations",
     "testimonials": "Testimonials",
+    "testimonialsIntro": "Words from the couples we've had the honor to film.",
     "eternalWeddings": " Eternal Weddings ",
     "team": "Team",
     "packages": "Packages",
@@ -44,6 +46,12 @@
     "promotional": "Wedding Promotional",
     "credits": "Credits",
     "documentary": "Wedding Documentary",
+    "films": "Films",
+    "filmsIntro": "Three ways to relive the weekend.",
+    "filmsIntroTwo": "Two ways to relive the weekend.",
+    "filmTeaserLabel": "Teaser",
+    "filmHighlightsLabel": "Highlights",
+    "filmDocumentaryLabel": "Documentary",
     "location": "Location",
     "contactForm": "Get in Touch"
   },
@@ -98,6 +106,7 @@
       "submitFailedTitle": "Something went wrong",
       "submitFailed": "We couldn't send your message right now.",
       "submitFailedRetry": "Please try again in a moment.",
+      "toastDismiss": "Dismiss",
       "submitting": "Sending…"
     },
     "step0": {
@@ -202,18 +211,28 @@
   },
   "fer_ricky": {
     "weddingDate": "September 13, 2025",
+    "highlightsDescription": "The emotional arc of the day — ceremony, celebration, and every breathless moment.",
+    "teaserDescription": "A cinematic opening chapter — energy, romance, and the spirit of the celebration.",
+    "documentaryDescription": "The complete story of the weekend, told with intention and depth.",
     "weddingReflection": "Fer and Ricky’s wedding in Valle de Guadalupe left a mark on us. Not only because of the scale of the production, but also because of the bond we built with them during those days. There were three spectacular celebrations: an elegant civil ceremony inside a wine cellar, a ceremony set in the middle of the vineyard with breathtaking views, and a reception beneath a wooden structure specially designed for the occasion, where lasers and lighting transformed the night into something unforgettable. The grand finale was a cowboy-themed costume party featuring circus acts, juggling, bubbles, and sparklers that took everything to the next level. An extraordinary weekend that left a lasting impression on us."
   },
   "july_ty": {
     "weddingDate": "June 28, 2025",
+    "teaserDescription": "Sunset vows and Pacific energy — a cinematic glimpse of their Los Cabos celebration.",
+    "highlightsDescription": "The emotional arc of the day — ceremony, celebration, and every breathless moment.",
     "weddingReflection": "July & Ty’s wedding in Los Cabos was the perfect meeting point of cultures, energy, and scenery. July, Brazilian, and Ty, American, brought everyone together by the sea for a ceremony overlooking the Pacific, with a truly spectacular sunset as the backdrop.The celebration continued with an incredible atmosphere that kept the energy high all night long. A vibrant, elegant wedding full of personality."
   },
   "gaby-tono": {
     "weddingDate": "April 5, 2025",
+    "teaserDescription": "A cinematic opening chapter — love, laughter, and Punta Mita at its finest.",
+    "highlightsDescription": "The emotional arc of the day — ceremony, celebration, and every breathless moment.",
+    "documentaryDescription": "The complete story of the weekend, told with intention and depth.",
     "weddingReflection": "Gaby & Toño’s wedding in Punta Mita was a true reflection of their unique connection and the joy that defines them. At a spectacular hotel, we captured a movie-worthy couple’s session, surrounded by the love and unity of two incredible families who made the day feel especially meaningful. The ceremony was filled with love and laughter, and the night ended with an unforgettable celebration that kept everyone’s energy alive."
   },
   "domi-tavo": {
     "weddingDate": "March 23, 2024",
+    "teaserDescription": "Joy in Tulum — fireworks, spectacle, and pure celebration.",
+    "highlightsDescription": "The energy of the dance floor and the magic that lasted until sunrise.",
     "weddingReflection": "Domi & Tavo’s celebration in Tulum was an experience overflowing with joy and boundless energy. Three days of festivities filled with fireworks, spectacular shows, and a dance floor that never stopped. Their authentic, contagious vibe is reflected in every moment of the videos, capturing the magic of a party that lasted until sunrise."
   },
   "david-edurne": {
@@ -227,5 +246,66 @@
   "erika-joey": {
     "weddingDate": "October 29, 2022",
     "weddingReflection": "Erika & Joey’s wedding in Mexico City exceeded every expectation. The venue and the ceremony will remain in everyone’s memory not only for their beauty, but for the energy and love the couple shared with every person present. From the most refined details to the unforgettable party, everything was striking and perfectly executed. No one left the dance floor in a celebration that truly marked a before and after."
+  },
+  "legal": {
+    "label": "Legal",
+    "meta": "Eternus · AEtherML · Last updated: July 2026",
+    "notice": "This document is a draft for client review. It should be reviewed by qualified legal counsel before publication.",
+    "backHome": "Back to home",
+    "terms": {
+      "pageTitle": "Terms of Service — Eternus",
+      "metaDescription": "Terms of Service for Eternus wedding photography and cinematography.",
+      "title": "Terms of Service",
+      "s1Heading": "1. Agreement",
+      "s1Body": "By booking our services, submitting an inquiry, or using this website, you agree to these Terms of Service. Eternus wedding photography and cinematography services are provided by AEtherML (“we”, “us”, “our”).",
+      "s2Heading": "2. Services",
+      "s2Body": "We provide wedding photography, cinematography, and related creative services as described in your proposal, contract, or package selection. Deliverables may include edited photographs, films, teasers, highlights, and documentary edits unless otherwise agreed in writing.",
+      "s3Heading": "3. Bookings & payments",
+      "s3Body": "A booking is confirmed once we receive your signed agreement and the required retainer. Remaining balances are due according to the schedule in your contract. Prices are quoted in the currency stated in your proposal and may be subject to travel, extended coverage, or add-on fees agreed before the event.",
+      "s4Heading": "4. Cancellations & rescheduling",
+      "s4Body": "Cancellation and rescheduling terms—including retainers, forfeitures, and credit policies—are defined in your individual service agreement. We recommend event insurance for unforeseen circumstances beyond either party’s control.",
+      "s5Heading": "5. Deliverables & timelines",
+      "s5Body": "We aim to deliver work within the timeframe outlined in your contract. Preview galleries or teasers may be shared earlier when available. Final delivery formats and resolution are specified per package. Reasonable revision rounds for films may be included as stated in your agreement.",
+      "s6Heading": "6. Copyright & usage rights",
+      "s6Body": "We retain copyright to all images and films we create. Clients receive a personal-use license as defined in the contract, including sharing on social media and printing for personal purposes. Commercial use, resale, or licensing to third parties requires written permission. We may showcase selected work in our portfolio, website, social channels, and award submissions unless you request a private agreement in advance.",
+      "s7Heading": "7. Client responsibilities",
+      "s7Body": "You agree to provide accurate event details, reasonable cooperation on the wedding day, and a safe working environment for our team. We are not responsible for compromised coverage due to restrictions imposed by venues, officiants, weather, or schedules outside our control when we are not notified in advance.",
+      "s8Heading": "8. Limitation of liability",
+      "s8Body": "Our liability is limited to the fees paid for the affected services. We are not liable for indirect, incidental, or consequential damages. In the rare event of equipment failure or data loss, our obligation is to refund fees attributable to undelivered services or, when possible, to re-shoot or re-edit at our discretion.",
+      "s9Heading": "9. Governing law",
+      "s9Body": "These terms are governed by the laws of Mexico unless your signed contract specifies otherwise. Disputes should first be addressed through good-faith communication with our team.",
+      "s10Heading": "10. Contact",
+      "s10Body": "Questions about these terms: <a href=\"index.html#contact-form\" class=\"no-ajax\">contact us</a> through the form on our website or via the email address provided in your booking documents."
+    },
+    "privacy": {
+      "pageTitle": "Privacy Policy — Eternus",
+      "metaDescription": "Privacy Policy for Eternus wedding photography and cinematography.",
+      "title": "Privacy Policy",
+      "s1Heading": "1. Who we are",
+      "s1Body": "Eternus provides luxury wedding photography and cinematography. This policy explains how AEtherML (“we”, “us”) collects, uses, and protects personal information when you visit our website, submit an inquiry, or book our services.",
+      "s2Heading": "2. Information we collect",
+      "s2Intro": "We may collect:",
+      "s2Item1": "<strong>Contact details</strong> — names, email addresses, phone numbers, and wedding dates you provide through our contact form.",
+      "s2Item2": "<strong>Booking information</strong> — venue, event schedule, package preferences, and communication related to your celebration.",
+      "s2Item3": "<strong>Meeting scheduling</strong> — if you book a consultation through our calendar integration, we receive appointment time and basic scheduling metadata.",
+      "s2Item4": "<strong>Visual content</strong> — photographs and films captured during your event, which may include you, your guests, and your vendors.",
+      "s2Item5": "<strong>Technical data</strong> — IP address, browser type, device information, and usage data collected through standard analytics or server logs.",
+      "s3Heading": "3. How we use your information",
+      "s3Body": "We use personal information to respond to inquiries, prepare proposals, deliver contracted services, process payments, communicate about your wedding, improve our website, and—unless you opt out in writing—showcase work in our portfolio and marketing channels.",
+      "s4Heading": "4. Sharing with third parties",
+      "s4Body": "We do not sell your personal data. We may share information with trusted service providers who help us operate our business, such as hosting, email delivery, calendar scheduling, payment processors, and cloud storage for media delivery. These providers are expected to handle data only for the services they perform on our behalf.",
+      "s5Heading": "5. Images, films & portfolio use",
+      "s5Body": "Wedding coverage naturally includes identifiable individuals. By booking our services, you acknowledge that we may display selected images and films on our website, social media, and in promotional materials. If you require privacy restrictions for specific guests or sensitive moments, please discuss them with us before your event so we can document your preferences.",
+      "s6Heading": "6. Cookies & analytics",
+      "s6Body": "Our website may use cookies and similar technologies to remember preferences (such as language) and to understand how visitors use the site. You can control cookies through your browser settings. Disabling cookies may affect some site features.",
+      "s7Heading": "7. Data retention",
+      "s7Body": "We retain inquiry and contract records for as long as needed to fulfill our services, comply with legal obligations, and resolve disputes. Raw and edited media may be archived according to the retention period stated in your service agreement.",
+      "s8Heading": "8. Security",
+      "s8Body": "We implement reasonable technical and organizational measures to protect your information. No method of transmission over the internet is completely secure; we encourage you to use strong passwords and protect access to delivered galleries.",
+      "s9Heading": "9. Your rights",
+      "s9Body": "Depending on your location, you may have the right to access, correct, delete, or restrict certain uses of your personal data. To make a request, contact us using the details below. We will respond within a reasonable timeframe.",
+      "s10Heading": "10. Contact",
+      "s10Body": "Privacy questions or requests: <a href=\"index.html#contact-form\" class=\"no-ajax\">contact us</a> through the form on our website or via the email address in your booking correspondence."
+    }
   }
 }

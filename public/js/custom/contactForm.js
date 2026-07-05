@@ -216,13 +216,10 @@
       showError(id, false);
     });
     setFieldInvalid(fieldKey, false);
-    showError('contact-form-errors', false);
   }
 
   function clearValidationMessages() {
     [
-      'contact-form-errors',
-      'contact-form-api-error',
       'contact-form-bride-error',
       'contact-form-bride-invalid',
       'contact-form-groom-error',
@@ -237,25 +234,18 @@
     clearFieldInvalidStates();
   }
 
-  function hideAllErrors() {
-    clearValidationMessages();
-    showError('contact-form-success', false);
-
-    var meetingDetail = document.getElementById('contact-form-success-meeting');
-    if (meetingDetail) meetingDetail.classList.add('d-none');
-
-    var form = getForm();
-    if (form) form.classList.remove('contact-form--submitted');
+  function showToast(options) {
+    if (window.EternusToast && window.EternusToast.show) {
+      window.EternusToast.show(options);
+    }
   }
 
-  function scrollToStatus(el) {
-    if (!el || el.classList.contains('d-none')) return;
-    var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var isCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
-    if (isCoarsePointer) {
-      return;
-    }
-    el.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'nearest' });
+  function showValidationToast() {
+    showToast({
+      variant: 'error',
+      title: t('form.index.submitErrorTitle', 'Almost there'),
+      message: t('form.index.submitError', 'Please check the highlighted fields below.'),
+    });
   }
 
   function focusFirstInvalid(form) {
@@ -285,8 +275,6 @@
 
   function validateForm(form) {
     clearValidationMessages();
-    showError('contact-form-success', false);
-    form.classList.remove('contact-form--submitted');
     var valid = true;
 
     var brideInput = form.querySelector('input[name="bride_name"]');
@@ -350,9 +338,7 @@
     }
 
     if (!valid) {
-      showError('contact-form-errors', true);
-      var summary = document.getElementById('contact-form-errors');
-      scrollToStatus(summary);
+      showValidationToast();
       focusFirstInvalid(form);
     }
 
@@ -436,33 +422,25 @@
     }
     console.error('[contactForm]', technicalMessage);
 
-    showError('contact-form-api-error', true);
-    var el = document.getElementById('contact-form-api-error');
-    scrollToStatus(el);
+    showToast({
+      variant: 'error',
+      title: t('form.index.submitFailedTitle', 'Something went wrong'),
+      message: t('form.index.submitFailed', "We couldn't send your message right now."),
+      hint: t('form.index.submitFailedRetry', 'Please try again in a moment.'),
+    });
   }
 
   function showSuccess(meetingDate, meetingTime) {
     clearValidationMessages();
-    showError('contact-form-api-error', false);
-    showError('contact-form-success', true);
 
-    var meetingEl = document.getElementById('contact-form-success-meeting');
     var meetingText = formatMeetingSummary(meetingDate, meetingTime);
-    if (meetingEl) {
-      if (meetingText) {
-        meetingEl.textContent = meetingText;
-        meetingEl.classList.remove('d-none');
-      } else {
-        meetingEl.textContent = '';
-        meetingEl.classList.add('d-none');
-      }
-    }
-
-    var form = getForm();
-    if (form) form.classList.add('contact-form--submitted');
-
-    var successEl = document.getElementById('contact-form-success');
-    scrollToStatus(successEl);
+    showToast({
+      variant: 'success',
+      title: t('form.index.submitSuccessTitle', "You're all set!"),
+      message: t('form.index.submitSuccess', "We've received your details and will be in touch soon."),
+      detail: meetingText || '',
+      duration: meetingText ? 9000 : 6500,
+    });
   }
 
   function submitForm(form) {
