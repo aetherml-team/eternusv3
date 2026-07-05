@@ -6,6 +6,7 @@
     "submit": "Enviar",
     "loading": "Cargando...",
     "play": "Reproducir",
+    "watchFilm": "Ver película",
     "scroll": "Seguir bajando",
     "over": "Mas de ",
     "projects": "Proyectos"
@@ -36,6 +37,7 @@
     "ourWay": "Lugares que forman parte de nuestro camino",
     "destinations": "Destinos",
     "testimonials": "Testimonios",
+    "testimonialsIntro": "Palabras de las parejas que hemos tenido el honor de filmar.",
     "eternalWeddings": " Eternal Weddings ",
     "team": "Equipo",
     "packages": "Paquetes",
@@ -44,6 +46,12 @@
     "promotional": "Video Promocional de Boda",
     "credits": "Créditos",
     "documentary": "Documental de Boda",
+    "films": "Películas",
+    "filmsIntro": "Tres formas de revivir el fin de semana.",
+    "filmsIntroTwo": "Dos formas de revivir el fin de semana.",
+    "filmTeaserLabel": "Teaser",
+    "filmHighlightsLabel": "Highlights",
+    "filmDocumentaryLabel": "Documental",
     "location": "Ubicación",
     "contactForm": "Ponte en Contacto"
   },
@@ -99,6 +107,7 @@
       "submitFailedTitle": "Algo salió mal",
       "submitFailed": "No pudimos enviar tu mensaje en este momento.",
       "submitFailedRetry": "Por favor inténtalo de nuevo en unos instantes.",
+      "toastDismiss": "Cerrar",
       "submitting": "Enviando…"
     },
     "step0": {
@@ -203,18 +212,28 @@
   },
   "fer_ricky": {
     "weddingDate": "13 de septiembre de 2025",
+    "highlightsDescription": "El arco emocional del día — ceremonia, celebración y cada momento que corta la respiración.",
+    "teaserDescription": "Un capítulo de apertura cinematográfico — energía, romance y el espíritu de la celebración.",
+    "documentaryDescription": "La historia completa del fin de semana, contada con intención y profundidad.",
     "weddingReflection": "La boda de Fer y Ricky en Valle de Guadalupe dejó una marca en nosotros. No solo por la magnitud de la producción, sino por el cariño que construimos con ellos durante esos días. Fueron tres celebraciones espectaculares: una boda civil elegante dentro de una cava de vinos, una ceremonia construida en medio del viñedo con una vista espectacular y una recepción bajo una estructura de madera diseñada especialmente para la ocasión, donde los lásers y la iluminación transformaron la noche en algo inolvidable. El cierre fue una fiesta vaquera de disfraces con actos de circo, malabares, burbujas y chisperos que elevaron todo a otro nivel. Un fin de semana extraordinario que dejo huella en nosotros."
   },
   "july_ty": {
     "weddingDate": "28 de Junio de 2025",
+    "teaserDescription": "Votos al atardecer y energía del Pacífico — un vistazo cinematográfico de su celebración en Los Cabos.",
+    "highlightsDescription": "El arco emocional del día — ceremonia, celebración y cada momento que quita el aliento.",
     "weddingReflection": "La boda de July & Ty en Los Cabos fue el encuentro perfecto entre culturas, energía y paisaje. July, brasileña, y Ty, estadounidense, reunieron a todos frente al mar para una ceremonia con una vista abierta al Pacífico y un sunset simplemente espectacular. La celebración continuó con un ambiente increíble que mantuvo la energía toda la noche. Una boda vibrante, elegante y llena de personalidad."
   },
   "gaby-tono": {
     "weddingDate": "5 de Abril de 2025",
+    "teaserDescription": "Un capítulo de apertura cinematográfico — amor, risas y Punta Mita en su máximo esplendor.",
+    "highlightsDescription": "El arco emocional del día — ceremonia, celebración y cada momento que quita el aliento.",
+    "documentaryDescription": "La historia completa del fin de semana, contada con intención y profundidad.",
     "weddingReflection": " La boda de Gaby & Toño en Punta Mita fue un reflejo de su conexión única y de la alegríaque los caracteriza. En un hotel espectacular tuvimos una sesión de novios digna de película,rodeados del cariño y la unión de dos familias increíbles que hicieron del día algomuy especial. La ceremonia estuvo llena de amor y risas, y la noche cerró con una fiesta inolvidable que mantuvo viva la energía de todos."
   },
   "domi-tavo": {
     "weddingDate": "23 de Marzo de 2024",
+    "teaserDescription": "Alegría en Tulum — fuegos artificiales, espectáculo y pura celebración.",
+    "highlightsDescription": "La energía de la pista de baile y la magia que duró hasta el amanecer.",
     "weddingReflection": "La celebración de Domi & Tavo en Tulum fue una experiencia llena de alegría y energía desbordante. Tres días de fiesta con fuegos artificiales, shows impresionantes y una pista de baile que nunca se apagó. Su vibra auténtica y contagiosa se refleja en cada momento de los videos, capturando la magia de una fiesta que duró hasta el amanecer."
   },
   "david-edurne": {
@@ -228,5 +247,66 @@
   "erika-joey": {
     "weddingDate": "29 de Octubre de 2022",
     "weddingReflection": "La boda de Erika & Joey en la Ciudad de México superó todas las expectativas. El lugar y la ceremonia quedarán en la memoria de todos, no solo por su belleza, sino por la energía y el amor que transmitían los novios a cada persona presente. Todo, desde los detalles más refinados hasta la fiesta, fue impactante y perfecto. Nadie se quedó fuera de la pista de baile en una celebración que marcó un antes y un después."
+  },
+  "legal": {
+    "label": "Legal",
+    "meta": "Eternus · AEtherML · Última actualización: julio de 2026",
+    "notice": "Este documento es un borrador para revisión del cliente. Debe ser revisado por asesoría legal calificada antes de su publicación.",
+    "backHome": "Volver al inicio",
+    "terms": {
+      "pageTitle": "Términos de servicio — Eternus",
+      "metaDescription": "Términos de servicio de Eternus para fotografía y cinematografía de bodas.",
+      "title": "Términos de servicio",
+      "s1Heading": "1. Acuerdo",
+      "s1Body": "Al contratar nuestros servicios, enviar una consulta o usar este sitio web, aceptas estos Términos de servicio. Los servicios de fotografía y cinematografía de bodas de Eternus son prestados por AEtherML (“nosotros”, “nos”, “nuestro”).",
+      "s2Heading": "2. Servicios",
+      "s2Body": "Ofrecemos fotografía de bodas, cinematografía y servicios creativos relacionados según lo descrito en tu propuesta, contrato o paquete seleccionado. Los entregables pueden incluir fotografías editadas, películas, teasers, highlights y ediciones documentales, salvo acuerdo distinto por escrito.",
+      "s3Heading": "3. Reservas y pagos",
+      "s3Body": "La reserva se confirma una vez recibamos tu contrato firmado y el anticipo requerido. Los saldos restantes se pagan según el calendario de tu contrato. Los precios se cotizan en la moneda indicada en tu propuesta y pueden incluir viaje, cobertura extendida o cargos adicionales acordados antes del evento.",
+      "s4Heading": "4. Cancelaciones y reprogramación",
+      "s4Body": "Los términos de cancelación y reprogramación —incluidos anticipos, penalizaciones y políticas de crédito— se definen en tu contrato de servicio individual. Recomendamos un seguro de evento para circunstancias imprevistas fuera del control de cualquiera de las partes.",
+      "s5Heading": "5. Entregables y plazos",
+      "s5Body": "Buscamos entregar el trabajo dentro del plazo indicado en tu contrato. Las galerías de vista previa o teasers pueden compartirse antes cuando estén disponibles. Los formatos y resolución finales se especifican por paquete. Las rondas razonables de revisión para películas pueden incluirse según lo indicado en tu acuerdo.",
+      "s6Heading": "6. Derechos de autor y uso",
+      "s6Body": "Conservamos los derechos de autor de todas las imágenes y películas que creamos. Los clientes reciben una licencia de uso personal según el contrato, incluido compartir en redes sociales e impresión para fines personales. El uso comercial, reventa o licencia a terceros requiere permiso por escrito. Podemos mostrar trabajo seleccionado en nuestro portafolio, sitio web, redes sociales y concursos, salvo que solicites un acuerdo de privacidad con anticipación.",
+      "s7Heading": "7. Responsabilidades del cliente",
+      "s7Body": "Te comprometes a proporcionar datos precisos del evento, cooperación razonable el día de la boda y un entorno de trabajo seguro para nuestro equipo. No somos responsables de cobertura comprometida por restricciones de venues, oficiantes, clima o horarios fuera de nuestro control cuando no se nos notifique con anticipación.",
+      "s8Heading": "8. Limitación de responsabilidad",
+      "s8Body": "Nuestra responsabilidad se limita a los honorarios pagados por los servicios afectados. No somos responsables de daños indirectos, incidentales o consecuentes. En el caso poco frecuente de falla de equipo o pérdida de datos, nuestra obligación es reembolsar los honorarios atribuibles a servicios no entregados o, cuando sea posible, volver a filmar o editar a nuestra discreción.",
+      "s9Heading": "9. Ley aplicable",
+      "s9Body": "Estos términos se rigen por las leyes de México, salvo que tu contrato firmado indique lo contrario. Las disputas deben abordarse primero mediante comunicación de buena fe con nuestro equipo.",
+      "s10Heading": "10. Contacto",
+      "s10Body": "Preguntas sobre estos términos: <a href=\"index.html#contact-form\" class=\"no-ajax\">contáctanos</a> a través del formulario en nuestro sitio web o por el correo indicado en tus documentos de reserva."
+    },
+    "privacy": {
+      "pageTitle": "Política de privacidad — Eternus",
+      "metaDescription": "Política de privacidad de Eternus para fotografía y cinematografía de bodas.",
+      "title": "Política de privacidad",
+      "s1Heading": "1. Quiénes somos",
+      "s1Body": "Eternus ofrece fotografía y cinematografía de bodas de lujo. Esta política explica cómo AEtherML (“nosotros”, “nos”) recopila, usa y protege la información personal cuando visitas nuestro sitio web, envías una consulta o contratas nuestros servicios.",
+      "s2Heading": "2. Información que recopilamos",
+      "s2Intro": "Podemos recopilar:",
+      "s2Item1": "<strong>Datos de contacto</strong> — nombres, correos electrónicos, teléfonos y fechas de boda que proporcionas en nuestro formulario de contacto.",
+      "s2Item2": "<strong>Información de reserva</strong> — venue, horario del evento, preferencias de paquete y comunicación relacionada con tu celebración.",
+      "s2Item3": "<strong>Programación de reuniones</strong> — si reservas una consulta mediante nuestra integración de calendario, recibimos la hora de la cita y metadatos básicos de programación.",
+      "s2Item4": "<strong>Contenido visual</strong> — fotografías y películas capturadas durante tu evento, que pueden incluirte a ti, a tus invitados y a tus proveedores.",
+      "s2Item5": "<strong>Datos técnicos</strong> — dirección IP, tipo de navegador, información del dispositivo y datos de uso recopilados mediante analítica estándar o registros del servidor.",
+      "s3Heading": "3. Cómo usamos tu información",
+      "s3Body": "Usamos la información personal para responder consultas, preparar propuestas, prestar los servicios contratados, procesar pagos, comunicarnos sobre tu boda, mejorar nuestro sitio web y —salvo que te opongas por escrito— mostrar trabajo en nuestro portafolio y canales de marketing.",
+      "s4Heading": "4. Compartir con terceros",
+      "s4Body": "No vendemos tus datos personales. Podemos compartir información con proveedores de confianza que nos ayudan a operar el negocio, como hosting, envío de correo, programación de calendario, procesadores de pago y almacenamiento en la nube para entrega de medios. Se espera que estos proveedores manejen los datos solo para los servicios que realizan en nuestro nombre.",
+      "s5Heading": "5. Imágenes, películas y uso en portafolio",
+      "s5Body": "La cobertura de bodas incluye naturalmente personas identificables. Al contratar nuestros servicios, reconoces que podemos mostrar imágenes y películas seleccionadas en nuestro sitio web, redes sociales y materiales promocionales. Si necesitas restricciones de privacidad para invitados específicos o momentos sensibles, háblanos antes del evento para documentar tus preferencias.",
+      "s6Heading": "6. Cookies y analítica",
+      "s6Body": "Nuestro sitio web puede usar cookies y tecnologías similares para recordar preferencias (como el idioma) y entender cómo los visitantes usan el sitio. Puedes controlar las cookies en la configuración de tu navegador. Desactivarlas puede afectar algunas funciones del sitio.",
+      "s7Heading": "7. Conservación de datos",
+      "s7Body": "Conservamos registros de consultas y contratos el tiempo necesario para cumplir nuestros servicios, obligaciones legales y resolver disputas. El material en bruto y editado puede archivarse según el periodo de retención indicado en tu contrato de servicio.",
+      "s8Heading": "8. Seguridad",
+      "s8Body": "Implementamos medidas técnicas y organizativas razonables para proteger tu información. Ningún método de transmisión por internet es completamente seguro; te recomendamos usar contraseñas fuertes y proteger el acceso a las galerías entregadas.",
+      "s9Heading": "9. Tus derechos",
+      "s9Body": "Según tu ubicación, puedes tener derecho a acceder, corregir, eliminar o restringir ciertos usos de tus datos personales. Para hacer una solicitud, contáctanos con los datos indicados abajo. Responderemos en un plazo razonable.",
+      "s10Heading": "10. Contacto",
+      "s10Body": "Preguntas o solicitudes de privacidad: <a href=\"index.html#contact-form\" class=\"no-ajax\">contáctanos</a> a través del formulario en nuestro sitio web o por el correo indicado en tu correspondencia de reserva."
+    }
   }
 }

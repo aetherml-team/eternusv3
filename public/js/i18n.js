@@ -281,6 +281,18 @@ class i18n {
       }
     });
 
+    const titleMeta = document.querySelector('meta[name="i18n-title"]');
+    if (titleMeta) {
+      const titleKey = titleMeta.getAttribute('content');
+      if (titleKey) document.title = this.t(titleKey);
+    }
+
+    const descMeta = document.querySelector('meta[name="i18n-description"]');
+    if (descMeta) {
+      const descKey = descMeta.getAttribute('content');
+      if (descKey) descMeta.setAttribute('content', this.t(descKey));
+    }
+
     this._initLangToggle();
   }
 
