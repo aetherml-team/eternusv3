@@ -231,6 +231,12 @@ class i18n {
       const wrapClass = el.getAttribute('data-i18n-wrap-class') || '';
 
       if (wrapTag) {
+        // Skip if the wrapper already holds the correct translation. Rewriting
+        // would destroy child structure added by other scripts (e.g. GSAP
+        // split-text lines) and reset their animation state.
+        if (el.textContent === translation && el.querySelector(wrapTag)) {
+          continue;
+        }
         const allowHtml = el.hasAttribute('data-i18n-wrap-allow-html');
         const cls = wrapClass ? ' class="' + wrapClass.replace(/"/g, '&quot;') + '"' : '';
         const inner = allowHtml
@@ -240,9 +246,15 @@ class i18n {
               .replace(/</g, '&lt;')
               .replace(/>/g, '&gt;');
         el.innerHTML = '<' + wrapTag + cls + '>' + inner + '</' + wrapTag + '>';
-      } else if (el.innerHTML.includes('<') || translation.includes('<')) {
-        el.innerHTML = translation;
-      } else {
+      } else if (translation.includes('<')) {
+        if (el.innerHTML !== translation) el.innerHTML = translation;
+      } else if (el.innerHTML.includes('<')) {
+        // Element already contains markup (e.g. split-text lines) but the
+        // translation is plain text. Only rewrite when the visible text
+        // actually differs, so we don't wipe another script's DOM structure
+        // on repeated translation passes.
+        if (el.textContent !== translation) el.innerHTML = translation;
+      } else if (el.textContent !== translation) {
         el.textContent = translation;
       }
     }

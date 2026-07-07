@@ -732,9 +732,9 @@
                 <div
                   class="container slider-testimonials__item js-slider-testimonials__section d-flex flex-column justify-content-center">
                   <div class="slider-testimonials__item-text content-width-3 mx-auto js-slider-testimonials__item-text mt-5"
-                    data-arts-split-text-preset="sliderLines">
-                    <div class="h5">Beyond breathtaking! They perfectly captured every precious moment of our day,
-                      making each memory feel like a work of art.</div>
+                    data-arts-split-text-preset="sliderLines"
+                    data-i18n="testimonials.quote1" data-i18n-wrap="div" data-i18n-wrap-class="h5">
+                    <div class="h5">Beyond breathtaking! They perfectly captured every precious moment of our day, making each memory feel like a work of art.</div>
                   </div>
                   <div class="slider-testimonials__item-subheading mt-5 js-slider-testimonials__item-subheading"
                     data-arts-split-text-preset="sliderLines">
@@ -743,9 +743,9 @@
                 <!-- Slide #2 -->
                 <div class="container slider-testimonials__item js-slider-testimonials__section d-flex flex-column justify-content-center">
                   <div class="slider-testimonials__item-text content-width-3 mx-auto js-slider-testimonials__item-text mt-4"
-                    data-arts-split-text-preset="sliderLines">
-                    <div class="h5">The photos and videos are more than just memories—they’re a masterpiece of our
-                      story, beautifully told with grace and precision..</div>
+                    data-arts-split-text-preset="sliderLines"
+                    data-i18n="testimonials.quote2" data-i18n-wrap="div" data-i18n-wrap-class="h5">
+                    <div class="h5">The photos and videos are more than just memories—they're a masterpiece of our story, beautifully told with grace and precision.</div>
                   </div>
                   <div class="slider-testimonials__item-subheading mt-4 js-slider-testimonials__item-subheading"
                     data-arts-split-text-preset="sliderLines">
@@ -754,9 +754,9 @@
                 <!-- Slide #3 -->
                 <div class="container slider-testimonials__item js-slider-testimonials__section d-flex flex-column justify-content-center">
                   <div class="slider-testimonials__item-text content-width-3 mx-auto js-slider-testimonials__item-text mt-5"
-                    data-arts-split-text-preset="sliderLines">
-                    <div class="h5">From start to finish, the experience was seamless and elegant. Our wedding felt
-                      truly magical, and the results speak for themselves.</div>
+                    data-arts-split-text-preset="sliderLines"
+                    data-i18n="testimonials.quote3" data-i18n-wrap="div" data-i18n-wrap-class="h5">
+                    <div class="h5">From start to finish, the experience was seamless and elegant. Our wedding felt truly magical, and the results speak for themselves.</div>
                   </div>
                   <div
                     class="flex items-start justify-start slider-testimonials__item-subheading mt-5 js-slider-testimonials__item-subheading"
@@ -765,6 +765,43 @@
                 </div>
 
               </div>
+              <script>
+                (function () {
+                  var SUPPORTED = ['en', 'es'];
+                  var STORAGE_KEY = 'eternus-lang';
+                  var lang = 'en';
+                  try {
+                    var param = new URLSearchParams(window.location.search).get('lang');
+                    if (param && SUPPORTED.indexOf(param) !== -1) {
+                      lang = param;
+                    } else {
+                      var saved = localStorage.getItem(STORAGE_KEY);
+                      if (saved && SUPPORTED.indexOf(saved) !== -1) {
+                        lang = saved;
+                      } else {
+                        var browser = (navigator.language || '').split('-')[0];
+                        if (SUPPORTED.indexOf(browser) !== -1) {
+                          lang = browser;
+                        }
+                      }
+                    }
+                  } catch (e) {}
+                  if (lang !== 'es') return;
+                  var quotes = {
+                    'testimonials.quote1': '¡Más que impresionante! Capturaron a la perfección cada momento precioso de nuestro día, haciendo que cada recuerdo se sienta como una obra de arte.',
+                    'testimonials.quote2': 'Las fotos y los videos son mucho más que recuerdos: son una obra maestra de nuestra historia, contada con gracia y precisión.',
+                    'testimonials.quote3': 'De principio a fin, la experiencia fue impecable y elegante. Nuestra boda se sintió verdaderamente mágica, y los resultados hablan por sí solos.'
+                  };
+                  var root = document.querySelector('.js-slider-testimonials');
+                  if (!root) return;
+                  root.querySelectorAll('[data-i18n^="testimonials.quote"]').forEach(function (el) {
+                    var key = el.getAttribute('data-i18n');
+                    if (quotes[key]) {
+                      el.innerHTML = '<div class="h5">' + quotes[key] + '</div>';
+                    }
+                  });
+                })();
+              </script>
               <!-- - Content -->
               <div class="slider-testimonials__controls">
                 <!-- Dots -->
