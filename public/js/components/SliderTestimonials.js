@@ -41,6 +41,7 @@ export default class SliderTestimonials extends BaseComponent {
 			sectionChange: this._onSectionChange.bind(this),
 			animationOut: this._onAnimationOut.bind(this),
 			transitionStart: this._onTransitionStart.bind(this),
+			retranslate: this._retranslate.bind(this),
 			resize: app.utilities.debounce(this._onResize.bind(this), app.utilities.getDebounceTime())
 		};
 
@@ -196,6 +197,7 @@ export default class SliderTestimonials extends BaseComponent {
 
 		this.slider.on('sectionChange', this._handlers.sectionChange);
 		window.addEventListener('resize', this._handlers.resize);
+		window.addEventListener('i18n:languageChange', this._handlers.retranslate);
 	}
 
 	_detachEvents() {
@@ -209,6 +211,7 @@ export default class SliderTestimonials extends BaseComponent {
 
 		this.slider.off('sectionChange', this._handlers.sectionChange);
 		window.removeEventListener('resize', this._handlers.resize);
+		window.removeEventListener('i18n:languageChange', this._handlers.retranslate);
 	}
 
 	_onAutoplayStart() {
@@ -348,7 +351,99 @@ export default class SliderTestimonials extends BaseComponent {
 				currentHeading = section.querySelectorAll(this.innerSelectors.headings),
 				currentText = section.querySelectorAll(this.innerSelectors.texts);
 
+			// Hide inactive slides at the section level (not only via the
+			// split-text line transforms). Slide transitions already toggle
+			// autoAlpha, so this stays consistent — but it also means a later
+			// text swap (e.g. an i18n language change) that removes the split
+			// lines can't expose the hidden slides, avoiding overlapping text.
+			gsap.set(section, {
+				autoAlpha: isFirstSection ? 1 : 0
+			});
+
 			if (isFirstSection && !hasAnimationScene) {
+				gsap.effects.animateLines(currentSubheading, {
+					duration: 0,
+					stagger: false
+				});
+
+				gsap.effects.animateChars(currentHeading, {
+					duration: 0,
+					stagger: false
+				});
+
+				gsap.effects.animateLines(currentText, {
+					duration: 0,
+					stagger: false
+				});
+			} else {
+				gsap.effects.hideLines(currentSubheading, {
+					duration: 0,
+					y: '100%',
+					stagger: false
+				});
+
+				gsap.effects.hideChars(currentHeading, {
+					duration: 0,
+					y: '100%',
+					stagger: false
+				});
+
+				gsap.effects.hideLines(currentText, {
+					duration: 0,
+					y: '100%',
+					stagger: 0
+				});
+			}
+		});
+	}
+
+	_retranslate() {
+		if (!this.slider) {
+			return;
+		}
+
+		const current = this.slider.currentIndex;
+
+		if (typeof this.destroySplitText === 'function') {
+			this.destroySplitText();
+		}
+
+		const i18n = window.i18n;
+
+		if (i18n) {
+			this.elements.texts.forEach((el) => {
+				const key = el.getAttribute('data-i18n');
+
+				if (!key) {
+					return;
+				}
+
+				const translation = i18n.t(key);
+				const escaped = String(translation)
+					.replace(/&/g, '&amp;')
+					.replace(/</g, '&lt;')
+					.replace(/>/g, '&gt;');
+
+				el.innerHTML = '<div class="h5">' + escaped + '</div>';
+			});
+		}
+
+		if (typeof this._initSplitText === 'function') {
+			this._initSplitText();
+		}
+
+		this.elements.sections.forEach((section, index) => {
+			const
+				isCurrentSection = index === current,
+				currentSubheading = section.querySelectorAll(this.innerSelectors.subheadings),
+				currentHeading = section.querySelectorAll(this.innerSelectors.headings),
+				currentText = section.querySelectorAll(this.innerSelectors.texts);
+
+			gsap.set(section, {
+				autoAlpha: isCurrentSection ? 1 : 0
+			});
+
+			if (isCurrentSection) {
 				gsap.effects.animateLines(currentSubheading, {
 					duration: 0,
 					stagger: false
