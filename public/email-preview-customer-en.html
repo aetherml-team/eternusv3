@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eternus Email Preview (English)</title>
+  <style>
+    body { margin: 0; background: #111; }
+    iframe { width: 100%; min-height: 1200px; border: 0; }
+  </style>
+</head>
+<body>
+  <iframe id="preview" title="Customer email preview (English)"></iframe>
+  <script type="module">
+    import { weddingCustomer } from './js/templates/weddingCustomer.js';
+
+    const copy = {
+      lang: 'en',
+      siteUrl: 'https://eternus-landing.vercel.app',
+      title: 'Your Journey with Eternus Begins',
+      headerWelcome: 'Welcome to Eternus',
+      headerTagline: 'Your Timeless Journey Awaits',
+      eyebrow: 'Thank You',
+      greeting: 'Dear James & Emma,',
+      intro: 'Thank you for entrusting <strong>Eternus</strong> with the planning of your special day. We are delighted to accompany you on this remarkable journey towards a celebration that echoes the timelessness of your love.',
+      receivedDetails: 'We have received the following details:',
+      labelBride: 'Bride',
+      labelGroom: 'Groom',
+      labelBudget: 'Budget',
+      labelWeddingType: 'Wedding Type',
+      labelMeeting: 'Meeting',
+      labelAdditionalInfo: 'Additional Information',
+      noneProvided: 'None provided',
+      closing: 'Our team of seasoned professionals is dedicated to transforming your vision into an exquisite reality. We will be in touch shortly to discuss the next steps. In the meantime, feel free to explore our portfolio and discover how we weave magic into every moment.',
+      cta: 'Discover Our Creations',
+      footerRights: 'All Rights Reserved',
+      footerAddress: '',
+    };
+
+    const html = weddingCustomer({
+      bride_name: 'Emma',
+      groom_name: 'James',
+      budget: '$5,000 - $10,000',
+      wedding_type: 'Beach Wedding',
+      additional_info: '',
+      meeting_display: 'Thursday, July 9, 2026 — 4:30 PM',
+    }, copy);
+
+    document.getElementById('preview').srcdoc = html;
+  </script>
+</body>
+</html>

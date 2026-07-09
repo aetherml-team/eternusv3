@@ -410,6 +410,24 @@
     );
   }
 
+  function showSlotTakenError() {
+    var panel = document.querySelector('.contact-grid__panel--scheduler');
+    if (panel) panel.classList.add('contact-grid__panel--invalid');
+
+    showToast({
+      variant: 'error',
+      title: t('form.index.slotTakenTitle', 'Time no longer available'),
+      message: t(
+        'form.index.slotTaken',
+        'That meeting time was just booked. Please pick another date or time.'
+      ),
+    });
+
+    if (window.MeetingScheduler && window.MeetingScheduler.refresh) {
+      window.MeetingScheduler.refresh();
+    }
+  }
+
   function showApiError(status, detail) {
     var technicalMessage;
     if (status === 405 || status === 0) {
@@ -443,6 +461,10 @@
     });
   }
 
+  function getSubmitLang() {
+    return window.i18n && window.i18n.currentLang === 'es' ? 'es' : 'en';
+  }
+
   function submitForm(form) {
     setSubmitting(true);
 
@@ -455,6 +477,7 @@
 
     var action = form.getAttribute('action') || '/api/send';
     var body = Object.fromEntries(new FormData(form));
+    body.lang = getSubmitLang();
 
     fetch(action, {
       method: 'POST',
@@ -468,6 +491,10 @@
           if (window.MeetingScheduler && window.MeetingScheduler.refresh) {
             window.MeetingScheduler.refresh();
           }
+          return;
+        }
+        if (res.status === 409) {
+          showSlotTakenError();
           return;
         }
         return res.text().then(function (responseBody) {

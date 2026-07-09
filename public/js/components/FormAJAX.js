@@ -75,10 +75,17 @@ export default class FormAJAX extends BaseComponent {
 	}
 
 	_fetch() {
+		if (window.MeetingScheduler && window.MeetingScheduler.sync) {
+			window.MeetingScheduler.sync();
+		}
+
 		const sendJson = this.element.hasAttribute('data-submit-json');
-		const body = sendJson
-			? JSON.stringify(Object.fromEntries(new FormData(this.element)))
-			: new FormData(this.element);
+		const bodyObj = Object.fromEntries(new FormData(this.element));
+		bodyObj.lang =
+			typeof window !== 'undefined' && window.i18n && window.i18n.currentLang === 'es'
+				? 'es'
+				: 'en';
+		const body = sendJson ? JSON.stringify(bodyObj) : new FormData(this.element);
 		const headers = sendJson ? { 'Content-Type': 'application/json' } : {};
 
 		fetch(this.action, {
@@ -88,11 +95,33 @@ export default class FormAJAX extends BaseComponent {
 		}).then((res) => {
 			if (res.status >= 200 && res.status < 300) {
 				this._onFetchSuccess();
+			} else if (res.status === 409) {
+				this._onSlotTaken();
 			} else {
 				this._onFetchError();
 			}
 		}).catch(() => {
 			this._onFetchError();
+		});
+	}
+
+	_onSlotTaken() {
+		const i18n = typeof window !== 'undefined' && window.i18n ? window.i18n : null;
+		const message = i18n && i18n.t
+			? i18n.t('form.stepMeeting.slotTaken', 'That time was just booked. Please choose another date or time.')
+			: 'That time was just booked. Please choose another date or time.';
+
+		if (window.MeetingScheduler && window.MeetingScheduler.refresh) {
+			window.MeetingScheduler.refresh();
+		}
+
+		document.dispatchEvent(new CustomEvent('meeting-slot-taken'));
+
+		this._createModal({
+			template: this._getModalTemplate({
+				icon: 'icon-error.svg',
+				message
+			})
 		});
 	}
 
