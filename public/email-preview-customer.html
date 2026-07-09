@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eternus Email Preview</title>
+  <style>
+    body { margin: 0; background: #111; }
+    iframe { width: 100%; min-height: 1200px; border: 0; }
+  </style>
+</head>
+<body>
+  <iframe id="preview" title="Customer email preview"></iframe>
+  <script type="module">
+    import { weddingCustomer } from './js/templates/weddingCustomer.js';
+
+    const copy = {
+      lang: 'es',
+      siteUrl: 'https://eternus-landing.vercel.app',
+      title: 'Tu camino con Eternus comienza',
+      headerWelcome: 'Bienvenidos a Eternus',
+      headerTagline: 'Tu viaje atemporal te espera',
+      eyebrow: 'Gracias',
+      greeting: 'Estimados Paco y Paca,',
+      intro: 'Gracias por confiar en <strong>Eternus</strong> la planificación de su día especial. Estamos encantados de acompañarlos en este extraordinario camino hacia una celebración que refleje la eternidad de su amor.',
+      receivedDetails: 'Hemos recibido los siguientes datos:',
+      labelBride: 'Novia',
+      labelGroom: 'Novio',
+      labelBudget: 'Presupuesto',
+      labelWeddingType: 'Tipo de boda',
+      labelMeeting: 'Reunión',
+      labelAdditionalInfo: 'Información adicional',
+      noneProvided: 'Sin información adicional',
+      closing: 'Nuestro equipo de profesionales está dedicado a transformar su visión en una realidad exquisita. Nos pondremos en contacto pronto para hablar de los siguientes pasos. Mientras tanto, exploren nuestro portafolio y descubran cómo tejemos magia en cada momento.',
+      cta: 'Descubran nuestras creaciones',
+      footerRights: 'Todos los derechos reservados',
+      footerAddress: '',
+    };
+
+    const html = weddingCustomer({
+      bride_name: 'Paco',
+      groom_name: 'Paca',
+      budget: '$5,000 - $10,000',
+      wedding_type: 'Boda en la Playa',
+      additional_info: '',
+      meeting_display: 'jueves, 9 de julio de 2026 — 4:30 p.m.',
+    }, copy);
+
+    document.getElementById('preview').srcdoc = html;
+  </script>
+</body>
+</html>

@@ -107,6 +107,8 @@
       "submitFailedTitle": "Algo salió mal",
       "submitFailed": "No pudimos enviar tu mensaje en este momento.",
       "submitFailedRetry": "Por favor inténtalo de nuevo en unos instantes.",
+      "slotTakenTitle": "Horario no disponible",
+      "slotTaken": "Ese horario de reunión acaba de reservarse. Por favor elige otra fecha u hora.",
       "toastDismiss": "Cerrar",
       "submitting": "Enviando…"
     },
@@ -156,7 +158,10 @@
       "timeLabel": "Horarios disponibles",
       "timeZone": "Horarios en {zone}",
       "selectDateHint": "Selecciona una fecha para ver los horarios disponibles.",
+      "loadingSlots": "Cargando horarios disponibles…",
+      "loadError": "No se pudieron cargar los horarios. Por favor inténtalo de nuevo.",
       "noSlots": "No hay horarios disponibles para este día. Por favor elige otra fecha.",
+      "slotTaken": "Ese horario acaba de reservarse. Por favor elige otra fecha u hora.",
       "error": "Por favor selecciona una fecha y hora para la reunión."
     },
     "step3Email": {
@@ -189,6 +194,29 @@
         "email": "Correo Electrónico",
         "meetingDateTime": "Reunión",
         "additionalInfo": "Información Adicional"
+      }
+    },
+    "email": {
+      "customer": {
+        "subject": "Gracias por elegir Eternus para tu día especial",
+        "title": "Tu camino con Eternus comienza",
+        "headerWelcome": "Bienvenidos a Eternus",
+        "headerTagline": "Tu viaje atemporal te espera",
+        "eyebrow": "Gracias",
+        "greeting": "Estimados {bride_name} y {groom_name},",
+        "intro": "Gracias por confiar en <strong>Eternus</strong> la planificación de su día especial. Estamos encantados de acompañarlos en este extraordinario camino hacia una celebración que refleje la eternidad de su amor.",
+        "receivedDetails": "Hemos recibido los siguientes datos:",
+        "labelBride": "Novia",
+        "labelGroom": "Novio",
+        "labelBudget": "Presupuesto",
+        "labelWeddingType": "Tipo de boda",
+        "labelMeeting": "Reunión",
+        "labelAdditionalInfo": "Información adicional",
+        "noneProvided": "Sin información adicional",
+        "closing": "Nuestro equipo de profesionales está dedicado a transformar su visión en una realidad exquisita. Nos pondremos en contacto pronto para hablar de los siguientes pasos. Mientras tanto, exploren nuestro portafolio y descubran cómo tejemos magia en cada momento.",
+        "cta": "Descubran nuestras creaciones",
+        "footerRights": "Todos los derechos reservados",
+        "footerAddress": "1234 Wedding Lane, Suite 100, Your City, Country"
       }
     }
   },

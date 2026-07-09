@@ -106,6 +106,8 @@
       "submitFailedTitle": "Something went wrong",
       "submitFailed": "We couldn't send your message right now.",
       "submitFailedRetry": "Please try again in a moment.",
+      "slotTakenTitle": "Time no longer available",
+      "slotTaken": "That meeting time was just booked. Please pick another date or time.",
       "toastDismiss": "Dismiss",
       "submitting": "Sending…"
     },
@@ -155,7 +157,10 @@
       "timeLabel": "Available times",
       "timeZone": "Times shown in {zone}",
       "selectDateHint": "Select a date to see available times.",
+      "loadingSlots": "Loading available times…",
+      "loadError": "Could not load available times. Please try again.",
       "noSlots": "No times available for this day. Please choose another date.",
+      "slotTaken": "That time was just booked. Please choose another date or time.",
       "error": "Please select a meeting date and time."
     },
     "step3Email": {
@@ -188,6 +193,29 @@
         "email": "Email",
         "meetingDateTime": "Meeting",
         "additionalInfo": "Additional Information"
+      }
+    },
+    "email": {
+      "customer": {
+        "subject": "Thank You for Choosing Eternus for Your Special Day",
+        "title": "Your Journey with Eternus Begins",
+        "headerWelcome": "Welcome to Eternus",
+        "headerTagline": "Your Timeless Journey Awaits",
+        "eyebrow": "Thank You",
+        "greeting": "Dear {bride_name} & {groom_name},",
+        "intro": "Thank you for entrusting <strong>Eternus</strong> with the planning of your special day. We are delighted to accompany you on this remarkable journey towards a celebration that echoes the timelessness of your love.",
+        "receivedDetails": "We have received the following details:",
+        "labelBride": "Bride",
+        "labelGroom": "Groom",
+        "labelBudget": "Budget",
+        "labelWeddingType": "Wedding Type",
+        "labelMeeting": "Meeting",
+        "labelAdditionalInfo": "Additional Information",
+        "noneProvided": "None provided",
+        "closing": "Our team of seasoned professionals is dedicated to transforming your vision into an exquisite reality. We will be in touch shortly to discuss the next steps. In the meantime, feel free to explore our portfolio and discover how we weave magic into every moment.",
+        "cta": "Discover Our Creations",
+        "footerRights": "All Rights Reserved",
+        "footerAddress": "1234 Wedding Lane, Suite 100, Your City, Country"
       }
     }
   },

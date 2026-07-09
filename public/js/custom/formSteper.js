@@ -386,6 +386,36 @@
     return div.innerHTML;
   }
 
+  function goToStep(step) {
+    document.querySelectorAll('.form-step').forEach(function (el, index) {
+      var isActive = index === step;
+      el.classList.toggle('active', isActive);
+      el.style.visibility = isActive ? 'visible' : 'hidden';
+      el.classList.remove('animate-out');
+    });
+    currentStep = step;
+    if (step === 5) {
+      ensureMeetingSchedulerInit();
+    } else {
+      updateContainerHeight();
+    }
+  }
+
+  window.FormSteperGoToStep = goToStep;
+
+  document.addEventListener('meeting-slot-taken', function () {
+    goToStep(5);
+    var stepEl = document.getElementById('step-5');
+    if (stepEl) {
+      stepEl.classList.add('form-step--slot-taken');
+      window.setTimeout(function () {
+        stepEl.classList.remove('form-step--slot-taken');
+      }, 3000);
+    }
+    var errorEl = document.getElementById('error-step-5');
+    if (errorEl) errorEl.classList.remove('d-none');
+  });
+
   function initForm() {
     var form = getForm();
     if (!form) return;

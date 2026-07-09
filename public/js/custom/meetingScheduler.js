@@ -1,20 +1,32 @@
 /**
  * Inline meeting calendar + time slots for contact forms (index grid + wizard step 5).
+ * Loads availability from Calendly via /api/calendly/availability when configured.
  */
 (function () {
   const TIMEZONE = 'America/Mexico_City';
-  const TIME_SLOTS = ['10:00', '11:00', '12:00', '14:00', '15:00', '16:00', '17:00'];
+  const FALLBACK_TIME_SLOTS = ['10:00', '11:00', '12:00', '14:00', '15:00', '16:00', '17:00'];
   const BUFFER_MS = 60 * 60 * 1000;
 
   let viewYear;
   let viewMonth;
   let selectedDate = null;
   let selectedTime = null;
+  let selectedSlotUtc = null;
   let initialized = false;
+  let calendlyConfigured = null;
+  let monthSlotsCache = {};
+  let monthSlotsKey = '';
+  let daySlots = [];
+  let slotsLoading = false;
+  let slotsError = false;
 
   function getLocale() {
     const lang = window.i18n && window.i18n.currentLang ? window.i18n.currentLang : 'en';
     return lang === 'es' ? 'es-MX' : 'en-US';
+  }
+
+  function t(key, fallback) {
+    return window.i18n && window.i18n.t ? window.i18n.t(key, fallback) : fallback;
   }
 
   function todayParts() {
@@ -86,25 +98,110 @@
     return new Date(best);
   }
 
-  function isSlotAvailable(dateKeyStr, timeStr) {
+  function isFallbackSlotAvailable(dateKeyStr, timeStr) {
     if (!dateKeyStr) return false;
     const slot = slotDateTime(dateKeyStr, timeStr);
     return slot.getTime() >= Date.now() + BUFFER_MS;
   }
 
-  function hasAvailableSlots(dateKeyStr) {
-    return TIME_SLOTS.some(function (time) {
-      return isSlotAvailable(dateKeyStr, time);
+  function monthCacheId(year, monthIndex) {
+    return year + '-' + String(monthIndex + 1).padStart(2, '0');
+  }
+
+  function buildFallbackDaySlots(dateKeyStr) {
+    return FALLBACK_TIME_SLOTS.filter(function (time) {
+      return isFallbackSlotAvailable(dateKeyStr, time);
+    }).map(function (time) {
+      return {
+        start_time_utc: slotDateTime(dateKeyStr, time).toISOString(),
+        label: time,
+      };
     });
   }
 
-  function localizeHints(container) {
-    if (!container) return;
-    container.querySelectorAll('[data-i18n]').forEach(function (el) {
-      var key = el.getAttribute('data-i18n');
-      if (key && window.i18n && window.i18n.t) {
-        el.textContent = window.i18n.t(key, el.textContent);
-      }
+  function finishDaySlots(slots) {
+    renderTimeSlots();
+    return slots;
+  }
+
+  function fetchMonthAvailability(year, monthIndex) {
+    const key = monthCacheId(year, monthIndex);
+    if (monthSlotsKey === key) {
+      return Promise.resolve(monthSlotsCache);
+    }
+    return fetch('/api/calendly/availability?month=' + encodeURIComponent(key))
+      .then(function (res) {
+        return res.json().then(function (data) {
+          if (res.status === 503 || data.configured === false) {
+            calendlyConfigured = false;
+            monthSlotsCache = {};
+            monthSlotsKey = key;
+            return monthSlotsCache;
+          }
+          if (!res.ok) {
+            throw new Error(data.error || 'Availability request failed');
+          }
+          calendlyConfigured = true;
+          monthSlotsCache = data.by_date || {};
+          monthSlotsKey = key;
+          return monthSlotsCache;
+        });
+      })
+      .catch(function () {
+        // Month prefetch failed; day-level fetches may still work.
+        monthSlotsCache = {};
+        monthSlotsKey = key;
+        return monthSlotsCache;
+      });
+  }
+
+  function fetchDaySlots(dateKeyStr) {
+    if (calendlyConfigured === false) {
+      daySlots = buildFallbackDaySlots(dateKeyStr);
+      slotsLoading = false;
+      slotsError = false;
+      return Promise.resolve(daySlots).then(finishDaySlots);
+    }
+
+    slotsLoading = true;
+    slotsError = false;
+    renderTimeSlots();
+
+    return fetch('/api/calendly/availability?date=' + encodeURIComponent(dateKeyStr))
+      .then(function (res) {
+        return res.json().then(function (data) {
+          slotsLoading = false;
+          if (res.status === 503 || data.configured === false) {
+            calendlyConfigured = false;
+            daySlots = buildFallbackDaySlots(dateKeyStr);
+            return daySlots;
+          }
+          if (!res.ok) {
+            slotsError = true;
+            daySlots = [];
+            return daySlots;
+          }
+          calendlyConfigured = true;
+          daySlots = data.slots || [];
+          return daySlots;
+        });
+      })
+      .catch(function () {
+        slotsLoading = false;
+        slotsError = true;
+        daySlots = buildFallbackDaySlots(dateKeyStr);
+        return daySlots;
+      })
+      .then(finishDaySlots);
+  }
+
+  function hasAvailableSlots(dateKeyStr) {
+    if (calendlyConfigured === true) {
+      const slots = monthSlotsCache[dateKeyStr];
+      return Array.isArray(slots) && slots.length > 0;
+    }
+    return FALLBACK_TIME_SLOTS.some(function (time) {
+      return isFallbackSlotAvailable(dateKeyStr, time);
     });
   }
 
@@ -117,8 +214,10 @@
     if (!form) return;
     const dateInput = form.querySelector('input[name="meeting_date"]');
     const timeInput = form.querySelector('input[name="meeting_time"]');
+    const utcInput = form.querySelector('input[name="meeting_start_utc"]');
     if (dateInput) dateInput.value = selectedDate || '';
     if (timeInput) timeInput.value = selectedTime || '';
+    if (utcInput) utcInput.value = selectedSlotUtc || '';
   }
 
   function notifyChange() {
@@ -158,10 +257,7 @@
     const el = document.getElementById('meeting-timezone-label');
     if (!el) return;
     const zone = getTimeZoneDisplay();
-    const template =
-      window.i18n && window.i18n.t
-        ? window.i18n.t('form.stepMeeting.timeZone', 'Times shown in {zone}')
-        : 'Times shown in {zone}';
+    const template = t('form.stepMeeting.timeZone', 'Times shown in {zone}');
     el.textContent = template.replace('{zone}', zone);
   }
 
@@ -181,10 +277,7 @@
       month: 'long',
       day: 'numeric',
     }).format(date);
-    const label =
-      window.i18n && window.i18n.t
-        ? window.i18n.t('form.stepMeeting.selectedDate', 'Selected:')
-        : 'Selected:';
+    const label = t('form.stepMeeting.selectedDate', 'Selected:');
     el.textContent = label + ' ' + formatted;
     el.classList.remove('d-none');
   }
@@ -198,11 +291,29 @@
       const hint = document.createElement('p');
       hint.className = 'meeting-scheduler__hint text-muted small mb-0';
       hint.setAttribute('data-i18n', 'form.stepMeeting.selectDateHint');
-      hint.textContent =
-        window.i18n && window.i18n.t
-          ? window.i18n.t('form.stepMeeting.selectDateHint', 'Select a date to see available times.')
-          : 'Select a date to see available times.';
+      hint.textContent = t('form.stepMeeting.selectDateHint', 'Select a date to see available times.');
       container.appendChild(hint);
+      return;
+    }
+
+    if (slotsLoading) {
+      const loading = document.createElement('p');
+      loading.className = 'meeting-scheduler__hint text-muted small mb-0';
+      loading.setAttribute('data-i18n', 'form.stepMeeting.loadingSlots');
+      loading.textContent = t('form.stepMeeting.loadingSlots', 'Loading available times…');
+      container.appendChild(loading);
+      return;
+    }
+
+    if (slotsError && daySlots.length === 0) {
+      const err = document.createElement('p');
+      err.className = 'meeting-scheduler__hint text-danger small mb-0';
+      err.setAttribute('data-i18n', 'form.stepMeeting.loadError');
+      err.textContent = t(
+        'form.stepMeeting.loadError',
+        'Could not load available times. Please try again.'
+      );
+      container.appendChild(err);
       return;
     }
 
@@ -210,27 +321,22 @@
     grid.className = 'meeting-scheduler__slots meeting-scheduler__slots--grid';
     let hasSlot = false;
 
-    TIME_SLOTS.forEach(function (time) {
-      const available = isSlotAvailable(selectedDate, time);
+    daySlots.forEach(function (slot) {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'meeting-scheduler__slot';
-      btn.textContent = time;
-      if (!available) {
-        btn.disabled = true;
-        btn.classList.add('meeting-scheduler__slot--disabled');
-      } else {
-        hasSlot = true;
-        if (selectedTime === time) {
-          btn.classList.add('meeting-scheduler__slot--selected');
-        }
-        btn.addEventListener('click', function () {
-          selectedTime = time;
-          syncHiddenInputs();
-          renderTimeSlots();
-          notifyChange();
-        });
+      btn.textContent = slot.label;
+      hasSlot = true;
+      if (selectedSlotUtc === slot.start_time_utc) {
+        btn.classList.add('meeting-scheduler__slot--selected');
       }
+      btn.addEventListener('click', function () {
+        selectedTime = slot.label;
+        selectedSlotUtc = slot.start_time_utc;
+        syncHiddenInputs();
+        renderTimeSlots();
+        notifyChange();
+      });
       grid.appendChild(btn);
     });
 
@@ -240,12 +346,13 @@
       const noSlots = document.createElement('p');
       noSlots.className = 'meeting-scheduler__hint text-muted small mt-2 mb-0';
       noSlots.setAttribute('data-i18n', 'form.stepMeeting.noSlots');
-      noSlots.textContent =
-        window.i18n && window.i18n.t
-          ? window.i18n.t('form.stepMeeting.noSlots', 'No times available for this day. Please choose another date.')
-          : 'No times available for this day. Please choose another date.';
+      noSlots.textContent = t(
+        'form.stepMeeting.noSlots',
+        'No times available for this day. Please choose another date.'
+      );
       container.appendChild(noSlots);
       selectedTime = null;
+      selectedSlotUtc = null;
       selectedDate = null;
       syncHiddenInputs();
       updateDateDisplay();
@@ -318,10 +425,14 @@
         btn.addEventListener('click', function () {
           selectedDate = key;
           selectedTime = null;
+          selectedSlotUtc = null;
           syncHiddenInputs();
           updateDateDisplay();
           renderCalendar();
+          slotsLoading = true;
+          slotsError = false;
           renderTimeSlots();
+          fetchDaySlots(key);
           notifyChange();
         });
       }
@@ -334,7 +445,7 @@
         viewMonth = 11;
         viewYear -= 1;
       }
-      renderCalendar();
+      loadMonthAndRender();
     });
 
     mount.querySelector('[data-nav="next"]').addEventListener('click', function () {
@@ -343,7 +454,16 @@
         viewMonth = 0;
         viewYear += 1;
       }
+      loadMonthAndRender();
+    });
+  }
+
+  function loadMonthAndRender() {
+    fetchMonthAvailability(viewYear, viewMonth).then(function () {
       renderCalendar();
+      if (selectedDate) {
+        fetchDaySlots(selectedDate);
+      }
     });
   }
 
@@ -364,12 +484,15 @@
     if (force || !initialized) {
       selectedDate = null;
       selectedTime = null;
+      selectedSlotUtc = null;
+      daySlots = [];
+      monthSlotsCache = {};
+      monthSlotsKey = '';
     }
     syncHiddenInputs();
     updateDateDisplay();
     updateTimezoneLabel();
-    renderCalendar();
-    renderTimeSlots();
+    loadMonthAndRender();
     initialized = true;
   }
 
@@ -386,23 +509,35 @@
     }
     updateDateDisplay();
     updateTimezoneLabel();
-    var slots = document.getElementById('meeting-time-slots');
-    localizeHints(slots);
     renderCalendar();
+    renderTimeSlots();
   }
 
   function refresh() {
+    monthSlotsCache = {};
+    monthSlotsKey = '';
+    selectedDate = null;
+    selectedTime = null;
+    selectedSlotUtc = null;
+    daySlots = [];
+    syncHiddenInputs();
+    updateDateDisplay();
     if (!initialized || !isMounted()) {
       init({ force: true });
       return;
     }
-    renderCalendar();
+    loadMonthAndRender();
     renderTimeSlots();
-    updateDateDisplay();
   }
 
   function isValid() {
-    return !!(selectedDate && selectedTime && isSlotAvailable(selectedDate, selectedTime));
+    if (!selectedDate || !selectedTime || !selectedSlotUtc) return false;
+    if (calendlyConfigured === false) {
+      return isFallbackSlotAvailable(selectedDate, selectedTime);
+    }
+    return daySlots.some(function (slot) {
+      return slot.start_time_utc === selectedSlotUtc;
+    });
   }
 
   function getFormattedDateTime() {
@@ -429,7 +564,7 @@
     sync: syncHiddenInputs,
     isValid: isValid,
     getFormattedDateTime: getFormattedDateTime,
-    TIME_SLOTS: TIME_SLOTS,
+    TIME_SLOTS: FALLBACK_TIME_SLOTS,
   };
 
   window.addEventListener('i18n:languageChange', function () {
