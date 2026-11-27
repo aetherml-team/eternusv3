@@ -13784,7 +13784,6 @@ section:has(> .grid_gallery_container) {
 
 .grid_gallery_container .item {
   overflow: hidden;
-  border-radius: 8px;
   position: relative;
   height: 100%;
   width: 100%;
