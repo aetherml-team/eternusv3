@@ -1542,6 +1542,59 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
   }
 }
 
+/* Back-to-home link: mirrors the EN|ES toggle at the top-left of wedding detail pages */
+.page-wedding-details .header-back {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 501;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  pointer-events: auto;
+  font-family: var(--ui-element-font-family, inherit);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1.5;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-light-1, #DBDAD7);
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+  padding-top: calc(1 * var(--header-min-gutters-vertical) * 1px + 0.25rem);
+  padding-bottom: calc(1 * var(--header-min-gutters-vertical) * 1px + 0.25rem);
+  padding-left: calc(1 * var(--header-min-gutters-horizontal) * 1px);
+}
+
+.page-wedding-details .header-back:hover {
+  opacity: 1;
+  color: var(--color-light-1, #DBDAD7);
+}
+
+.page-wedding-details .header-back__arrow {
+  transition: transform 0.2s ease;
+}
+
+.page-wedding-details .header-back:hover .header-back__arrow {
+  transform: translateX(-3px);
+}
+
+@media screen and (min-width: 360px) {
+  .page-wedding-details .header-back {
+    padding-top: calc(1 * (var(--header-min-gutters-vertical) * 1px + (var(--header-max-gutters-vertical) - var(--header-min-gutters-vertical)) * (100vw - 360px) / 1560) + 0.25rem);
+    padding-bottom: calc(1 * (var(--header-min-gutters-vertical) * 1px + (var(--header-max-gutters-vertical) - var(--header-min-gutters-vertical)) * (100vw - 360px) / 1560) + 0.25rem);
+    padding-left: calc(1 * (var(--header-min-gutters-horizontal) * 1px + (var(--header-max-gutters-horizontal) - var(--header-min-gutters-horizontal)) * (100vw - 360px) / 1560));
+  }
+}
+@media screen and (min-width: 1920px) {
+  .page-wedding-details .header-back {
+    padding-top: calc(1 * var(--header-max-gutters-vertical) * 1px + 0.25rem);
+    padding-bottom: calc(1 * var(--header-max-gutters-vertical) * 1px + 0.25rem);
+    padding-left: calc(1 * var(--header-max-gutters-horizontal) * 1px);
+  }
+}
+
 /* ==========================================================================
    Contact form section – prevent marquee text from looking "chopped"
    ========================================================================== */
@@ -1650,14 +1703,6 @@ html:not(.i18n-switching) [data-i18n-placeholder] {
   position: relative;
   width: 100%;
   max-width: 100%;
-}
-
-.section-wedding-films__header {
-  position: relative;
-}
-
-.section-wedding-films__lede {
-  max-width: 28rem;
 }
 
 .section-wedding-films__hero-wrap {
